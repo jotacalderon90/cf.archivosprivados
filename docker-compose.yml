@@ -70,6 +70,7 @@ services:
     volumes:
       - .:/srv/cf.archivosprivados/
       - /srv/cf.archivosprivados/node_modules
+      - ../cf.archivospublicos/frontend/:/srv/cf.archivosprivados/frontend/assets/archivospublicos
     environment:
        <<: *common-variables
        HOST: "http://192.168.42.4:2203"
