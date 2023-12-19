@@ -1,0 +1,15 @@
+FROM node:16.13.1 as build-stage
+
+CMD mkdir /srv/cf.archivosprivados
+
+COPY ["package.json","/srv/cf.archivosprivados/"]
+
+WORKDIR /srv/cf.archivosprivados
+
+RUN npm install
+
+COPY [".", "/srv/cf.archivosprivados/"]
+
+EXPOSE 80
+
+CMD [ "npm", "run", "dev" ]
