@@ -1,15 +1,7 @@
 version: "3.9"
 
 x-common-variables: &common-variables
-  HOST_ARCHIVOSPUBLICOS: "http://192.168.42.4:2201"
-  HOST_ACCOUNT: "http://192.168.42.4:2202"
-  SESSION_SECRET: "trascender-con-sso"
-  COOKIE_DOMAINs: ".jotace.cl"
-  MONGO_URL: "mongodb://host.docker.internal:27017"
-  MONGO_DBNAME: "miscolecciones"
-  REDIS_HOST: redis
-  REDIS_PORT: 6379
-  REDIS_DB: 0
+  NODE_ENV: "development"
 
 services:
 
@@ -36,7 +28,7 @@ services:
       - /srv/cf.archivospublicos/frontend/bower_components
     environment:
        <<: *common-variables
-       HOST: "http://192.168.42.4:2201"
+       HOST: "http://192.168.100.6:2201"
        REDIS_PREFIX: "archivospublicos:"
     ports:
       - "2201:80"
@@ -54,7 +46,7 @@ services:
       - /srv/cf.account/node_modules
     environment:
        <<: *common-variables
-       HOST: "http://192.168.42.4:2202"
+       HOST: "http://192.168.100.6:2202"
        REDIS_PREFIX: "account:"
     ports:
       - "2202:80"
@@ -70,15 +62,9 @@ services:
     volumes:
       - .:/srv/cf.archivosprivados/
       - /srv/cf.archivosprivados/node_modules
-      - ../cf.archivospublicos/frontend/:/srv/cf.archivosprivados/frontend/assets/archivospublicos
     environment:
        <<: *common-variables
-       HOST: "http://192.168.42.4:2203"
+       HOST: "http://192.168.100.6:2203"
        REDIS_PREFIX: "archivosprivados:"
     ports:
       - "2203:80"
-      
-#networks:
-#  default:
-#    external:
-#      name: jotace
