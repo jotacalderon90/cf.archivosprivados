@@ -1,70 +1,18 @@
 version: "3.9"
 
-x-common-variables: &common-variables
-  NODE_ENV: "development"
-
 services:
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    volumes:
-      - ../redis/redis.conf:/usr/local/etc/redis/redis.conf
-    ports:
-      - "6379:6379"
-    command: redis-server /usr/local/etc/redis/redis.conf
-         
-  archivospublicos:
-    build:
-      context: ../cf.archivospublicos
-      dockerfile: Dockerfile.dev
-    image: archivospublicos:0.0.1
-    container_name: archivospublicos
-    depends_on:
-      - redis
-    volumes:
-      - ../cf.archivospublicos:/srv/cf.archivospublicos/
-      - /srv/cf.archivospublicos/node_modules
-      - /srv/cf.archivospublicos/frontend/bower_components
-    environment:
-       <<: *common-variables
-       HOST: "http://192.168.100.6:2201"
-       REDIS_PREFIX: "archivospublicos:"
-    ports:
-      - "2201:80"
-          
-  account:
-    build:
-      context: ../cf.account
-      dockerfile: Dockerfile.dev
-    image: account:0.0.1
-    container_name: account
-    depends_on:
-      - archivospublicos
-    volumes:
-      - ../cf.account:/srv/cf.account/
-      - /srv/cf.account/node_modules
-    environment:
-       <<: *common-variables
-       HOST: "http://192.168.100.6:2202"
-       REDIS_PREFIX: "account:"
-    ports:
-      - "2202:80"
-       
   archivosprivados:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     image: archivosprivados:0.0.1
     container_name: archivosprivados
-    depends_on:
-      - account
     volumes:
       - .:/srv/cf.archivosprivados/
       - /srv/cf.archivosprivados/node_modules
     environment:
-       <<: *common-variables
-       HOST: "http://192.168.100.6:2203"
-       REDIS_PREFIX: "archivosprivados:"
+       NODE_ENV: "production"
+       PORT: ${PORT:-2203}
     ports:
-      - "2203:80"
+      - "${PORT:-2203}:2203"

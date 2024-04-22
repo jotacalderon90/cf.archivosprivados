@@ -1,0 +1,56 @@
+version: "3.9"
+
+x-common-variables: &common-variables
+  NODE_ENV: "development"
+
+services:
+
+  archivospublicos:
+    build:
+      context: ../cf.archivospublicos
+      dockerfile: Dockerfile.dev
+    image: archivospublicos:0.0.1
+    container_name: archivospublicos
+    volumes:
+      - ../cf.archivospublicos:/srv/cf.archivospublicos/
+      - /srv/cf.archivospublicos/node_modules
+      - /srv/cf.archivospublicos/frontend/assets/lib/bower_components
+    environment:
+       <<: *common-variables
+       PORT: ${PORT:-2201}
+    ports:
+      - "${PORT:-2201}:2201"
+          
+  account:
+    build:
+      context: ../cf.account
+      dockerfile: Dockerfile.dev
+    image: account:0.0.1
+    container_name: account
+    depends_on:
+      - archivospublicos
+    volumes:
+      - ../cf.account:/srv/cf.account/
+      - /srv/cf.account/node_modules
+    environment:
+       <<: *common-variables
+       PORT: ${PORT:-2202}
+    ports:
+      - "${PORT:-2202}:2202"
+       
+  archivosprivados:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: archivosprivados:0.0.1
+    container_name: archivosprivados
+    depends_on:
+      - account
+    volumes:
+      - .:/srv/cf.archivosprivados/
+      - /srv/cf.archivosprivados/node_modules
+    environment:
+       <<: *common-variables
+       PORT: ${PORT:-2203}
+    ports:
+      - "${PORT:-2203}:2203"
