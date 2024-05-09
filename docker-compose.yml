@@ -1,4 +1,3 @@
-version: "3.10"
 
 services:
 
@@ -11,6 +10,7 @@ services:
     volumes:
       - .:/srv/cf.archivosprivados/
       - /srv/cf.archivosprivados/node_modules
+      - ../cf.archivospublicos/frontend/assets/:/srv/cf.archivosprivados/frontend/assets/archivospublicos
     environment:
        NODE_ENV: "production"
        PORT: ${PORT:-2203}

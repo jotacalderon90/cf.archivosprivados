@@ -1,4 +1,4 @@
-app.modules.filemanager = function(parent) {
+const filemanager = function(parent) {
 	this.parent = parent;
 	this.service_read = createService('GET', ':path:id');
 	this.service_folder_collection = createService("GET", ":path:id/collection");
@@ -7,7 +7,7 @@ app.modules.filemanager = function(parent) {
 	this.service_update = createService("PUT", ":path:id");
 }
 
-app.modules.filemanager.prototype.start = async function() {
+filemanager.prototype.start = async function() {
 	await this.getUser();
 
 	this.createFolder(document.getElementById("ul_directory"), "d0", {
@@ -20,7 +20,7 @@ app.modules.filemanager.prototype.start = async function() {
 	$('.loader').fadeOut();
 }
 
-app.modules.filemanager.prototype.getUser = async function() {
+filemanager.prototype.getUser = async function() {
 	try {
 		this.user = await (createService('GET', '/api/account')());
 		if(this.user.error){
@@ -32,22 +32,23 @@ app.modules.filemanager.prototype.getUser = async function() {
 	}
 }
 
-app.modules.filemanager.prototype.archive = null,
-	app.modules.filemanager.prototype.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"],
-	app.modules.filemanager.prototype.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"],
+filemanager.prototype.archive = null,
 
-	app.modules.filemanager.prototype.close = function() {
+filemanager.prototype.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"],
+
+filemanager.prototype.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"],
+
+filemanager.prototype.close = function() {
 		$("#ul_directory .selected").removeClass("selected");
 		this.archive = null;
 	};
 
-app.modules.filemanager.prototype.clean = function() {
+filemanager.prototype.clean = function() {
 	$("#ul_directory .selected").removeClass("selected");
 	this.archive = null;
-	this.parent.refresh();
 };
 
-app.modules.filemanager.prototype.delete = async function() {
+filemanager.prototype.delete = async function() {
 	try {
 		let label = $(this.archive).find("label");
 		if (confirm("Confirme eliminación del archivo")) {
@@ -75,7 +76,7 @@ app.modules.filemanager.prototype.delete = async function() {
 	}
 };
 
-app.modules.filemanager.prototype.update = async function() {
+filemanager.prototype.update = async function() {
 	try {
 		let label = $(this.archive).find("label");
 		if (confirm("Confirme actualización del archivo")) {
@@ -102,7 +103,7 @@ app.modules.filemanager.prototype.update = async function() {
 	}
 };
 
-app.modules.filemanager.prototype.select = async function(li) {
+filemanager.prototype.select = async function(li) {
 	try {
 		let label = $(li).find("label");
 		label.addClass("selected");
@@ -179,10 +180,9 @@ app.modules.filemanager.prototype.select = async function(li) {
 	} catch (e) {
 		console.log(e);
 	}
-	this.parent.refresh();
 };
 
-app.modules.filemanager.prototype.createFolder = function(ulParent, id, directory) {
+filemanager.prototype.createFolder = function(ulParent, id, directory) {
 	const li = document.createElement("li");
 	const input = document.createElement("input");
 	input.type = "checkbox";
@@ -255,13 +255,12 @@ app.modules.filemanager.prototype.createFolder = function(ulParent, id, director
 	ulParent.appendChild(li);
 };
 
-app.modules.filemanager.prototype.hasRole = function(role) {
+filemanager.prototype.hasRole = function(role) {
 	return (this.user && this.user.roles && this.user.roles.indexOf(role) > -1) ? true : false;
 }
 
-app.modules.filemanager.prototype.canAdmin = function() {
+filemanager.prototype.canAdmin = function() {
 	return this.hasRole('root');
 };
 
-
-
+app.modules.filemanager = filemanager;
