@@ -1,5 +1,4 @@
-const filemanager = function(parent) {
-	this.parent = parent;
+const filemanager = function() {
 	this.service_read = createService('GET', ':path:id');
 	this.service_folder_collection = createService("GET", ":path:id/collection");
 	this.service_file_collection = createService("GET", ":path:id/collection");
@@ -7,7 +6,10 @@ const filemanager = function(parent) {
 	this.service_update = createService("PUT", ":path:id");
 }
 
-filemanager.prototype.start = async function() {
+filemanager.prototype.start = async function(parent) {
+	
+	this.parent = parent;
+	
 	await this.getUser();
 
 	this.createFolder(document.getElementById("ul_directory"), "d0", {
@@ -16,8 +18,7 @@ filemanager.prototype.start = async function() {
 		folder: "/api/filemanager/folder/",
 		path: "/"
 	});
-
-	$('.loader').fadeOut();
+	
 }
 
 filemanager.prototype.getUser = async function() {
@@ -123,13 +124,13 @@ filemanager.prototype.select = async function(li) {
 			this.fullnameDOWNLOAD = (label.attr("data-api-file") + btoa(this.fullname) + "/download");
 			this.fullnameGET = (label.attr("data-api-file") + btoa(this.fullname) + "/getfile");
 			if (this.isTextFile) {
-				$(".loader").fadeIn();
+				this.parent.loader.active = true;
 				this.fileContent = await this.service_read({
 					id: btoa(this.fullname),
 					path: label.attr("data-api-file")
 				});
 				this.fileContent = this.fileContent.data;
-				$(".loader").fadeOut();
+				this.parent.loader.active = false;
 			} else if (this.isMediaFile) {
 				let child = null;
 				switch (this.type) {
