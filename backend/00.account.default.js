@@ -1,5 +1,6 @@
 "use strict";
 
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.00.account.default');
 const accesscontrol = require('cl.jotacalderon.cf.framework/lib/accesscontrol');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
@@ -11,8 +12,9 @@ module.exports = {
 		try{
 			req.user = await accesscontrol.getUser(req);
 			res.send({data: req.user});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	}
 }

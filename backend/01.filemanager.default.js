@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.01.filemanager.default');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const directory = process.cwd() + "/frontend/assets/";
 
@@ -26,8 +27,9 @@ module.exports = {
 				return directory;
 			};
 			res.send({data: getDirectory(directory,"/")});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	}
 }

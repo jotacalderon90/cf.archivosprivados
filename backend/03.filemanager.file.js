@@ -22,8 +22,9 @@ module.exports = {
 				return fs.statSync(path.join(dir,row)).isFile();
 			}).length;
 			res.send({data: response});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -37,8 +38,9 @@ module.exports = {
 				return fs.statSync(path.join(dir,row)).isFile();
 			});
 			res.send({data: response});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -49,8 +51,9 @@ module.exports = {
 		try{
 			fs.writeFileSync(directory + decode(req.params.id) + req.body.name, (req.body.content)?req.body.content:"");
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -60,8 +63,9 @@ module.exports = {
 	read: async function(req,res){
 		try{
 			res.send({data: fs.readFileSync(directory + decode(req.params.id),"utf8")});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -72,8 +76,9 @@ module.exports = {
 		try{
 			fs.writeFileSync(directory + decode(req.params.id), req.body.content);
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -84,8 +89,9 @@ module.exports = {
 		try{
 			fs.unlinkSync(directory + decode(req.params.id));
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -96,8 +102,9 @@ module.exports = {
 		try{
 			fs.renameSync(directory + decode(req.params.id),directory + "/" + req.body.name);
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -107,8 +114,9 @@ module.exports = {
 	download: async function(req,res){
 		try{
 			res.download(directory + decode(req.params.id));
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -118,8 +126,9 @@ module.exports = {
 	get: async function(req,res){
 		try{
 			res.sendFile(directory + decode(req.params.id));
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -143,8 +152,9 @@ module.exports = {
 			}
 			
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	}
 }

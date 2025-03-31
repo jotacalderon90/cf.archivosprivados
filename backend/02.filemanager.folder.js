@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.01.filemanager.default');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const directory = process.cwd() + "/frontend/assets/";
 
@@ -22,8 +23,9 @@ module.exports = {
 				return !fs.statSync(path.join(dir,row)).isFile();
 			}).length;
 			res.send({data: response});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -37,8 +39,9 @@ module.exports = {
 				return !fs.statSync(path.join(dir,row)).isFile();
 			});
 			res.send({data: response});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -49,8 +52,9 @@ module.exports = {
 		try{
 			fs.mkdirSync(directory + decode(req.params.id) + req.body.name);
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -61,8 +65,9 @@ module.exports = {
 		try{
 			fs.renameSync(directory + decode(req.params.id), directory + "/" + req.body.name);
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	},
 	
@@ -73,8 +78,9 @@ module.exports = {
 		try{
 			fs.rmdirSync(directory + decode(req.params.id));
 			res.send({data: true});
-		}catch(e){
-			response.APIError(req,res,e);
+		}catch(error){
+			logger.error(error);
+			response.APIError(req,res,error);
 		}
 	}
 }
