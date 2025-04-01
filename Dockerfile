@@ -6,7 +6,7 @@ COPY ["package.json","/srv/cf.archivosprivados/"]
 
 WORKDIR /srv/cf.archivosprivados
 
-RUN npm install --only=production
+RUN npm install --omit=dev
 
 COPY [".", "/srv/cf.archivosprivados/"]
 
