@@ -2,18 +2,15 @@
 
 //import { v2 as cloudinary } from 'cloudinary';
 const cloudinary = require('cloudinary').v2;
-console.log(cloudinary);
-
-if(process.env.CLOUDINAY_NAME && process.env.CLOUDINAY_NAME != ''){
-	cloudinary.config({ 
-		cloud_name: process.env.CLOUDINAY_NAME, 
-		api_key: process.env.CLOUDINAY_API_KEY, 
-		api_secret: process.env.CLOUDINAY_API_SECRET
-	});
-}
 
 module.exports = async function(fileImageURL, fileImageID){
 	try{
+		
+		cloudinary.config({ 
+			cloud_name: process.env.CLOUDINARY_NAME, 
+			api_key: process.env.CLOUDINARY_API_KEY, 
+			api_secret: process.env.CLOUDINARY_API_SECRET
+		});
 		
 		const uploadResult = await cloudinary.uploader.upload(fileImageURL, {public_id: fileImageID})
 			.catch((error) => {
