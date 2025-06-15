@@ -5,6 +5,9 @@ const path = require("path");
 const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.03.filemanager.file');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
+
+const cloudinary = require('./lib/cloudinary');
+
 const directory = process.cwd() + "/frontend/assets/";
 
 const decode = function(value){
@@ -150,6 +153,11 @@ module.exports = {
 				}
 			}else{
 				await helper.upload_process(req.files.file, dir + req.files.file.name);
+				
+				if(process.env.CLOUDINARY_NAME != ''){
+					console.log(dir + req.files.file.name);
+					//cloudinary((dir + req.files.file.name).replace('archivospublicos'));
+				}
 			}
 			
 			res.send({data: true});

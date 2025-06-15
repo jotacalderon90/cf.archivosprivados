@@ -9,7 +9,8 @@
 	},
 	"dependencies": {
 		"cl.jotacalderon.cf.framework": "0.0.35",
-		"express-fileupload": "1.2.1"
+		"express-fileupload": "1.2.1",
+		"cloudinary": "2.6.1"
 	},
 	"devDependencies": {		
 		"nodemon": "latest"
