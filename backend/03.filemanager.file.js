@@ -5,6 +5,7 @@ const path = require("path");
 const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.03.filemanager.file');
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
 const response = require('cl.jotacalderon.cf.framework/lib/response');
+const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
 
 const cloudinary = require('./lib/cloudinary');
 
@@ -155,7 +156,10 @@ module.exports = {
 				await helper.upload_process(req.files.file, dir + req.files.file.name);
 				
 				if(process.env.CLOUDINARY_NAME != ''){+
-					cloudinary(((decode(req.params.id)).substr(1) + req.files.file.name).replace('archivospublicos',process.env.HOST_ARCHIVOSPUBLICOS + '/assets'));
+					const uploadResult = await cloudinary(((decode(req.params.id)).substr(1) + req.files.file.name).replace('archivospublicos',process.env.HOST_ARCHIVOSPUBLICOS + '/assets'));
+					if(uploadResult != null){
+						await mongodb.insertOne("cloudinary",uploadResult);
+					}
 				}
 			}
 			
