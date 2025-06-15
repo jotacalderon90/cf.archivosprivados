@@ -155,7 +155,7 @@ module.exports = {
 				await helper.upload_process(req.files.file, dir + req.files.file.name);
 				
 				if(process.env.CLOUDINARY_NAME != ''){
-					console.log(dir + req.files.file.name);
+					console.log((decode(req.params.id)).substr(1) + req.files.file.name);
 					//cloudinary((dir + req.files.file.name).replace('archivospublicos'));
 				}
 			}
