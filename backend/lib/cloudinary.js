@@ -3,7 +3,7 @@
 //import { v2 as cloudinary } from 'cloudinary';
 const cloudinary = require('cloudinary').v2;
 
-module.exports = async function(fileImageURL, fileImageID){
+module.exports = async function(fileImageURL){
 	try{
 		
 		cloudinary.config({ 
@@ -12,7 +12,10 @@ module.exports = async function(fileImageURL, fileImageID){
 			api_secret: process.env.CLOUDINARY_API_SECRET
 		});
 		
-		const uploadResult = await cloudinary.uploader.upload(fileImageURL, {public_id: fileImageID})
+		const fileImageName = fileImageName.split('/').filter(Boolean).pop();
+		console.log('fileImageName',fileImageName);
+		
+		const uploadResult = await cloudinary.uploader.upload(fileImageURL, {public_id: fileImageName})
 			.catch((error) => {
 				console.log('error en catch interno de cloudinary.uploader.upload');
 				console.log(error);
@@ -21,7 +24,7 @@ module.exports = async function(fileImageURL, fileImageID){
 		console.log('uploadResult',uploadResult);
 		
 		// Optimize delivery by resizing and applying auto-format and auto-quality
-		const optimizeUrl = await cloudinary.url(fileImageID, {
+		const optimizeUrl = await cloudinary.url(fileImageName, {
 			fetch_format: 'auto',
 			quality: 'auto'
 		});
@@ -29,7 +32,7 @@ module.exports = async function(fileImageURL, fileImageID){
 		console.log('optimizeUrl',optimizeUrl);
 		
 		// Transform the image: auto-crop to square aspect_ratio
-		const autoCropUrl = await cloudinary.url(fileImageID, {
+		const autoCropUrl = await cloudinary.url(fileImageName, {
 			crop: 'auto',
 			gravity: 'auto',
 			width: 500,
