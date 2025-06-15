@@ -19,7 +19,7 @@ module.exports = async function(fileImageURL){
 				console.log('error en catch interno de cloudinary.uploader.upload');
 				console.log(error);
 			});
-		
+		/*
 		// Optimize delivery by resizing and applying auto-format and auto-quality
 		uploadResult.optimizeUrl = await cloudinary.url(fileImageName, {
 			fetch_format: 'auto',
@@ -33,7 +33,7 @@ module.exports = async function(fileImageURL){
 			width: 500,
 			height: 500,
 		});
-		
+		*/
 		return uploadResult;
 		
 	}catch(error) {
