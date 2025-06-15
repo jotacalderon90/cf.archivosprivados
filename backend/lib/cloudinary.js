@@ -21,7 +21,7 @@ module.exports = async function(fileImageURL, fileImageID){
 		console.log('uploadResult',uploadResult);
 		
 		// Optimize delivery by resizing and applying auto-format and auto-quality
-		const optimizeUrl = cloudinary.url(fileImageID, {
+		const optimizeUrl = await cloudinary.url(fileImageID, {
 			fetch_format: 'auto',
 			quality: 'auto'
 		});
@@ -29,7 +29,7 @@ module.exports = async function(fileImageURL, fileImageID){
 		console.log('optimizeUrl',optimizeUrl);
 		
 		// Transform the image: auto-crop to square aspect_ratio
-		const autoCropUrl = cloudinary.url(fileImageID, {
+		const autoCropUrl = await cloudinary.url(fileImageID, {
 			crop: 'auto',
 			gravity: 'auto',
 			width: 500,
