@@ -1,4 +1,8 @@
-import { v2 as cloudinary } from 'cloudinary';
+"use strict";
+
+//import { v2 as cloudinary } from 'cloudinary';
+const cloudinary = require('cloudinary').v2;
+console.log(cloudinary);
 
 if(process.env.CLOUDINAY_NAME && process.env.CLOUDINAY_NAME != ''){
 	cloudinary.config({ 
@@ -7,6 +11,7 @@ if(process.env.CLOUDINAY_NAME && process.env.CLOUDINAY_NAME != ''){
 		api_secret: process.env.CLOUDINAY_API_SECRET
 	});
 }
+
 module.exports = async function(fileImageURL, fileImageID){
 	try{
 		
