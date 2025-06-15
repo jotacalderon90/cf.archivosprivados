@@ -155,7 +155,7 @@ module.exports = {
 				await helper.upload_process(req.files.file, dir + req.files.file.name);
 				
 				if(process.env.CLOUDINARY_NAME != ''){+
-					cloudinary(((decode(req.params.id)).substr(1) + req.files.file.name).replace('archivospublicos',process.env.HOST_ARCHIVOSPUBLICOS));
+					cloudinary(((decode(req.params.id)).substr(1) + req.files.file.name).replace('archivospublicos',process.env.HOST_ARCHIVOSPUBLICOS + '/assets'));
 				}
 			}
 			
