@@ -12,7 +12,7 @@ module.exports = async function(fileImageURL){
 			api_secret: process.env.CLOUDINARY_API_SECRET
 		});
 		
-		const fileImageName = fileImageName.split('/').filter(Boolean).pop();
+		const fileImageName = fileImageURL.split('/').filter(Boolean).pop();
 		console.log('fileImageName',fileImageName);
 		
 		const uploadResult = await cloudinary.uploader.upload(fileImageURL, {public_id: fileImageName})
