@@ -15,9 +15,4 @@ services:
        NODE_ENV: "production"
        PORT: ${PORT:-2203}
     ports:
-      - "${PORT:-2203}:2203"
-
-networks:
-  default:
-    external:
-      name: jotace
+      - "127.0.0.1:2203:2203"
