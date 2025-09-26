@@ -4,6 +4,9 @@ const filemanager = function() {
 	this.service_file_collection = createService("GET", ":path:id/collection");
 	this.service_delete = createService("DELETE", ":path:id");
 	this.service_update = createService("PUT", ":path:id");
+    this.archive = null;
+    this.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"];
+    this.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"];
 }
 
 filemanager.prototype.start = async function(parent) {
@@ -33,208 +36,192 @@ filemanager.prototype.getUser = async function() {
 	}
 }
 
-filemanager.prototype.archive = null,
-
-filemanager.prototype.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"],
-
-filemanager.prototype.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"],
-
 filemanager.prototype.close = function() {
-		$("#ul_directory .selected").removeClass("selected");
-		this.archive = null;
-	};
-
-filemanager.prototype.clean = function() {
-	$("#ul_directory .selected").removeClass("selected");
-	this.archive = null;
+	document.querySelectorAll("#ul_directory .selected").forEach(el => el.classList.remove("selected"));
+    this.archive = null;
 };
 
-filemanager.prototype.delete = async function() {
+filemanager.prototype.clean = function() {
+	document.querySelectorAll("#ul_directory .selected").forEach(el => el.classList.remove("selected"));
+    this.archive = null;
+};
+
+filemanager.prototype.delete = async function () {
 	try {
-		let label = $(this.archive).find("label");
+		let label = this.archive.querySelector("label");
 		if (confirm("Confirme eliminación del archivo")) {
 			let p;
 			let i;
 			if (this.isFile) {
-				p = label.attr("data-api-file");
+				p = label.getAttribute("data-api-file");
 				i = btoa(this.fullname);
 			} else if (this.isFolder) {
-				p = label.attr("data-api-folder");
-				i = (btoa(this.fullname.substr(1)));
+				p = label.getAttribute("data-api-folder");
+				i = btoa(this.fullname.substr(1));
 			}
 
-			await this.service_delete({
-				id: i,
-				path: p
-			});
+			await this.service_delete({ id: i, path: p });
 			alert("Archivo eliminado correctamente");
-			$(this.archive.parentNode).find("checkbox").click();
+
+			let checkbox = this.archive.parentNode.querySelector("checkbox");
+			if (checkbox) checkbox.click();
+
 			location.reload();
 		}
 	} catch (e) {
 		console.log(e);
 		alert(e);
 	}
-};
+}
 
-filemanager.prototype.update = async function() {
+filemanager.prototype.update = async function () {
 	try {
-		let label = $(this.archive).find("label");
+		let label = this.archive.querySelector("label");
 		if (confirm("Confirme actualización del archivo")) {
 			let p;
 			let i;
 			if (this.isFile) {
-				p = label.attr("data-api-file");
+				p = label.getAttribute("data-api-file");
 				i = btoa(this.fullname);
 			}
 
-			await this.service_update({
-				id: i,
-				path: p
-			}, JSON.stringify({
-				content: this.fileContent
-			}));
+			await this.service_update(
+				{ id: i, path: p },
+				JSON.stringify({ content: this.fileContent })
+			);
+
 			alert("Archivo actualizado correctamente");
-			$(this.archive.parentNode).find("checkbox").click();
+
+			let checkbox = this.archive.parentNode.querySelector("checkbox");
+			if (checkbox) checkbox.click();
+
 			location.reload();
 		}
 	} catch (e) {
 		console.log(e);
 		alert(e);
 	}
-};
+}
 
-filemanager.prototype.select = async function(li) {
+filemanager.prototype.select = async function (li) {
 	try {
-		let label = $(li).find("label");
-		label.addClass("selected");
+		let label = li.querySelector("label");
+		label.classList.add("selected");
 		this.archive = li;
 
-		this.isFile = (label.attr("data-type") == "file") ? true : false;
-		this.isFolder = (label.attr("data-type") == "folder") ? true : false;
+		const type = label.getAttribute("data-type");
+		this.isFile = type === "file";
+		this.isFolder = type === "folder";
+
+		this.name = label.textContent;
+		this.fullname = decodeURIComponent(label.getAttribute("data-api-path"));
 
 		if (this.isFile) {
-			this.name = label.text();
-			this.fullname = label.attr("data-api-path");
-			this.fullname = decodeURIComponent(this.fullname);
-			this.type = this.name.split(".");
-			this.type = this.type[this.type.length - 1];
-			this.isTextFile = this.textFiles.indexOf(this.type) > -1;
-			this.isMediaFile = this.mediaFiles.indexOf(this.type) > -1;
-			this.fullnameDOWNLOAD = (label.attr("data-api-file") + btoa(this.fullname) + "/download");
-			this.fullnameGET = (label.attr("data-api-file") + btoa(this.fullname) + "/getfile");
+			this.type = this.name.split(".").pop();
+			this.isTextFile = this.textFiles.includes(this.type);
+			this.isMediaFile = this.mediaFiles.includes(this.type);
+			this.fullnameDOWNLOAD = label.getAttribute("data-api-file") + btoa(this.fullname) + "/download";
+			this.fullnameGET = label.getAttribute("data-api-file") + btoa(this.fullname) + "/getfile";
+
 			if (this.isTextFile) {
 				this.parent.loader.active = true;
-				this.fileContent = await this.service_read({
+				let result = await this.service_read({
 					id: btoa(this.fullname),
-					path: label.attr("data-api-file")
+					path: label.getAttribute("data-api-file")
 				});
-				this.fileContent = this.fileContent.data;
+				this.fileContent = result.data;
 				this.parent.loader.active = false;
 			} else if (this.isMediaFile) {
 				let child = null;
-				switch (this.type) {
-					case "jpg":
-						child = document.createElement("img");
-						child.setAttribute("src", this.fullnameGET);
-						break;
-					case "png":
-						child = document.createElement("img");
-						child.setAttribute("src", this.fullnameGET);
-						break;
-					case "gif":
-						child = document.createElement("img");
-						child.setAttribute("src", this.fullnameGET);
-						break;
-					case "ico":
-						child = document.createElement("img");
-						child.setAttribute("src", this.fullnameGET);
-						break;
-					case "mp3":
-						child = document.createElement("audio");
-						child.setAttribute("controls", "");
-						child.setAttribute("src", this.fullnameGET);
-						break;
-					case "mp4":
-						child = document.createElement("video");
-						child.setAttribute("controls", "");
-						child.setAttribute("src", this.fullnameGET);
-						break;
-					case "pdf":
-						child = document.createElement("object");
-						child.setAttribute("data", this.fullnameGET);
-						child.setAttribute("type", "application/pdf");
-						break;
+				const src = this.fullnameGET;
+
+				if (["jpg", "png", "gif", "ico"].includes(this.type)) {
+					child = document.createElement("img");
+					child.src = src;
+				} else if (this.type === "mp3") {
+					child = document.createElement("audio");
+					child.controls = true;
+					child.src = src;
+				} else if (this.type === "mp4") {
+					child = document.createElement("video");
+					child.controls = true;
+					child.src = src;
+				} else if (this.type === "pdf") {
+					child = document.createElement("object");
+					child.data = src;
+					child.type = "application/pdf";
 				}
-				$(".dv-visualcontent").html(child);
+
+				document.querySelector(".dv-visualcontent").innerHTML = "";
+				document.querySelector(".dv-visualcontent").appendChild(child);
 			}
 		} else {
-			this.name = label.text();
-			this.fullname = label.attr("data-api-path");
-			this.fullname = decodeURIComponent(this.fullname);
-
-			let n = label.attr("data-api-path");
-			n = label.attr("data-api-file") + btoa(n) + "/uploader";
-
-			$("#fileupload").attr("action", n);
+			const n = label.getAttribute("data-api-file") + btoa(label.getAttribute("data-api-path")) + "/uploader";
+			document.getElementById("fileupload").setAttribute("action", n);
 		}
 	} catch (e) {
 		console.log(e);
 	}
-};
+}
 
-filemanager.prototype.createFolder = function(ulParent, id, directory) {
+filemanager.prototype.createFolder = function (ulParent, id, directory) {
 	const li = document.createElement("li");
 	const input = document.createElement("input");
 	input.type = "checkbox";
 	input.id = id;
+
 	input.onchange = async (element) => {
 		this.clean();
-		if (element.srcElement.checked) {
-			this.select(element.srcElement.parentNode);
-			const labelParent = $(element.srcElement.parentNode).find("label");
-			let coll;
-			const newid = btoa(encodeURIComponent(labelParent.attr("data-api-path")));
+		if (element.target.checked) {
+			this.select(element.target.parentNode);
 
-			coll = await this.service_folder_collection({
+			const labelParent = element.target.parentNode.querySelector("label");
+			const newid = btoa(encodeURIComponent(labelParent.getAttribute("data-api-path")));
+
+			let coll = await this.service_folder_collection({
 				id: newid,
-				path: labelParent.attr("data-api-folder")
+				path: labelParent.getAttribute("data-api-folder")
 			});
+
 			for (let i = 0; i < coll.data.length; i++) {
-				this.createFolder(element.srcElement.parentNode.lastChild, element.srcElement.getAttribute("id") + "d" + i, {
-					file: directory.file,
-					folder: directory.folder,
-					path: labelParent.attr("data-api-path") + coll.data[i] + "/",
-					name: coll.data[i]
-				});
+				this.createFolder(
+					element.target.parentNode.lastChild,
+					element.target.getAttribute("id") + "d" + i,
+					{
+						file: directory.file,
+						folder: directory.folder,
+						path: labelParent.getAttribute("data-api-path") + coll.data[i] + "/",
+						name: coll.data[i]
+					}
+				);
 			}
 
 			coll = await this.service_file_collection({
 				id: newid,
-				path: labelParent.attr("data-api-file")
+				path: labelParent.getAttribute("data-api-file")
 			});
+
 			for (let i = 0; i < coll.data.length; i++) {
 				const label = document.createElement("label");
-
-				label.setAttribute("data-api-file", labelParent.attr("data-api-file"));
-				label.setAttribute("data-api-folder", labelParent.attr("data-api-folder"));
-				label.setAttribute("data-api-path", labelParent.attr("data-api-path") + coll.data[i]);
+				label.setAttribute("data-api-file", labelParent.getAttribute("data-api-file"));
+				label.setAttribute("data-api-folder", labelParent.getAttribute("data-api-folder"));
+				label.setAttribute("data-api-path", labelParent.getAttribute("data-api-path") + coll.data[i]);
 				label.setAttribute("data-type", "file");
-
-				label.innerHTML = coll.data[i];
+				label.textContent = coll.data[i];
 
 				const li = document.createElement("li");
 				li.appendChild(label);
 				li.onclick = (element) => {
 					this.clean();
-					this.select(element.srcElement.parentNode);
-				}
-				element.srcElement.parentNode.lastChild.appendChild(li);
+					this.select(element.target.parentNode);
+				};
+				element.target.parentNode.lastChild.appendChild(li);
 			}
 		} else {
-			element.srcElement.parentNode.lastChild.innerHTML = "";
+			element.target.parentNode.lastChild.innerHTML = "";
 		}
 	};
+
 	li.appendChild(input);
 
 	const label = document.createElement("label");
@@ -245,8 +232,8 @@ filemanager.prototype.createFolder = function(ulParent, id, directory) {
 	label.setAttribute("data-api-folder", directory.folder);
 	label.setAttribute("data-api-path", directory.path);
 	label.setAttribute("data-type", "folder");
+	label.textContent = directory.name;
 
-	label.innerHTML = directory.name;
 	li.appendChild(label);
 
 	const ul = document.createElement("ul");
@@ -254,7 +241,7 @@ filemanager.prototype.createFolder = function(ulParent, id, directory) {
 	li.appendChild(ul);
 
 	ulParent.appendChild(li);
-};
+}
 
 filemanager.prototype.hasRole = function(role) {
 	return (this.user && this.user.roles && this.user.roles.indexOf(role) > -1) ? true : false;
