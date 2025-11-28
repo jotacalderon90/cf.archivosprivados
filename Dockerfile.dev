@@ -1,6 +1,6 @@
 FROM node:alpine
 
-CMD mkdir /srv/cf.archivosprivados
+RUN mkdir -p /srv/cf.archivosprivados
 
 COPY ["package.json","/srv/cf.archivosprivados/"]
 
