@@ -164,6 +164,11 @@ filemanager.prototype.select = async function (li) {
 	}
 }
 
+filemanager.prototype.copyCleanURL = async function() {
+  await copyLarge(host + '/assets' + this.cleanURL);
+  alert('Url limpia copiada');
+}
+
 filemanager.prototype.createFolder = function (ulParent, id, directory) {
 	const li = document.createElement("li");
 	const input = document.createElement("input");
