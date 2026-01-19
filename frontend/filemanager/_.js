@@ -4,6 +4,7 @@ const filemanager = function() {
 	this.service_file_collection = createService("GET", ":path:id/collection");
 	this.service_delete = createService("DELETE", ":path:id");
 	this.service_update = createService("PUT", ":path:id");
+	this.service_convertitmdhtml = createService("POST", "/api/convertitmdhtml");
     this.archive = null;
     this.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"];
     this.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"];
@@ -168,6 +169,27 @@ filemanager.prototype.copyCleanURL = async function() {
   await copyLarge(host + '/assets' + this.cleanURL);
   alert('Url limpia copiada');
 }
+
+filemanager.prototype.mdToHtml = async function() {
+  try {
+    
+    const respuesta = await this.service_convertitmdhtml({},{
+      markdown: this.fileContent
+    });
+    
+    console.log(respuesta);
+    if(respuesta.error){
+      throw new Error(respuesta.error);
+    }
+    
+    await copyLarge(respuesta.data);
+    alert('Html copiado :D e impreso');
+    
+  }catch(error) {
+    alert(error);
+    console.log(error);
+  }
+},
 
 filemanager.prototype.createFolder = function (ulParent, id, directory) {
 	const li = document.createElement("li");
