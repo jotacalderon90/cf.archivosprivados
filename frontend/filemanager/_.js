@@ -4,10 +4,14 @@ const filemanager = function() {
 	this.service_file_collection = createService("GET", ":path:id/collection");
 	this.service_delete = createService("DELETE", ":path:id");
 	this.service_update = createService("PUT", ":path:id");
-	this.service_convertitmdhtml = createService("POST", "/api/convertitmdhtml");
-    this.archive = null;
-    this.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"];
-    this.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"];
+	
+  this.service_convertitmdhtml = createService("POST", "/api/convertitmdhtml");
+  this.service_convertitcsvjson = createService("POST", "/api/convertitcsvjson");
+  
+  this.archive = null;
+  this.textFiles = ["txt", "html", "css", "js", "json", "csv", "md", "gitignore", "bowerrc"];
+  this.mediaFiles = ["jpg", "gif", "png", "ico", "mp3", "mp4", "pdf"];
+  
 }
 
 filemanager.prototype.start = async function(parent) {
@@ -121,6 +125,8 @@ filemanager.prototype.select = async function (li) {
 			this.type = this.name.split(".").pop();
 			this.isTextFile = this.textFiles.includes(this.type);
 			this.isMediaFile = this.mediaFiles.includes(this.type);
+      this.isMdFile = (this.type==='md')?true:false;
+      this.isCsvFile = (this.type==='csv')?true:false;
 			this.fullnameDOWNLOAD = label.getAttribute("data-api-file") + btoa(this.fullname) + "/download";
 			this.fullnameGET = label.getAttribute("data-api-file") + btoa(this.fullname) + "/getfile";
 
@@ -183,13 +189,34 @@ filemanager.prototype.mdToHtml = async function() {
     }
     
     await copyLarge(respuesta.data);
-    alert('Html copiado :D e impreso');
+    alert('Html copiado al portapapeles :D e impreso');
     
   }catch(error) {
     alert(error);
     console.log(error);
   }
 },
+
+filemanager.prototype.csvToJson = async function() {
+  try {
+    
+    const respuesta = await this.service_convertitcsvjson({},{
+      csv: this.fileContent
+    });
+    
+    console.log(respuesta);
+    if(respuesta.error){
+      throw new Error(respuesta.error);
+    }
+    
+    await copyLarge(respuesta.data);
+    alert('JSON copiado al portapapeles e impreso');
+    
+  }catch(error) {
+    alert(error);
+    console.log(error);
+  }
+}
 
 filemanager.prototype.createFolder = function (ulParent, id, directory) {
 	const li = document.createElement("li");

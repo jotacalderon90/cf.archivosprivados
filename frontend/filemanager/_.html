@@ -107,7 +107,10 @@
             >
 						<i class="fa fa-copy"></i> Copiar URL
 					</button>
-					<button class="btn btn-outline-primary" v-on:click="filemanager.mdToHtml()" title="Cerrar">
+					<button class="btn btn-outline-primary" v-show="filemanager.isCsvFile" v-on:click="filemanager.csvToJson()" title="csv a json">
+						<i class="fa fa-html"></i> Convertir a JSON
+					</button>
+					<button class="btn btn-outline-primary" v-show="filemanager.isMdFile" v-on:click="filemanager.mdToHtml()" title="md a html">
 						<i class="fa fa-html"></i> Convertir a Html
 					</button>
 					<button class="btn btn-outline-primary" v-on:click="filemanager.close()" title="Cerrar">
