@@ -74,14 +74,6 @@ module.exports = {
       
       return true;
       
-      /*
-      if(process.env.CLOUDINARY_NAME && process.env.CLOUDINARY_NAME != ''){
-        const uploadResult = await cloudinary((directory + input.file.name).replace('archivospublicos', process.env.HOST_ARCHIVOSPUBLICOS + '/assets'));
-        if(uploadResult != null){
-          await mongodb.insertOne("cloudinary",uploadResult);
-        }
-      }*/
-      
     }catch(error) {
       logger.error(error);
       throw new Error((error instanceof Error) ? error.message : constants.error.rest.upload + ' ' + constants.error.servicio);

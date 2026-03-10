@@ -2,21 +2,6 @@
 
 const controlador = require('./lib/06.file.admin/controller');
 
-const fs = require("fs");
-const path = require("path");
-const logger = require('cl.jotacalderon.cf.framework/lib/log')('api.03.filemanager.file');
-const helper = require('cl.jotacalderon.cf.framework/lib/helper');
-const response = require('cl.jotacalderon.cf.framework/lib/response');
-const mongodb = require('cl.jotacalderon.cf.framework/lib/mongodb');
-
-const cloudinary = require('./lib/cloudinary');
-
-const directory = process.cwd() + "/frontend/assets/";
-
-const decode = function(value){
-	return decodeURIComponent(new Buffer(value,"base64"));
-}
-
 module.exports = {
 	
   /**

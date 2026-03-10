@@ -9,7 +9,7 @@ module.exports = {
    * /api/filemanager/folder:
    *   post:
    *     tags:
-   *       - Folder
+   *       - Folder Admin
    *     summary: crear carpeta
    *     description: crear carpeta
    */
@@ -25,7 +25,7 @@ module.exports = {
    * /api/filemanager/folder/:id:
    *   put:
    *     tags:
-   *       - Folder
+   *       - Folder Admin
    *     summary: actualizar carpeta
    *     description: actualizar carpeta
    */
@@ -41,7 +41,7 @@ module.exports = {
    * /api/filemanager/folder/:id:
    *   delete:
    *     tags:
-   *       - Folder
+   *       - Folder Admin
    *     summary: eliminar carpeta
    *     description: eliminar carpeta
    */

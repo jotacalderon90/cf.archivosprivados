@@ -1,0 +1,59 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "cf.archivosprivados",
+      "version": "1.0.0",
+      "description": "Documentación del backend",
+      "contact": {
+        "name": "Jhonatan Calderón Leiva",
+        "email": "info@jotace.cl"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://172.27.16.1:2203",
+        "description": "Servidor local"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Default",
+        "description": "Servicios genericos"
+      },
+      {
+        "name": "Views",
+        "description": "Vistas del sistema"
+      },
+      {
+        "name": "Folder",
+        "description": "Rest para obtener carpetas"
+      },
+      {
+        "name": "Folder Admin",
+        "description": "Rest para administrar carpetas"
+      },
+      {
+        "name": "File",
+        "description": "Rest para obtener archivos"
+      },
+      {
+        "name": "File Admin",
+        "description": "Rest para administrar archivos"
+      },
+      {
+        "name": "Folder Full",
+        "description": "Rest para directorio completo"
+      },
+      {
+        "name": "Extras",
+        "description": "Rest para Funciones extras"
+      }
+    ]
+  },
+  "apis": ["./backend/*.js"]
+}
