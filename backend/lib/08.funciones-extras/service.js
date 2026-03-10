@@ -1,6 +1,8 @@
-"use strict";
+'use strict';
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
+
+const constants = require('./constants');
 
 const MarkdownIt = require('markdown-it');
 
@@ -40,41 +42,30 @@ const csvToJson = function csvToJson(csvString) {
 };
 
 module.exports = {
-	
-	//@route('/api/convertitmdhtml')
-	//@method(['post'])
-	//@roles(['root','filemanager'])
-	convertitmdhtml: async function(req,res){
-		try{
-			const htmlContent = md.render(req.body.markdown);
-      res.json({ data: htmlContent });
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,error);
-		}
-	},
   
-	//@route('/api/convertitcsvjson')
-	//@method(['post'])
-	//@roles(['root','filemanager'])
-	convertitcsvjson: async function(req,res){
-		try{
+  convertitmdhtml: async function(input) {
+    try{
+			
+      const htmlContent = md.render(input.markdown);
       
-      const { csv } = req.body;
-      
-      if (!csv || typeof csv !== 'string') {
-        return res.status(400).json({ error: 'CSV string es requerido' });
-      }
-
-      const jsonData = csvToJson(csv);
-      
-      return res.json({
-        data: JSON.stringify(jsonData)
-      });
+      return htmlContent;
       
 		}catch(error){
 			logger.error(error);
-			response.APIError(req,res,error);
+      throw new Error((error instanceof Error) ? error.message : constants.error.rest.convertitmdhtml + ' ' + constants.error.servicio);
 		}
-	},
+  },
+  
+  convertitcsvjson: async function(input) {
+    try {
+      
+      const jsonData = csvToJson(input.csv);
+      
+      return jsonData;
+      
+    }catch(error) {
+      logger.error(error);
+      throw new Error((error instanceof Error) ? error.message : constants.error.rest.convertitcsvjson + ' ' + constants.error.servicio);
+    }
+  }
 }
