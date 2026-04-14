@@ -15,7 +15,7 @@ const filemanager = function () {
 	this.service_rename_folder     = createService('PUT',   ':path:id');
 	this.service_convertitmdhtml   = createService('POST',  '/api/convertitmdhtml');
 	this.service_convertitcsvjson  = createService('POST',  '/api/convertitcsvjson');
-
+  
 	this.archive     = null;
 	this.textFiles   = ['txt','html','css','js','json','csv','md','gitignore','bowerrc'];
 	this.mediaFiles  = ['jpg','gif','png','ico','mp3','mp4','pdf'];
@@ -29,6 +29,8 @@ const filemanager = function () {
 		notifyMsg:      '',
 		notifyType:     'success'
 	};
+  
+  this.uploadUrl = '/';
 };
 
 // ─────────────────────────────────────────────
@@ -42,6 +44,7 @@ filemanager.prototype.start = async function (parent) {
 		folder: '/api/filemanager/folder/',
 		path:   '/'
 	});
+  this.dropzone();
 };
 
 // ─────────────────────────────────────────────
@@ -183,6 +186,7 @@ filemanager.prototype.select = async function (li) {
 			// Es carpeta: configurar el uploader
 			const n = label.getAttribute('data-api-file') + btoa(encodeURIComponent(label.getAttribute('data-api-path'))) + '/uploader';
 			document.getElementById('fileupload').setAttribute('action', n);
+      this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
 		}
 	} catch (e) {
 		console.error(e);
@@ -652,6 +656,77 @@ filemanager.prototype.createFolderNode = function (ulParent, id, directory) {
 
 	ulParent.appendChild(li);
 };
+
+
+filemanager.prototype.dropzone = function() {
+  var dropzone = document.getElementById('dropzone');
+  var fileInput = document.querySelector('#fileupload input[type="file"]');
+
+  dropzone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+  });
+
+  dropzone.addEventListener('dragleave', function() {
+      dropzone.classList.remove('dragover');
+  });
+
+  dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+
+      // Inyecta los archivos dropeados en el input nativo
+      var dt = new DataTransfer();
+      for (var i = 0; i < e.dataTransfer.files.length; i++) {
+          dt.items.add(e.dataTransfer.files[i]);
+      }
+      fileInput.files = dt.files;
+      
+      this.uploadFile();
+  });
+}
+//Uploader
+filemanager.prototype.uploadFile = async function () {
+  try {
+    var form = document.getElementById('fileupload');
+    var fileInput = form.querySelector('input[type="file"]');
+    var files = fileInput.files;
+    if (!files.length) return;
+
+    var formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append('file', files[i]);
+    }
+    
+    console.log(formData);
+    
+    this.parent.loader.active = true;
+    
+    for (var i = 0; i < files.length; i++) {
+      var formData = new FormData();
+      formData.append('file', files[i]);
+
+      const respuesta = await fetch('/api/filemanager/file/' + this.uploadUrl + '/uploader', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await respuesta.json();
+      if (result.error) throw new Error(result.error);
+    }
+    
+    form.reset();
+    
+    this.parent.loader.active = false;    
+    this.close();
+		this._notify('Archivo subido correctamente.', 'success');
+		setTimeout(() => location.reload(), 1200);
+
+  }catch(error) {
+    this.parent.loader.active = false;
+    this._notify(error, 'error');
+    console.log(error);
+  }
+}
 
 // ─────────────────────────────────────────────
 //  Registro en el framework

@@ -90,11 +90,17 @@
 
 				<!-- Uploader -->
 				<form id="fileupload" method="post" action="/" encType="multipart/form-data" v-show="filemanager.isFolder && filemanager.canAdmin()" class="mt-3">
-					<div class="input-group input-group-sm">
-						<input type="file" name="file" class="form-control" multiple/>
-						<button type="submit" class="btn btn-primary"><i class="fa fa-upload"></i> Subir archivo</button>
-					</div>
-				</form>
+          <div id="dropzone" class="dropzone">
+            <i class="fa fa-cloud-upload"></i>
+            <p>Arrastra archivos aquí</p>
+          </div>
+          <div class="input-group input-group-sm mt-2">
+            <input type="file" name="files" class="form-control" multiple/>
+            <button type="button" class="btn btn-primary" v-on:click="filemanager.uploadFile()">
+              <i class="fa fa-upload"></i> Subir archivo
+            </button>
+          </div>
+        </form>
 
 				<!-- Contenido -->
 				<div v-show="filemanager.isFile" class="mt-3">

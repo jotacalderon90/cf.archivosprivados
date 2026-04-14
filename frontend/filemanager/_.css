@@ -31,7 +31,7 @@
 /**********/
 /*DROPZONE*/
 /**********/
- #dropzone{
+/* #dropzone{
      border: dotted 3px lightgray;
      text-align:center;
      background: inherit;
@@ -41,4 +41,28 @@
 }
  .hover{
      border: dotted 3px green!important;
+}*/
+
+
+
+
+
+.dropzone {
+    border: 2px dashed #adb5bd;
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    color: #adb5bd;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.dropzone.dragover {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    background-color: #f0f5ff;
+}
+.dropzone i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
 }
