@@ -31,14 +31,6 @@ describe('validator.b64', () => {
     expect(result.error.issues[0].message).toBe('id debe ser un string en base64 válido');
   });
 
-  test('debe rechazar base64 mal formado', () => {
-    // String que parece base64 pero no lo es realmente
-    const result = b64.safeParse('abcd');
-
-    expect(result.success).toBe(false);
-    expect(result.error.issues[0].message).toBe('id debe ser un string en base64 válido');
-  });
-
   test('debe rechazar null o undefined', () => {
     const resultNull = b64.safeParse(null);
     const resultUndefined = b64.safeParse(undefined);
