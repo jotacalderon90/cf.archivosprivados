@@ -3,7 +3,6 @@
 const controlador = require('./lib/01.default/controller');
 
 module.exports = {
-	
   /**
    * @swagger
    * /favicon.ico:
@@ -13,12 +12,10 @@ module.exports = {
    *     summary: obtener favicon
    *     description: obtiene favicon
    */
-	//@route('/favicon.ico')
-	//@method(['get'])
-	favicon: function(req,res){
-		controlador.favicon(req,res);
-	},
-	
+  //@route('/favicon.ico')
+  //@method(['get'])
+  favicon: controlador.favicon,
+
   /**
    * @swagger
    * /robots.txt:
@@ -28,10 +25,7 @@ module.exports = {
    *     summary: obtener robots
    *     description: obtiene robots.txt
    */
-	//@route('/robots.txt')
-	//@method(['get'])
-	robots: function(req,res){
-		controlador.robots(req,res);
-	}
-	
+  //@route('/robots.txt')
+  //@method(['get'])
+  robots: controlador.robots,
 };

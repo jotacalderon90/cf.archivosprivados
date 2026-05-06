@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     image: archivosprivados:0.0.1
     container_name: archivosprivados
+    env_file:
+      - .env.production
     volumes:
-      - .:/srv/cf.archivosprivados/
-      - /srv/cf.archivosprivados/node_modules
       - ../cf.archivospublicos/frontend/assets/:/srv/cf.archivosprivados/frontend/assets/archivospublicos
     environment:
        NODE_ENV: "production"

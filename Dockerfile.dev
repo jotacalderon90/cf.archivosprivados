@@ -1,15 +1,12 @@
-FROM node:alpine
-
-RUN mkdir -p /srv/cf.archivosprivados
-
-COPY ["package.json","/srv/cf.archivosprivados/"]
+FROM node:20-alpine
 
 WORKDIR /srv/cf.archivosprivados
 
-RUN npm install
+COPY package*.json ./
 
-COPY [".", "/srv/cf.archivosprivados/"]
+RUN npm ci \
+  && npm cache clean --force
 
-EXPOSE $PORT
+COPY . .
 
-CMD [ "npm", "run", "dev" ]
+CMD ["npm", "run", "dev"]

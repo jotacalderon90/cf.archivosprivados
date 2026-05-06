@@ -3,7 +3,6 @@
 const controlador = require('./lib/06.file.admin/controller');
 
 module.exports = {
-	
   /**
    * @swagger
    * /api/filemanager/file/:id:
@@ -13,13 +12,11 @@ module.exports = {
    *     summary: crear archivo
    *     description: crear archivo
    */
-	//@route('/api/filemanager/file/:id')
-	//@method(['post'])
-	//@roles(['root'])
-	create: async function(req,res){
-		controlador.create(req , res);
-	},
-	
+  //@route('/api/filemanager/file/:id')
+  //@method(['post'])
+  //@roles(['root'])
+  create: controlador.create,
+
   /**
    * @swagger
    * /api/filemanager/file/:id:
@@ -29,13 +26,11 @@ module.exports = {
    *     summary: actualizar archivo
    *     description: actualizar archivo
    */
-	//@route('/api/filemanager/file/:id')
-	//@method(['put'])
-	//@roles(['root'])
-	update: async function(req,res){
-		controlador.update(req , res);
-	},
-	
+  //@route('/api/filemanager/file/:id')
+  //@method(['put'])
+  //@roles(['root'])
+  update: controlador.update,
+
   /**
    * @swagger
    * /api/filemanager/file/:id:
@@ -45,13 +40,11 @@ module.exports = {
    *     summary: eliminar archivo
    *     description: eliminar archivo
    */
-	//@route('/api/filemanager/file/:id')
-	//@method(['delete'])
-	//@roles(['root'])
-	delete: async function(req,res){
-		controlador.delete(req , res);
-	},
-	
+  //@route('/api/filemanager/file/:id')
+  //@method(['delete'])
+  //@roles(['root'])
+  delete: controlador.delete,
+
   /**
    * @swagger
    * /api/filemanager/file/:id/rename:
@@ -61,13 +54,11 @@ module.exports = {
    *     summary: renombrar archivo
    *     description: renombrar archivo
    */
-	//@route('/api/filemanager/file/:id/rename')
-	//@method(['put'])
-	//@roles(['root'])
-	rename: async function(req,res){
-		controlador.rename(req , res);
-	},
-	
+  //@route('/api/filemanager/file/:id/rename')
+  //@method(['put'])
+  //@roles(['root'])
+  rename: controlador.rename,
+
   /**
    * @swagger
    * /api/filemanager/file/:id/uploader:
@@ -77,10 +68,8 @@ module.exports = {
    *     summary: subir archivo
    *     description: subir archivo
    */
-	//@route('/api/filemanager/file/:id/uploader')
-	//@method(['post'])
-	//@roles(['root','filemanager'])
-	upload: async function(req,res){
-		controlador.upload(req , res);
-	}
-}
+  //@route('/api/filemanager/file/:id/uploader')
+  //@method(['post'])
+  //@roles(['root','filemanager'])
+  upload: controlador.upload,
+};

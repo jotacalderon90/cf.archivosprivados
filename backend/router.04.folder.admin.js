@@ -3,7 +3,6 @@
 const controlador = require('./lib/04.folder.admin/controller');
 
 module.exports = {
-  
   /**
    * @swagger
    * /api/filemanager/folder:
@@ -13,13 +12,11 @@ module.exports = {
    *     summary: crear carpeta
    *     description: crear carpeta
    */
-	//@route('/api/filemanager/folder')
-	//@method(['post'])
-	//@roles(['root'])
-	create: async function(req,res){
-		controlador.create(req,res);
-	},
-	
+  //@route('/api/filemanager/folder')
+  //@method(['post'])
+  //@roles(['root'])
+  create: controlador.create,
+
   /**
    * @swagger
    * /api/filemanager/folder/:id:
@@ -29,13 +26,11 @@ module.exports = {
    *     summary: actualizar carpeta
    *     description: actualizar carpeta
    */
-	//@route('/api/filemanager/folder/:id')
-	//@method(['put'])
-	//@roles(['root'])
-	update: async function(req,res){
-		controlador.update(req,res);
-	},
-	
+  //@route('/api/filemanager/folder/:id')
+  //@method(['put'])
+  //@roles(['root'])
+  update: controlador.update,
+
   /**
    * @swagger
    * /api/filemanager/folder/:id:
@@ -45,10 +40,8 @@ module.exports = {
    *     summary: eliminar carpeta
    *     description: eliminar carpeta
    */
-	//@route('/api/filemanager/folder/:id')
-	//@method(['delete'])
-	//@roles(['root'])
-	delete: async function(req,res){
-		controlador.delete(req,res);
-	}
-}
+  //@route('/api/filemanager/folder/:id')
+  //@method(['delete'])
+  //@roles(['root'])
+  delete: controlador.delete,
+};

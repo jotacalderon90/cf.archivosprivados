@@ -5,15 +5,35 @@
   "private": true,
   "scripts": {
     "start": "node app",
-    "dev": "npx nodemon --legacy-watch app  --ignore frontend"
+    "dev": "npx nodemon --legacy-watch app  --ignore frontend",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "jest",
+    "prepare": "husky || true"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
+  },
+  "jest": {
+    "testMatch": [
+      "**/backend__tests__/**/*.test.js"
+    ]
   },
   "dependencies": {
-    "cl.jotacalderon.cf.framework": "0.0.80",
+    "cl.jotacalderon.cf.framework": "0.0.83",
     "zod": "4.1.12",
-    "express-fileupload": "1.2.1",
-    "markdown-it": "14.1.0"
+    "express-fileupload": "1.5.2",
+    "markdown-it": "14.1.1"
   },
   "devDependencies": {
-    "nodemon": "latest"
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "jest": "^30.3.0",
+    "lint-staged": "^16.4.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.3"
   }
 }
