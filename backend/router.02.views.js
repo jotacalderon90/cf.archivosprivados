@@ -11,9 +11,17 @@ module.exports = {
    *       - Views
    *     summary: renderizar inicio
    *     description: renderizar inicio
+   *     x-roles: ['admin','archivosprivados']
+   *     responses:
+   *       200:
+   *         description: Respuesta en HTML
+   *         content:
+   *           text/html:
+   *             schema:
+   *               type: string
    */
   //@route('/')
   //@method(['get'])
-  //@roles(['root','filemanager'])
+  //@roles(['admin','archivosprivados'])
   index: controlador.index,
 };

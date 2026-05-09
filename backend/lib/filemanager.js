@@ -1,16 +1,16 @@
 'use strict';
 
-const directory = process.cwd() + '/frontend/assets';
+const directory = process.cwd() + '/frontend/assets/domains/';
 
-const decode = function(value){
-	return decodeURIComponent(Buffer.from(value, 'base64').toString('utf8'));
-}
+const decode = function (value) {
+  return decodeURIComponent(Buffer.from(value, 'base64').toString('utf8'));
+};
 
 module.exports = {
-  base: function() {
-    return directory;
+  base: function (host) {
+    return directory + host;
   },
-  get: function(id) {
-    return directory + decode(id);
-  }
-}
+  get: function (id, host) {
+    return directory + host + '/' + decode(id);
+  },
+};

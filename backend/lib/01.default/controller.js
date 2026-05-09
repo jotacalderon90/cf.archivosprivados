@@ -5,24 +5,29 @@ const response = require('cl.jotacalderon.cf.framework/lib/response');
 const constants = require('./constants');
 
 module.exports = {
-  
-  favicon: async function(req, res) {
-    try{
-      res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,constants.error.rest.favicon + ' ' + constants.error.controlador);
-		}
+  favicon: async function (req, res) {
+    try {
+      if (process.env.NODE_ENV === 'development') {
+        res.redirect(process.env.HOST_ARCHIVOSPUBLICOS + '/favicon.ico');
+        return;
+      } else {
+        const host_archivospublicos = req.headers.host.replace(/^([^.:]+)/, 'archivospublicos');
+        res.redirect('https://' + host_archivospublicos + '/favicon.ico');
+        return;
+      }
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.favicon + ' ' + constants.error.controlador);
+    }
   },
-  
-  robots: async function(req, res) {
-    try{
+
+  robots: async function (req, res) {
+    try {
       res.setHeader('content-type', 'text/plain');
       res.send('User-agent: *\n\nDisallow: /');
-		}catch(error){
-			logger.error(error);
-			response.APIError(req,res,constants.error.rest.robots + ' ' + constants.error.controlador);
-		}
-  }
-  
-}
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.robots + ' ' + constants.error.controlador);
+    }
+  },
+};

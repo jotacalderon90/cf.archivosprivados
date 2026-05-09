@@ -77,7 +77,7 @@ filemanager.prototype.hasRole = function (role) {
 };
 
 filemanager.prototype.canAdmin = function () {
-	return this.hasRole('root');
+	return this.hasRole('admin');
 };
 
 // ─────────────────────────────────────────────
@@ -527,7 +527,7 @@ filemanager.prototype.relocate = async function () {
 // ─────────────────────────────────────────────
 filemanager.prototype.copyCleanURL = async function () {
 	try {
-		await copyLarge(host + '/assets' + this.cleanURL);
+    await copyLarge(window.location.origin + this.cleanURL);
 		this._notify('URL copiada al portapapeles.', 'success');
 	} catch (e) {
 		this._notify('No se pudo copiar la URL.', 'error');

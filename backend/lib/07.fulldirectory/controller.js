@@ -7,18 +7,18 @@ const constants = require('./constants');
 const service = require('./service');
 
 module.exports = {
-  
-  fulldirectory: async function(req, res) {
-    try{
-      
-      const respuesta = await service.fulldirectory();
-      
-      res.send({data: respuesta});
-      
-		}catch(error){
-			logger.error(error);
-			response.APIError(req, res, constants.error.rest.fulldirectory + ' ' + constants.error.controlador);
-		}
-  }
-  
-}
+  fulldirectory: async function (req, res) {
+    try {
+      const respuesta = await service.fulldirectory(req.headers.host);
+
+      res.send({ data: respuesta });
+    } catch (error) {
+      logger.error(error);
+      response.APIError(
+        req,
+        res,
+        constants.error.rest.fulldirectory + ' ' + constants.error.controlador
+      );
+    }
+  },
+};

@@ -11,10 +11,24 @@ module.exports = {
    *       - Folder Admin
    *     summary: crear carpeta
    *     description: crear carpeta
+   *     x-roles: ['admin']
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/folder')
   //@method(['post'])
-  //@roles(['root'])
+  //@roles(['admin'])
   create: controlador.create,
 
   /**
@@ -25,10 +39,30 @@ module.exports = {
    *       - Folder Admin
    *     summary: actualizar carpeta
    *     description: actualizar carpeta
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/folder/:id')
   //@method(['put'])
-  //@roles(['root'])
+  //@roles(['admin'])
   update: controlador.update,
 
   /**
@@ -39,9 +73,23 @@ module.exports = {
    *       - Folder Admin
    *     summary: eliminar carpeta
    *     description: eliminar carpeta
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/folder/:id')
   //@method(['delete'])
-  //@roles(['root'])
+  //@roles(['admin'])
   delete: controlador.delete,
 };

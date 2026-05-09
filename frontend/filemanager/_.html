@@ -67,11 +67,11 @@
 						</ul>
 					</div>
 
-					<button class="btn btn-outline-secondary" v-show="filemanager.isCsvFile" v-on:click="filemanager.csvToJson()" title="CSV a JSON">
+					<button class="btn btn-outline-secondary" v-show="filemanager.canAdmin() && filemanager.isCsvFile" v-on:click="filemanager.csvToJson()" title="CSV a JSON">
 						<i class="fa fa-exchange-alt"></i> CSV → JSON
 					</button>
 
-					<button class="btn btn-outline-secondary" v-show="filemanager.isMdFile" v-on:click="filemanager.mdToHtml()" title="MD a HTML">
+					<button class="btn btn-outline-secondary" v-show="filemanager.canAdmin() && filemanager.isMdFile" v-on:click="filemanager.mdToHtml()" title="MD a HTML">
 						<i class="fa fa-code"></i> MD → HTML
 					</button>
 

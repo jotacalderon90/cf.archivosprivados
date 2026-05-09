@@ -11,10 +11,30 @@ module.exports = {
    *       - File Admin
    *     summary: crear archivo
    *     description: crear archivo
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/file/:id')
   //@method(['post'])
-  //@roles(['root'])
+  //@roles(['admin'])
   create: controlador.create,
 
   /**
@@ -25,10 +45,30 @@ module.exports = {
    *       - File Admin
    *     summary: actualizar archivo
    *     description: actualizar archivo
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/file/:id')
   //@method(['put'])
-  //@roles(['root'])
+  //@roles(['admin'])
   update: controlador.update,
 
   /**
@@ -39,10 +79,24 @@ module.exports = {
    *       - File Admin
    *     summary: eliminar archivo
    *     description: eliminar archivo
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/file/:id')
   //@method(['delete'])
-  //@roles(['root'])
+  //@roles(['admin'])
   delete: controlador.delete,
 
   /**
@@ -53,10 +107,30 @@ module.exports = {
    *       - File Admin
    *     summary: renombrar archivo
    *     description: renombrar archivo
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/file/:id/rename')
   //@method(['put'])
-  //@roles(['root'])
+  //@roles(['admin'])
   rename: controlador.rename,
 
   /**
@@ -67,9 +141,29 @@ module.exports = {
    *       - File Admin
    *     summary: subir archivo
    *     description: subir archivo
+   *     x-roles: ['admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
    */
   //@route('/api/filemanager/file/:id/uploader')
   //@method(['post'])
-  //@roles(['root','filemanager'])
+  //@roles(['admin'])
   upload: controlador.upload,
 };

@@ -10,7 +10,7 @@ services:
     env_file:
       - .env.production
     volumes:
-      - ../cf.archivospublicos/frontend/assets/:/srv/cf.archivosprivados/frontend/assets/archivospublicos
+      - ../cf.archivospublicos/frontend/assets/domains/archivospublicos.jotace.cl/:/srv/cf.archivosprivados/frontend/assets/domains/archivosprivados.jotace.cl/archivospublicos
     environment:
        NODE_ENV: "production"
        PORT: ${PORT:-2203}
