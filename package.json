@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "cl.jotacalderon.cf.framework": "0.0.94",
+    "cl.jotacalderon.cf.framework": "0.0.95",
     "zod": "4.1.12",
     "express-fileupload": "1.5.2",
     "markdown-it": "14.1.1"
