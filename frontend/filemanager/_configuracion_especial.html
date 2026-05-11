@@ -1,0 +1,48 @@
+  <div class="modal fade" id="mdFolderConfig" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+            <i class="fa fa-folder-open me-2"></i>
+            Configuración de {{filemanager.isFolder ? 'carpeta' : 'archivo'}}
+          </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body table-responsive">
+          <small class="text-muted">
+						<i class="fa" :class="filemanager.isFolder ? 'fa-folder text-warning' : 'fa-file text-secondary'"></i>
+						{{ filemanager.fullname }}
+					</small>
+          <hr>
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="text-center">Crear</th>
+                <th class="text-center">Editar</th>
+                <th class="text-center">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="rol in filemanager.configuracion_especial.roles">
+                <th>{{rol.nombre}}</th>
+                <td class="text-center">
+                  <input type="checkbox" v-model="rol.canCreate" />
+                </td>
+                <td class="text-center">
+                  <input type="checkbox" v-model="rol.canUpdate" />
+                </td>
+                <td class="text-center">
+                  <input type="checkbox" v-model="rol.canDelete" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-sm btn-primary" v-on:click="filemanager.saveConfig()">Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>

@@ -1,27 +1,37 @@
 <!--use:main-->
 
 <!--define:head-->
-	<link rel="stylesheet" href="filemanager/_.css" />
+	<link rel="stylesheet" href="filemanager/index/_.css" />
 <!--/define:head-->
 
 <!--define:script-->
 	
   <script>
-    const host = "{{data:process.env.HOST}}";
     const roles = {{data:JSON.stringify(doc.user.roles)}};
   </script>
-	<script src="filemanager/_.js"></script>
-	
+	<script src="filemanager/_roles.js"></script>
+	<script src="filemanager/_configuracion_especial.js"></script>
+	<script src="filemanager/index/_.js"></script>
+  
 <!--/define:script-->
 
 <!--define:main-->
 	
-	<!--include:filemanager/section/header-->
+	<!--include:filemanager/header-->
+  
+	<!--include:modal/_-->
 	
 	<div class="d-flex">
-		<aside class="border border-end bg-body-tertiary min-vh-100 flex-shrink-0 offcanvas-md offcanvas-end"
-			tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 300px;">
-			<ul id="ul_directory" class="mt-4"></ul>
+		<aside class="border border-end bg-body-tertiary flex-shrink-0 offcanvas-md offcanvas-end d-flex flex-column"
+			tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 300px; height: calc(100vh - 37px);">
+			<ul id="ul_directory" class="mt-4 flex-grow-1  overflow-auto"></ul>
+      <!--
+      <div class="p-3 border-top" v-show="filemanager.canAdmin()">
+        <a class="btn btn-outline-secondary w-100" href="/admin/configuration">
+          Configuración
+        </a>
+      </div>
+      -->
 		</aside>
 		<div class="resizer"></div>
 		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;" v-show="filemanager.archive!=null">
@@ -73,6 +83,15 @@
 
 					<button class="btn btn-outline-secondary" v-show="filemanager.canAdmin() && filemanager.isMdFile" v-on:click="filemanager.mdToHtml()" title="MD a HTML">
 						<i class="fa fa-code"></i> MD → HTML
+					</button>
+
+					<button 
+            class="btn btn-outline-secondary" 
+            title="Configuración de carpeta"
+            v-show="filemanager.canAdmin() && filemanager.isFolder && filemanager.fullname != '/'" 
+            v-on:click="filemanager.openConfig()" 
+            >
+						<i class="fa fa-cogs"></i>
 					</button>
 
 					<button class="btn btn-outline-secondary" v-on:click="filemanager.close()" title="Cerrar">
@@ -239,26 +258,8 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- ===================== MODAL: Notificación ===================== -->
-	<div class="modal fade" id="mdNotify" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<div class="modal-header" :class="filemanager.modal.notifyType === 'error' ? 'bg-danger text-white' : 'bg-success text-white'">
-					<h6 class="modal-title">
-						<i :class="filemanager.modal.notifyType === 'error' ? 'fa fa-exclamation-circle' : 'fa fa-check-circle'" class="me-2"></i>
-						{{ filemanager.modal.notifyType === 'error' ? 'Error' : 'Listo' }}
-					</h6>
-					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-				</div>
-				<div class="modal-body">
-					<p class="mb-0">{{ filemanager.modal.notifyMsg }}</p>
-				</div>
-				<div class="modal-footer py-2">
-					<button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
+  
+	<!--include:filemanager/_configuracion_especial-->
+  
 
 <!--/define:main-->

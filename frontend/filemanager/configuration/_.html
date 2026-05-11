@@ -1,0 +1,47 @@
+<!--use:main-->
+
+<!--define:script-->
+	
+  <script>
+    const host = "{{data:process.env.HOST}}";
+    const roles = {{data:JSON.stringify(doc.user.roles)}};
+  </script>
+	<script src="filemanager/configuration/_.js"></script>
+	
+<!--/define:script-->
+
+<!--define:main-->
+	
+	<!--include:filemanager/header-->
+	
+	<div class="d-flex">
+		<aside class="border border-end bg-body-tertiary flex-shrink-0 offcanvas-md offcanvas-end d-flex flex-column"
+			tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 300px; height: calc(100vh - 37px);">
+			
+      <div class="p-3 border-bottom">
+        <a class="btn btn-outline-secondary w-100" href="/">
+          Inicio
+        </a>
+      </div>
+      
+		</aside>
+		<div class="resizer"></div>
+		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;">
+    
+      <h4 class="mt-4">
+				Configuración
+      </h4>
+			
+      <hr>
+			
+      <div class="mb-3">
+        <label for="inputTitle" class="form-label">Permitir usuarios con rol <strong>[archivosprivados]</strong> tener carpetas propias</label>
+        <br>
+        <input type="checkbox" />
+      </div>
+				
+    
+    </main>
+  </div>
+
+<!--/define:main-->

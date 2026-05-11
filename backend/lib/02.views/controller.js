@@ -17,7 +17,7 @@ const getHostAccount = function (req) {
 module.exports = {
   index: async function (req, res) {
     try {
-      res.render('filemanager/_', {
+      res.render('filemanager/index/_', {
         user: req.user,
         __hostAccount: getHostAccount(req),
       });
@@ -27,6 +27,22 @@ module.exports = {
         req,
         res,
         constants.error.rest.index + ' ' + constants.error.controlador
+      );
+    }
+  },
+
+  configuration: async function (req, res) {
+    try {
+      res.render('filemanager/configuration/_', {
+        user: req.user,
+        __hostAccount: getHostAccount(req),
+      });
+    } catch (error) {
+      logger.error(error);
+      response.renderError(
+        req,
+        res,
+        constants.error.rest.configuration + ' ' + constants.error.controlador
       );
     }
   },

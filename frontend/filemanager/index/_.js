@@ -31,6 +31,11 @@ const filemanager = function () {
 	};
   
   this.uploadUrl = '/';
+  
+  this.configuracion_especial = {
+    path: '',
+    roles: []
+  };
 };
 
 // ─────────────────────────────────────────────
@@ -45,28 +50,6 @@ filemanager.prototype.start = async function (parent) {
 		path:   '/'
 	});
   this.dropzone();
-};
-
-// ─────────────────────────────────────────────
-//  Helpers de modal Bootstrap 5
-// ─────────────────────────────────────────────
-filemanager.prototype._openModal = function (id) {
-	this.modal.error = '';
-	const el = document.getElementById(id);
-	if (!el) return;
-	bootstrap.Modal.getOrCreateInstance(el).show();
-};
-
-filemanager.prototype._closeModal = function (id) {
-	const el = document.getElementById(id);
-	if (!el) return;
-	bootstrap.Modal.getOrCreateInstance(el).hide();
-};
-
-filemanager.prototype._notify = function (msg, type) {
-	this.modal.notifyMsg  = msg;
-	this.modal.notifyType = type || 'success';
-	this._openModal('mdNotify');
 };
 
 // ─────────────────────────────────────────────
@@ -187,10 +170,21 @@ filemanager.prototype.select = async function (li) {
 			const n = label.getAttribute('data-api-file') + btoa(encodeURIComponent(label.getAttribute('data-api-path'))) + '/uploader';
 			document.getElementById('fileupload').setAttribute('action', n);
       this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
+      
+      //20260510:cargar configuracion especial
+      this.configuracion_especial = this.parent.configuracion_especial.findByPath(this.fullname);
+      if(this.configuracion_especial == null) {
+        this.configuracion_especial = {
+          path: this.fullname,
+          roles: this.parent._roles.getToSelect()
+        }
+      }
+      
 		}
+    
 	} catch (e) {
 		console.error(e);
-		this._notify('Error al seleccionar: ' + e.message, 'error');
+		this.parent.modal.notify('Error al seleccionar: ' + e.message, 'error');
 	}
 };
 
@@ -198,11 +192,11 @@ filemanager.prototype.select = async function (li) {
 //  Eliminar
 // ─────────────────────────────────────────────
 filemanager.prototype.confirmDelete = function () {
-	this._openModal('mdDelete');
+	this.parent.modal.open('mdDelete');
 };
 
 filemanager.prototype.delete = async function () {
-	this._closeModal('mdDelete');
+	this.parent.modal.close('mdDelete');
 	try {
 		const label = this.archive.querySelector('label');
 		let p, i;
@@ -222,12 +216,12 @@ filemanager.prototype.delete = async function () {
 		if (result && result.error) throw new Error(result.error);
 
 		this.close();
-		this._notify('Eliminado correctamente.', 'success');
+		this.parent.modal.notify('Eliminado correctamente.', 'success');
 		setTimeout(() => location.reload(), 1200);
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al eliminar: ' + e.message, 'error');
+		this.parent.modal.notify('Error al eliminar: ' + e.message, 'error');
 	}
 };
 
@@ -235,7 +229,7 @@ filemanager.prototype.delete = async function () {
 //  Guardar (actualizar contenido)
 // ─────────────────────────────────────────────
 filemanager.prototype.update = async function () {
-	this._closeModal('mdUpdate');
+	this.parent.modal.close('mdUpdate');
 	try {
 		const label = this.archive.querySelector('label');
 		const p     = label.getAttribute('data-api-file');
@@ -250,11 +244,11 @@ filemanager.prototype.update = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this._notify('Archivo guardado correctamente.', 'success');
+		this.parent.modal.notify('Archivo guardado correctamente.', 'success');
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al guardar: ' + e.message, 'error');
+		this.parent.modal.notify('Error al guardar: ' + e.message, 'error');
 	}
 };
 
@@ -263,7 +257,7 @@ filemanager.prototype.update = async function () {
 // ─────────────────────────────────────────────
 filemanager.prototype.openRename = function () {
 	this.modal.newName = this.name;
-	this._openModal('mdRename');
+	this.parent.modal.open('mdRename');
 	setTimeout(() => {
 		const input = document.querySelector('#mdRename input');
 		if (input) { input.focus(); input.select(); }
@@ -285,7 +279,7 @@ filemanager.prototype.rename = async function () {
 		return;
 	}
 
-	this._closeModal('mdRename');
+	this.parent.modal.close('mdRename');
 	try {
 		const label = this.archive.querySelector('label');
 		const i     = btoa(this.fullname);
@@ -314,12 +308,12 @@ filemanager.prototype.rename = async function () {
 		this.parent.loader.active = false;
 		if (result && result.error) throw new Error(result.error);
 
-		this._notify('Renombrado correctamente.', 'success');
+		this.parent.modal.notify('Renombrado correctamente.', 'success');
 		setTimeout(() => location.reload(), 1200);
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al renombrar: ' + e.message, 'error');
+		this.parent.modal.notify('Error al renombrar: ' + e.message, 'error');
 	}
 };
 
@@ -328,7 +322,7 @@ filemanager.prototype.rename = async function () {
 // ─────────────────────────────────────────────
 filemanager.prototype.openNewFile = function () {
 	this.modal.newName = '';
-	this._openModal('mdNewFile');
+	this.parent.modal.open('mdNewFile');
 	setTimeout(() => {
 		const input = document.querySelector('#mdNewFile input');
 		if (input) input.focus();
@@ -350,7 +344,7 @@ filemanager.prototype.createFile = async function () {
 		return;
 	}
 
-	this._closeModal('mdNewFile');
+	this.parent.modal.close('mdNewFile');
 	try {
 		const label = this.archive.querySelector('label');
 		const i     = btoa(encodeURIComponent(this.fullname));
@@ -365,12 +359,12 @@ filemanager.prototype.createFile = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this._notify('Archivo "' + newName + '" creado.', 'success');
+		this.parent.modal.notify('Archivo "' + newName + '" creado.', 'success');
 		setTimeout(() => location.reload(), 1200);
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al crear archivo: ' + e.message, 'error');
+		this.parent.modal.notify('Error al crear archivo: ' + e.message, 'error');
 	}
 };
 
@@ -379,7 +373,7 @@ filemanager.prototype.createFile = async function () {
 // ─────────────────────────────────────────────
 filemanager.prototype.openNewFolder = function () {
 	this.modal.newName = '';
-	this._openModal('mdNewFolder');
+	this.parent.modal.open('mdNewFolder');
 	setTimeout(() => {
 		const input = document.querySelector('#mdNewFolder input');
 		if (input) input.focus();
@@ -397,7 +391,7 @@ filemanager.prototype.createFolder_ = async function () {
 		return;
 	}
 
-	this._closeModal('mdNewFolder');
+	this.parent.modal.close('mdNewFolder');
 	try {
 		const label = this.archive.querySelector('label');
 		const i     = btoa(encodeURIComponent(this.fullname));
@@ -412,12 +406,12 @@ filemanager.prototype.createFolder_ = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this._notify('Carpeta "' + newName + '" creada.', 'success');
+		this.parent.modal.notify('Carpeta "' + newName + '" creada.', 'success');
 		setTimeout(() => location.reload(), 1200);
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al crear carpeta: ' + e.message, 'error');
+		this.parent.modal.notify('Error al crear carpeta: ' + e.message, 'error');
 	}
 };
 
@@ -434,7 +428,7 @@ filemanager.prototype.openRelocate = function () {
 	ul.innerHTML = '';
 	this._buildRelocateTree(ul, '/', '/api/filemanager/folder/', 0);
 
-	this._openModal('mdRelocate');
+	this.parent.modal.open('mdRelocate');
 };
 
 filemanager.prototype._buildRelocateTree = async function (ulEl, path, folderApi, depth) {
@@ -496,7 +490,7 @@ filemanager.prototype.relocate = async function () {
 		return;
 	}
 
-	this._closeModal('mdRelocate');
+	this.parent.modal.close('mdRelocate');
 	try {
 		// La reubicación usa rename del archivo: lo renombra con path destino + nombre actual
 		const label    = this.archive.querySelector('label');
@@ -513,12 +507,12 @@ filemanager.prototype.relocate = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this._notify('Archivo reubicado en "' + this.modal.relocateTarget + '".', 'success');
+		this.parent.modal.notify('Archivo reubicado en "' + this.modal.relocateTarget + '".', 'success');
 		setTimeout(() => location.reload(), 1200);
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al reubicar: ' + e.message, 'error');
+		this.parent.modal.notify('Error al reubicar: ' + e.message, 'error');
 	}
 };
 
@@ -528,9 +522,9 @@ filemanager.prototype.relocate = async function () {
 filemanager.prototype.copyCleanURL = async function () {
 	try {
     await copyLarge(window.location.origin + this.cleanURL);
-		this._notify('URL copiada al portapapeles.', 'success');
+		this.parent.modal.notify('URL copiada al portapapeles.', 'success');
 	} catch (e) {
-		this._notify('No se pudo copiar la URL.', 'error');
+		this.parent.modal.notify('No se pudo copiar la URL.', 'error');
 	}
 };
 
@@ -546,11 +540,11 @@ filemanager.prototype.mdToHtml = async function () {
 		if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
 		await copyLarge(respuesta.data);
-		this._notify('HTML generado y copiado al portapapeles.', 'success');
+		this.parent.modal.notify('HTML generado y copiado al portapapeles.', 'success');
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al convertir MD: ' + e.message, 'error');
+		this.parent.modal.notify('Error al convertir MD: ' + e.message, 'error');
 	}
 };
 
@@ -566,13 +560,25 @@ filemanager.prototype.csvToJson = async function () {
 		if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
 		await copyLarge(JSON.stringify(respuesta.data, null, 2));
-		this._notify('JSON copiado al portapapeles.', 'success');
+		this.parent.modal.notify('JSON copiado al portapapeles.', 'success');
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
-		this._notify('Error al convertir CSV: ' + e.message, 'error');
+		this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
 	}
 };
+
+
+// ─────────────────────────────────────────────
+//  Config Folder
+// ─────────────────────────────────────────────
+filemanager.prototype.openConfig = async function () {
+  this.parent.modal.open('mdFolderConfig');
+};
+
+filemanager.prototype.saveConfig = async function () {
+  console.log(this.configuracion_especial);
+}
 
 // ─────────────────────────────────────────────
 //  Árbol de directorios (sidebar)
@@ -685,6 +691,7 @@ filemanager.prototype.dropzone = function() {
       this.uploadFile();
   });
 }
+
 //Uploader
 filemanager.prototype.uploadFile = async function () {
   try {
@@ -718,15 +725,16 @@ filemanager.prototype.uploadFile = async function () {
     
     this.parent.loader.active = false;    
     this.close();
-		this._notify('Archivo subido correctamente.', 'success');
+		this.parent.modal.notify('Archivo subido correctamente.', 'success');
 		setTimeout(() => location.reload(), 1200);
 
   }catch(error) {
     this.parent.loader.active = false;
-    this._notify(error, 'error');
+    this.parent.modal.notify(error, 'error');
     console.log(error);
   }
 }
+
 
 // ─────────────────────────────────────────────
 //  Registro en el framework
