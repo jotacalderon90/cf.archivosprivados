@@ -63,6 +63,15 @@ filemanager.prototype.canAdmin = function () {
 	return this.hasRole('admin');
 };
 
+filemanager.prototype.canDelete = function () {
+  if(this.hasRole('admin')) {
+    return true;
+  } if(this.parent && this.parent.configuracion_especial.has(roles)) {
+    return true;
+  }
+  return false;
+};
+
 // ─────────────────────────────────────────────
 //  Selección y cierre
 // ─────────────────────────────────────────────
@@ -172,13 +181,7 @@ filemanager.prototype.select = async function (li) {
       this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
       
       //20260510:cargar configuracion especial
-      this.configuracion_especial = this.parent.configuracion_especial.findByPath(this.fullname);
-      if(this.configuracion_especial == null) {
-        this.configuracion_especial = {
-          path: this.fullname,
-          roles: this.parent._roles.getToSelect()
-        }
-      }
+      this.parent.configuracion_especial.select(this.fullname);
       
 		}
     
@@ -568,17 +571,6 @@ filemanager.prototype.csvToJson = async function () {
 	}
 };
 
-
-// ─────────────────────────────────────────────
-//  Config Folder
-// ─────────────────────────────────────────────
-filemanager.prototype.openConfig = async function () {
-  this.parent.modal.open('mdFolderConfig');
-};
-
-filemanager.prototype.saveConfig = async function () {
-  console.log(this.configuracion_especial);
-}
 
 // ─────────────────────────────────────────────
 //  Árbol de directorios (sidebar)

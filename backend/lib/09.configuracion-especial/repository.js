@@ -8,6 +8,12 @@ const constants = require('./constants');
 
 const collectionName = 'archivos_privados_configuracion';
 
+const map = (row) => {
+  row.id = row._id.toString();
+  delete row._id;
+  return row;
+};
+
 module.exports = {
   total: async function (query, options) {
     try {
@@ -28,12 +34,11 @@ module.exports = {
     try {
       const collection = await mongodb.find(collectionName, query, options);
 
-      console.log(collection);
       if (!Array.isArray(collection)) {
         throw new Error(collection);
       }
 
-      return collection.map((r) => ({ ...r, id: r._id.toString() }));
+      return collection.map(map);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.collection + ' ' + constants.error.repositorio);
@@ -45,12 +50,10 @@ module.exports = {
       const doc = await mongodb.findOne(collectionName, id);
 
       if (!doc._id) {
-        throw new Error(doc);
+        return null;
       }
 
-      doc.id = doc._id.toString();
-
-      return doc;
+      return map(doc);
     } catch (error) {
       logger.error(error);
       throw new Error(constants.error.rest.read + ' ' + constants.error.repositorio);
@@ -62,7 +65,7 @@ module.exports = {
       const newdoc = {
         path: input.path,
         host: input.host,
-        roles: [],
+        roles: input.roles,
       };
 
       const created = await mongodb.insertOne(collectionName, newdoc);
@@ -78,9 +81,13 @@ module.exports = {
     }
   },
 
-  update: async function (input, id) {
+  update: async function (input) {
     try {
-      const updated = await mongodb.updateOne(collectionName, id, { $set: input });
+      const set = {
+        roles: input.roles,
+      };
+
+      const updated = await mongodb.updateOne(collectionName, input.id, { $set: set });
 
       if (!updated.acknowledged) {
         throw new Error(updated);

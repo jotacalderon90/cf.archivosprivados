@@ -24,7 +24,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="rol in filemanager.configuracion_especial.roles">
+              <tr v-for="rol in configuracion_especial.doc.roles">
                 <th>{{rol.nombre}}</th>
                 <td class="text-center">
                   <input type="checkbox" v-model="rol.canCreate" />
@@ -41,7 +41,7 @@
 				</div>
 				<div class="modal-footer py-2">
 					<button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cerrar</button>
-					<button type="button" class="btn btn-sm btn-primary" v-on:click="filemanager.saveConfig()">Guardar</button>
+					<button type="button" class="btn btn-sm btn-primary" v-on:click="configuracion_especial.save()">Guardar</button>
 				</div>
 			</div>
 		</div>

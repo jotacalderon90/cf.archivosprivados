@@ -4,7 +4,7 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
 const constants = require('./constants');
-//const validator = require('./validator');
+const validator = require('./validator');
 const service = require('./service');
 
 const getHost = function (host) {
@@ -69,7 +69,18 @@ module.exports = {
 
   create: async function (req, res) {
     try {
-      const respuesta = await service.create({ ...req.body, host: getHost(req.headers.host) });
+      const parseResult = validator.create.safeParse(req.body);
+
+      if (!parseResult.success) {
+        logger.error(parseResult);
+        response.APIError(req, res, constants.error.validacion);
+        return;
+      }
+
+      const respuesta = await service.create({
+        ...parseResult.data,
+        host: getHost(req.headers.host),
+      });
 
       if (typeof respuesta === 'string') {
         logger.error(respuesta);
@@ -86,8 +97,16 @@ module.exports = {
 
   update: async function (req, res) {
     try {
+      const parseResult = validator.create.safeParse(req.body);
+
+      if (!parseResult.success) {
+        logger.error(parseResult);
+        response.APIError(req, res, constants.error.validacion);
+        return;
+      }
+
       const respuesta = await service.update({
-        ...req.body,
+        ...parseResult.data,
         id: req.params.id,
         host: getHost(req.headers.host),
       });

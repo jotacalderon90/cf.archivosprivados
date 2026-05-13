@@ -32,9 +32,11 @@ module.exports = {
     }
   },
 
-  read: async function () {
+  read: async function (input) {
     try {
-      return '';
+      const doc = repository.read(input.id);
+
+      return doc.host === input.host ? doc : null;
     } catch (error) {
       logger.error(error);
       throw new Error(
@@ -45,9 +47,9 @@ module.exports = {
     }
   },
 
-  create: async function () {
+  create: async function (input) {
     try {
-      return '';
+      return await repository.create(input);
     } catch (error) {
       logger.error(error);
       throw new Error(
@@ -58,9 +60,14 @@ module.exports = {
     }
   },
 
-  update: async function () {
+  update: async function (input) {
     try {
-      return '';
+      const doc = this.read(input);
+      if (doc != null) {
+        return await repository.update(input);
+      } else {
+        return false;
+      }
     } catch (error) {
       logger.error(error);
       throw new Error(

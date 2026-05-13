@@ -33,7 +33,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: colección de configuración especial
    *     description: colección de configuración especial
-   *     x-roles: ['admin']
+   *     x-roles: ['admin', 'archivosprivados']
    *     responses:
    *       200:
    *         description: OK
@@ -44,7 +44,7 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial/collection')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['admin', 'archivosprivados'])
   collection: controlador.collection,
 
   /**
@@ -71,7 +71,7 @@ module.exports = {
 
   /**
    * @swagger
-   * /api/admin/admin/configuracion-especial:
+   * /api/admin/configuracion-especial:
    *   post:
    *     tags:
    *       - Configuración especial
@@ -92,14 +92,14 @@ module.exports = {
    *             schema:
    *               type: object
    */
-  //@route('/api/admin/admin/configuracion-especial')
+  //@route('/api/admin/configuracion-especial')
   //@method(['post'])
   //@roles(['admin'])
   create: controlador.create,
 
   /**
    * @swagger
-   * /api/admin/admin/configuracion-especial/:id:
+   * /api/admin/configuracion-especial/:id:
    *   put:
    *     tags:
    *       - Configuración especial
@@ -126,14 +126,14 @@ module.exports = {
    *             schema:
    *               type: object
    */
-  //@route('/api/admin/admin/configuracion-especial/:id')
+  //@route('/api/admin/configuracion-especial/:id')
   //@method(['put'])
   //@roles(['admin'])
   update: controlador.update,
 
   /**
    * @swagger
-   * /api/admin/admin/configuracion-especial/:id:
+   * /api/admin/configuracion-especial/:id:
    *   delete:
    *     tags:
    *       - Configuración especial
@@ -154,7 +154,7 @@ module.exports = {
    *             schema:
    *               type: object
    */
-  //@route('/api/admin/admin/configuracion-especial/:id')
+  //@route('/api/admin/configuracion-especial/:id')
   //@method(['delete'])
   //@roles(['admin'])
   delete: controlador.delete,
