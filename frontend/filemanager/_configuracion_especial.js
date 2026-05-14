@@ -12,6 +12,8 @@ const configuracion_especial = function () {
     delete: createService('delete', apibase + '/:id'),
   };
   
+  this.collection = [];
+  
   this.doc = {
     path: '',
     roles: []
@@ -20,7 +22,7 @@ const configuracion_especial = function () {
 
 configuracion_especial.prototype.start = async function(parent) {
   this.parent = parent;
-  this.getCollection();
+  //this.getCollection();
 }
 
 configuracion_especial.prototype.getCollection = async function(loader) {
