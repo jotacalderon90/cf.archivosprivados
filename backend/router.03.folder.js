@@ -11,7 +11,7 @@ module.exports = {
    *       - Folder
    *     summary: total de carpetas
    *     description: total de carpetas
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     parameters:
    *       - in: path
    *         name: id
@@ -28,7 +28,7 @@ module.exports = {
    */
   //@route('/api/filemanager/folder/:id/total')
   //@method(['get']
-  //@roles(['admin','archivosprivados']))
+  //@roles(['root','admin','archivosprivados']))
   total: controlador.total,
 
   /**
@@ -39,7 +39,7 @@ module.exports = {
    *       - Folder
    *     summary: colecction de carpetas
    *     description: colecction de carpetas
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     parameters:
    *       - in: path
    *         name: id
@@ -56,6 +56,6 @@ module.exports = {
    */
   //@route('/api/filemanager/folder/:id/collection')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   collection: controlador.collection,
 };

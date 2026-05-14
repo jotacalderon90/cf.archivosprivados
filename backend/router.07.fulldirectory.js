@@ -11,7 +11,7 @@ module.exports = {
    *       - Folder Full
    *     summary: obtener directorio completo como json
    *     description: obtener directorio completo como json
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: OK
@@ -22,6 +22,6 @@ module.exports = {
    */
   //@route('/api/filemanager/folder/full')
   //@method(['get'])
-  //@roles(['root'])
+  //@roles(['root','admin'])
   fulldirectory: controlador.fulldirectory,
 };

@@ -10,12 +10,11 @@ const folderName = z
   .min(1, 'El nombre no puede estar vacío');
 
 module.exports = {
-
   // POST /api/filemanager/folder/:id
   // params: id (base64 del path padre)
   // body:   name (nombre de la nueva carpeta)
   create: z.object({
-    id:   validator.b64,
+    id: validator.b64Path,
     name: folderName,
   }),
 
@@ -23,14 +22,13 @@ module.exports = {
   // params: id (base64 del path actual)
   // body:   name (nuevo nombre)
   update: z.object({
-    id:   validator.b64,
+    id: validator.b64Path,
     name: folderName,
   }),
 
   // DELETE /api/filemanager/folder/:id
   // params: id (base64 del path a eliminar)
   delete: z.object({
-    id: validator.b64,
+    id: validator.b64Path,
   }),
-
 };

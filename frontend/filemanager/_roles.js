@@ -7,11 +7,19 @@ const _roles = function () {
   this.collection = [];
 };
 
+_roles.prototype.hasRole = function (role) {
+	return !!(roles && roles.indexOf(role) > -1);
+};
+
+_roles.prototype.canAdmin = function () {
+	return this.hasRole('root') || this.hasRole('admin');
+};
+
 _roles.prototype.start = async function(parent) {
   this.parent = parent;
   try {
     
-    if(roles.indexOf('admin') == -1) {
+    if(!this.canAdmin()) {
       return;
     }
     
@@ -21,7 +29,7 @@ _roles.prototype.start = async function(parent) {
       throw new Error(collection);
     }
     
-    this.collection = collection.data.filter( row => row.nombre != 'admin');
+    this.collection = collection.data.filter( row => row.nombre != 'root' && row.nombre != 'admin');
     
   } catch(error) {
     alert('Error al iniciar roles');

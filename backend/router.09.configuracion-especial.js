@@ -11,7 +11,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: total de configuración especial
    *     description: total de configuración especial
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: OK
@@ -22,7 +22,7 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial/total')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   total: controlador.total,
 
   /**
@@ -33,7 +33,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: colección de configuración especial
    *     description: colección de configuración especial
-   *     x-roles: ['admin', 'archivosprivados']
+   *     x-roles: ['root','admin', 'archivosprivados']
    *     responses:
    *       200:
    *         description: OK
@@ -44,7 +44,7 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial/collection')
   //@method(['get'])
-  //@roles(['admin', 'archivosprivados'])
+  //@roles(['root','admin', 'archivosprivados'])
   collection: controlador.collection,
 
   /**
@@ -55,7 +55,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: obtener una configuración especial
    *     description: obtener una configuración especial
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: OK
@@ -66,7 +66,7 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial/:id')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   read: controlador.read,
 
   /**
@@ -77,7 +77,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: crear configuracion especial
    *     description: crear configuracion especial
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -94,7 +94,7 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   create: controlador.create,
 
   /**
@@ -105,7 +105,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: actualizar configuracion especial
    *     description: actualizar configuracion especial
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -128,7 +128,7 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial/:id')
   //@method(['put'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   update: controlador.update,
 
   /**
@@ -139,7 +139,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: eliminar configuracion especial
    *     description: eliminar configuracion especial
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -156,6 +156,6 @@ module.exports = {
    */
   //@route('/api/admin/configuracion-especial/:id')
   //@method(['delete'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   delete: controlador.delete,
 };

@@ -11,7 +11,7 @@ module.exports = {
    *       - File Admin
    *     summary: crear archivo
    *     description: crear archivo
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -34,7 +34,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   create: controlador.create,
 
   /**
@@ -45,7 +45,7 @@ module.exports = {
    *       - File Admin
    *     summary: actualizar archivo
    *     description: actualizar archivo
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -68,7 +68,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id')
   //@method(['put'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   update: controlador.update,
 
   /**
@@ -79,7 +79,7 @@ module.exports = {
    *       - File Admin
    *     summary: eliminar archivo
    *     description: eliminar archivo
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -96,7 +96,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id')
   //@method(['delete'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   delete: controlador.delete,
 
   /**
@@ -107,7 +107,7 @@ module.exports = {
    *       - File Admin
    *     summary: renombrar archivo
    *     description: renombrar archivo
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -130,7 +130,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id/rename')
   //@method(['put'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   rename: controlador.rename,
 
   /**
@@ -141,7 +141,7 @@ module.exports = {
    *       - File Admin
    *     summary: subir archivo
    *     description: subir archivo
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -164,6 +164,6 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id/uploader')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   upload: controlador.upload,
 };

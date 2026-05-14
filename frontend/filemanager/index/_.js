@@ -60,11 +60,11 @@ filemanager.prototype.hasRole = function (role) {
 };
 
 filemanager.prototype.canAdmin = function () {
-	return this.hasRole('admin');
+	return this.hasRole('root') || this.hasRole('admin');
 };
 
 filemanager.prototype.canDelete = function () {
-  if(this.hasRole('admin')) {
+  if(this.canAdmin()) {
     return true;
   } if(this.parent && this.parent.configuracion_especial.has(roles)) {
     return true;

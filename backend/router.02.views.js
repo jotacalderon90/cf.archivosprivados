@@ -11,7 +11,7 @@ module.exports = {
    *       - Views
    *     summary: renderizar inicio
    *     description: renderizar inicio
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -22,7 +22,7 @@ module.exports = {
    */
   //@route('/')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   index: controlador.index,
 
   /**
@@ -33,7 +33,7 @@ module.exports = {
    *       - Views
    *     summary: renderizar configuracion
    *     description: renderizar configuracion
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -44,6 +44,6 @@ module.exports = {
    */
   //@route('/admin/configuration')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   configuration: controlador.configuration,
 };

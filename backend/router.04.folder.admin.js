@@ -11,7 +11,7 @@ module.exports = {
    *       - Folder Admin
    *     summary: crear carpeta
    *     description: crear carpeta
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -28,7 +28,7 @@ module.exports = {
    */
   //@route('/api/filemanager/folder')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   create: controlador.create,
 
   /**
@@ -39,7 +39,7 @@ module.exports = {
    *       - Folder Admin
    *     summary: actualizar carpeta
    *     description: actualizar carpeta
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -62,7 +62,7 @@ module.exports = {
    */
   //@route('/api/filemanager/folder/:id')
   //@method(['put'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   update: controlador.update,
 
   /**
@@ -73,7 +73,7 @@ module.exports = {
    *       - Folder Admin
    *     summary: eliminar carpeta
    *     description: eliminar carpeta
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     parameters:
    *       - in: path
    *         name: id
@@ -90,6 +90,6 @@ module.exports = {
    */
   //@route('/api/filemanager/folder/:id')
   //@method(['delete'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   delete: controlador.delete,
 };

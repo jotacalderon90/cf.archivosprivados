@@ -26,7 +26,7 @@
 			tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 300px; height: calc(100vh - 37px);">
 			<ul id="ul_directory" class="mt-4 flex-grow-1  overflow-auto"></ul>
       
-      <div class="p-3 border-top" v-show="filemanager.canAdmin()">
+      <div class="p-3 border-top" v-show="filemanager.hasRole('root')">
         <a class="btn btn-outline-secondary w-100" href="/admin/configuration">
           Configuración
         </a>

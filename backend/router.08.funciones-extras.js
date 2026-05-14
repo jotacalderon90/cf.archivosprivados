@@ -11,7 +11,7 @@ module.exports = {
    *       - Extras
    *     summary: convertir md a html
    *     description: convertir md a html
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -28,7 +28,7 @@ module.exports = {
    */
   //@route('/api/convertitmdhtml')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   convertitmdhtml: controlador.convertitmdhtml,
 
   /**
@@ -39,7 +39,7 @@ module.exports = {
    *       - Extras
    *     summary: convertur csv a json
    *     description: convertur csv a json
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     requestBody:
    *       required: true
    *       content:
@@ -56,6 +56,6 @@ module.exports = {
    */
   //@route('/api/convertitcsvjson')
   //@method(['post'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   convertitcsvjson: controlador.convertitcsvjson,
 };

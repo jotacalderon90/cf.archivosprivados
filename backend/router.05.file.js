@@ -11,7 +11,7 @@ module.exports = {
    *       - File
    *     summary: total de archivos
    *     description: total de archivos
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     parameters:
    *       - in: path
    *         name: id
@@ -28,7 +28,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id/total')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   total: controlador.total,
 
   /**
@@ -39,7 +39,7 @@ module.exports = {
    *       - File
    *     summary: colección de archivos
    *     description: colección de archivos
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     parameters:
    *       - in: path
    *         name: id
@@ -56,7 +56,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id/collection')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   collection: controlador.collection,
 
   /**
@@ -67,7 +67,7 @@ module.exports = {
    *       - File
    *     summary: leer contenido de archivo
    *     description: leer contenido de archivo
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     parameters:
    *       - in: path
    *         name: id
@@ -84,7 +84,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   read: controlador.read,
 
   /**
@@ -95,7 +95,7 @@ module.exports = {
    *       - File
    *     summary: descargar archivo
    *     description: descargar archivo
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     responses:
    *       200:
    *         description: Archivo descargado correctamente
@@ -107,7 +107,7 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id/download')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   download: controlador.download,
 
   /**
@@ -118,7 +118,7 @@ module.exports = {
    *       - File
    *     summary: leer archivo directamente
    *     description: leer archivo directamente
-   *     x-roles: ['admin','archivosprivados']
+   *     x-roles: ['root','admin','archivosprivados']
    *     responses:
    *       200:
    *         description: Archivo obtenido correctamente
@@ -130,6 +130,6 @@ module.exports = {
    */
   //@route('/api/filemanager/file/:id/getfile')
   //@method(['get'])
-  //@roles(['admin','archivosprivados'])
+  //@roles(['root','admin','archivosprivados'])
   get: controlador.get,
 };

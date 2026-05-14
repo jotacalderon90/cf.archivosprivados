@@ -11,7 +11,7 @@ module.exports = {
    *       - Configuración especial
    *     summary: colección de roles
    *     description: colección de roles
-   *     x-roles: ['admin']
+   *     x-roles: ['root','admin']
    *     responses:
    *       200:
    *         description: OK
@@ -22,6 +22,6 @@ module.exports = {
    */
   //@route('/api/admin/roles/collection')
   //@method(['get'])
-  //@roles(['admin'])
+  //@roles(['root','admin'])
   collection: controlador.collection,
 };
