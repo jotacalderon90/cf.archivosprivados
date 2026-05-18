@@ -32,12 +32,12 @@ menu.prototype.getMenuHost = function(hostEntry) {
   const entry = { ...hostEntry };
   
   if (env === 'development') {
-    entry.hostname = `${location.protocol}//${location.host.replace('2202', entry.defaultPort)}`;
+    entry.hostname = `${location.protocol}//${location.host.replace('2203', entry.defaultPort)}`;
     return entry;
   }
   
   if (env === 'production') {
-    entry.hostname = `https://${location.host.replace('account', entry.hostname)}`;
+    entry.hostname = `https://${location.host.replace('archivosprivados', entry.hostname)}`;
     return entry;
   }
 
