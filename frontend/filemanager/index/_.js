@@ -4,6 +4,7 @@
 //  Constructor
 // ─────────────────────────────────────────────
 const filemanager = function () {
+  
 	this.service_read             = createService('GET',    ':path:id');
 	this.service_folder_collection = createService('GET',   ':path:id/collection');
 	this.service_file_collection   = createService('GET',   ':path:id/collection');
@@ -52,23 +53,15 @@ filemanager.prototype.start = async function (parent) {
   this.dropzone();
 };
 
-// ─────────────────────────────────────────────
-//  Roles
-// ─────────────────────────────────────────────
-filemanager.prototype.hasRole = function (role) {
-	return !!(roles && roles.indexOf(role) > -1);
-};
-
-filemanager.prototype.canAdmin = function () {
-	return this.hasRole('root') || this.hasRole('admin');
-};
-
 filemanager.prototype.canDelete = function () {
-  if(this.canAdmin()) {
+  if(!this.parent) return false;
+  if(!this.parent.perfil) return false;
+  
+  if(this.parent.perfil.isAdmin()) {
     return true;
-  } if(this.parent && this.parent.configuracion_especial.has(roles)) {
+  } /*if(this.parent && this.parent.configuracion_especial.has(roles)) {
     return true;
-  }
+  }*/
   return false;
 };
 
@@ -181,7 +174,7 @@ filemanager.prototype.select = async function (li) {
       this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
       
       //20260510:cargar configuracion especial
-      this.parent.configuracion_especial.select(this.fullname);
+      //this.parent.configuracion_especial.select(this.fullname);
       
 		}
     

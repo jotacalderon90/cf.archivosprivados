@@ -3,16 +3,20 @@
 <!--define:script-->
 	
   <script>
+    const env = '{{data:process.env.NODE_ENV}}';
+    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
     const host = "{{data:process.env.HOST}}";
     const roles = {{data:JSON.stringify(doc.user.roles)}};
   </script>
+	<script src="filemanager/perfil.js"></script>
+	<script src="filemanager/menu.js"></script>
 	<script src="filemanager/configuration/_.js"></script>
 	
 <!--/define:script-->
 
 <!--define:main-->
 	
-	<!--include:filemanager/header-->
+	<!--include:header-->
 	
 	<div class="d-flex">
 		<aside class="border border-end bg-body-tertiary flex-shrink-0 offcanvas-md offcanvas-end d-flex flex-column"
