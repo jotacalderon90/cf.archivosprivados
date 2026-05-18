@@ -4,22 +4,14 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 const constants = require('./constants');
 
-const getHostAccount = function (req) {
-  let hostAccount = '';
-  if (process.env.NODE_ENV === 'production' && process.env.FRONT_MULTIDOMAIN === '1') {
-    hostAccount = req.protocol + '://' + req.headers.host.replace(/^([^.:]+)/, 'account');
-  } else {
-    hostAccount = process.env.HOST_ACCOUNT;
-  }
-  return hostAccount;
-};
+const domain = require('../domain');
 
 module.exports = {
   index: async function (req, res) {
     try {
       res.render('filemanager/index/_', {
-        user: req.user,
-        __hostAccount: getHostAccount(req),
+        user: req.usera,
+        __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
       logger.error(error);
@@ -35,7 +27,7 @@ module.exports = {
     try {
       res.render('filemanager/configuration/_', {
         user: req.user,
-        __hostAccount: getHostAccount(req),
+        __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
       logger.error(error);
