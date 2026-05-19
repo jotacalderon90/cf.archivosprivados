@@ -39,98 +39,98 @@
       
 		</aside>
 		<div class="resizer"></div>
-		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;" v-show="filemanager.archive!=null">
+		<main class="flex-grow-1 px-md-4 mb-4" style="min-width: 0;" v-show="archivosprivados.archive!=null">
     
 				<!-- Barra de acciones -->
 				<div class="btn-group btn-group-sm mt-4 flex-wrap gap-1">
 
-					<button class="btn btn-outline-danger" v-show="filemanager.canDelete()" v-on:click="filemanager.confirmDelete()" title="Eliminar">
+					<button class="btn btn-outline-danger" v-show="archivosprivados.canDelete()" v-on:click="archivosprivados.confirmDelete()" title="Eliminar">
 						<i class="fa fa-trash"></i> Eliminar
 					</button>
 
-					<button class="btn btn-outline-primary" v-show="perfil.isAdmin() && filemanager.isTextFile" v-on:click="filemanager.update()" title="Guardar">
+					<button class="btn btn-outline-primary" v-show="archivosprivados.canAdmin && archivosprivados.isTextFile" v-on:click="archivosprivados.update()" title="Guardar">
 						<i class="fa fa-save"></i> Guardar
 					</button>
 
-					<a class="btn btn-outline-primary" target="_blank" title="Descargar" v-show="filemanager.isFile" :href="filemanager.fullnameDOWNLOAD">
+					<a class="btn btn-outline-primary" target="_blank" title="Descargar" v-show="archivosprivados.isFile" :href="archivosprivados.fullnameDOWNLOAD">
 						<i class="fa fa-download"></i> Descargar
 					</a>
 
-					<a class="btn btn-outline-primary" target="_blank" title="Visualizar" v-show="filemanager.isFile" :href="filemanager.fullnameGET">
+					<a class="btn btn-outline-primary" target="_blank" title="Visualizar" v-show="archivosprivados.isFile" :href="archivosprivados.fullnameGET">
 						<i class="fa fa-eye"></i> Visualizar
 					</a>
 
-					<button class="btn btn-outline-primary" title="Copiar URL" v-show="filemanager.isFile" v-on:click="filemanager.copyCleanURL()">
+					<button class="btn btn-outline-primary" title="Copiar URL" v-show="archivosprivados.isFile" v-on:click="archivosprivados.copyCleanURL()">
 						<i class="fa fa-copy"></i> Copiar URL
 					</button>
 
-					<button class="btn btn-outline-secondary" v-show="perfil.isAdmin()" v-on:click="filemanager.openRename()" title="Renombrar">
+					<button class="btn btn-outline-secondary" v-show="archivosprivados.canAdmin" v-on:click="archivosprivados.openRename()" title="Renombrar">
 						<i class="fa fa-pen"></i> Renombrar
 					</button>
 
-					<button class="btn btn-outline-secondary" v-show="perfil.isAdmin() && filemanager.isFile" v-on:click="filemanager.openRelocate()" title="Reubicar">
+					<button class="btn btn-outline-secondary" v-show="archivosprivados.canAdmin && archivosprivados.isFile" v-on:click="archivosprivados.openRelocate()" title="Reubicar">
 						<i class="fa fa-folder-open"></i> Reubicar
 					</button>
 
-					<div class="btn-group btn-group-sm" v-show="perfil.isAdmin() && filemanager.isFolder">
+					<div class="btn-group btn-group-sm" v-show="archivosprivados.canAdmin && archivosprivados.isFolder">
 						<button class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="fa fa-plus"></i> Nuevo
 						</button>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#" v-on:click.prevent="filemanager.openNewFile()"><i class="fa fa-file-alt me-2"></i>Archivo de texto</a></li>
-							<li><a class="dropdown-item" href="#" v-on:click.prevent="filemanager.openNewFolder()"><i class="fa fa-folder me-2"></i>Carpeta</a></li>
+							<li><a class="dropdown-item" href="#" v-on:click.prevent="archivosprivados.openNewFile()"><i class="fa fa-file-alt me-2"></i>Archivo de texto</a></li>
+							<li><a class="dropdown-item" href="#" v-on:click.prevent="archivosprivados.openNewFolder()"><i class="fa fa-folder me-2"></i>Carpeta</a></li>
 						</ul>
 					</div>
 
-					<button class="btn btn-outline-secondary" v-show="perfil.isAdmin() && filemanager.isCsvFile" v-on:click="filemanager.csvToJson()" title="CSV a JSON">
+					<button class="btn btn-outline-secondary" v-show="archivosprivados.canAdmin && archivosprivados.isCsvFile" v-on:click="archivosprivados.csvToJson()" title="CSV a JSON">
 						<i class="fa fa-exchange-alt"></i> CSV → JSON
 					</button>
 
-					<button class="btn btn-outline-secondary" v-show="perfil.isAdmin() && filemanager.isMdFile" v-on:click="filemanager.mdToHtml()" title="MD a HTML">
+					<button class="btn btn-outline-secondary" v-show="archivosprivados.canAdmin && archivosprivados.isMdFile" v-on:click="archivosprivados.mdToHtml()" title="MD a HTML">
 						<i class="fa fa-code"></i> MD → HTML
 					</button>
           <!--
 					<button 
             class="btn btn-outline-secondary" 
             title="Configuración de carpeta"
-            v-show="perfil.isAdmin() && filemanager.isFolder && filemanager.fullname != '/'" 
+            v-show="archivosprivados.canAdmin && archivosprivados.isFolder && archivosprivados.fullname != '/'" 
             v-on:click="configuracion_especial.open()" 
             >
 						<i class="fa fa-cogs"></i>
 					</button>
           -->
-					<button class="btn btn-outline-secondary" v-on:click="filemanager.close()" title="Cerrar">
+					<button class="btn btn-outline-secondary" v-on:click="archivosprivados.close()" title="Cerrar">
 						<i class="fa fa-times"></i> Cerrar
 					</button>
 
 				</div>
 
 				<!-- Info del archivo/carpeta seleccionado -->
-				<div class="mt-2 mb-2" v-show="filemanager.archive!=null">
+				<div class="mt-2 mb-2" v-show="archivosprivados.archive!=null">
 					<small class="text-muted">
-						<i class="fa" :class="filemanager.isFolder ? 'fa-folder text-warning' : 'fa-file text-secondary'"></i>
-						{{ filemanager.fullname }}
+						<i class="fa" :class="archivosprivados.isFolder ? 'fa-folder text-warning' : 'fa-file text-secondary'"></i>
+						{{ archivosprivados.fullname }}
 					</small>
 				</div>
 
 				<!-- Uploader -->
-				<form id="fileupload" method="post" action="/" encType="multipart/form-data" v-show="filemanager.isFolder && perfil.isAdmin()" class="mt-3">
+				<form id="fileupload" method="post" action="/" encType="multipart/form-data" v-show="archivosprivados.isFolder && archivosprivados.canAdmin" class="mt-3">
           <div id="dropzone" class="dropzone">
             <i class="fa fa-cloud-upload"></i>
             <p>Arrastra archivos aquí</p>
           </div>
           <div class="input-group input-group-sm mt-2">
             <input type="file" name="files" class="form-control" multiple/>
-            <button type="button" class="btn btn-primary" v-on:click="filemanager.uploadFile()">
+            <button type="button" class="btn btn-primary" v-on:click="archivosprivados.uploadFile()">
               <i class="fa fa-upload"></i> Subir archivo
             </button>
           </div>
         </form>
 
 				<!-- Contenido -->
-				<div v-show="filemanager.isFile" class="mt-3">
-					<textarea rows="20" class="form-control font-monospace" v-show="filemanager.isTextFile" v-model="filemanager.fileContent"></textarea>
-					<div class="dv-visualcontent" v-show="filemanager.isMediaFile"></div>
+				<div v-show="archivosprivados.isFile" class="mt-3">
+					<textarea rows="20" class="form-control font-monospace" v-show="archivosprivados.isTextFile" v-model="archivosprivados.fileContent"></textarea>
+					<div class="dv-visualcontent" v-show="archivosprivados.isMediaFile"></div>
 				</div>
 
 			</main>
@@ -145,12 +145,12 @@
 					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body">
-					<p>¿Confirma la eliminación de <strong>{{ filemanager.name }}</strong>?</p>
+					<p>¿Confirma la eliminación de <strong>{{ archivosprivados.name }}</strong>?</p>
 					<p class="text-muted small mb-0">Esta acción no se puede deshacer.</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-danger" v-on:click="filemanager.delete()"><i class="fa fa-trash me-1"></i>Eliminar</button>
+					<button type="button" class="btn btn-danger" v-on:click="archivosprivados.delete()"><i class="fa fa-trash me-1"></i>Eliminar</button>
 				</div>
 			</div>
 		</div>
@@ -165,11 +165,11 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body">
-					<p>¿Confirma guardar los cambios en <strong>{{ filemanager.name }}</strong>?</p>
+					<p>¿Confirma guardar los cambios en <strong>{{ archivosprivados.name }}</strong>?</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary" v-on:click="filemanager.update()"><i class="fa fa-save me-1"></i>Guardar</button>
+					<button type="button" class="btn btn-primary" v-on:click="archivosprivados.update()"><i class="fa fa-save me-1"></i>Guardar</button>
 				</div>
 			</div>
 		</div>
@@ -184,13 +184,13 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body">
-					<label class="form-label">Nuevo nombre para <strong>{{ filemanager.name }}</strong></label>
-					<input type="text" class="form-control" placeholder="Nombre" v-model="filemanager.modal.newName" v-on:keyup.enter="filemanager.rename()">
-					<div class="form-text text-danger" v-show="filemanager.modal.error">{{ filemanager.modal.error }}</div>
+					<label class="form-label">Nuevo nombre para <strong>{{ archivosprivados.name }}</strong></label>
+					<input type="text" class="form-control" placeholder="Nombre" v-model="archivosprivados.modal.newName" v-on:keyup.enter="archivosprivados.rename()">
+					<div class="form-text text-danger" v-show="archivosprivados.modal.error">{{ archivosprivados.modal.error }}</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary" v-on:click="filemanager.rename()"><i class="fa fa-pen me-1"></i>Renombrar</button>
+					<button type="button" class="btn btn-primary" v-on:click="archivosprivados.rename()"><i class="fa fa-pen me-1"></i>Renombrar</button>
 				</div>
 			</div>
 		</div>
@@ -206,12 +206,12 @@
 				</div>
 				<div class="modal-body">
 					<label class="form-label">Nombre del archivo <span class="text-muted">(incluye la extensión, ej: notas.txt)</span></label>
-					<input type="text" class="form-control" placeholder="nombre.txt" v-model="filemanager.modal.newName" v-on:keyup.enter="filemanager.createFile()">
-					<div class="form-text text-danger" v-show="filemanager.modal.error">{{ filemanager.modal.error }}</div>
+					<input type="text" class="form-control" placeholder="nombre.txt" v-model="archivosprivados.modal.newName" v-on:keyup.enter="archivosprivados.createFile()">
+					<div class="form-text text-danger" v-show="archivosprivados.modal.error">{{ archivosprivados.modal.error }}</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-success" v-on:click="filemanager.createFile()"><i class="fa fa-plus me-1"></i>Crear</button>
+					<button type="button" class="btn btn-success" v-on:click="archivosprivados.createFile()"><i class="fa fa-plus me-1"></i>Crear</button>
 				</div>
 			</div>
 		</div>
@@ -227,12 +227,12 @@
 				</div>
 				<div class="modal-body">
 					<label class="form-label">Nombre de la carpeta</label>
-					<input type="text" class="form-control" placeholder="Mi carpeta" v-model="filemanager.modal.newName" v-on:keyup.enter="filemanager.createFolder_()">
-					<div class="form-text text-danger" v-show="filemanager.modal.error">{{ filemanager.modal.error }}</div>
+					<input type="text" class="form-control" placeholder="Mi carpeta" v-model="archivosprivados.modal.newName" v-on:keyup.enter="archivosprivados.createFolder_()">
+					<div class="form-text text-danger" v-show="archivosprivados.modal.error">{{ archivosprivados.modal.error }}</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-success" v-on:click="filemanager.createFolder_()"><i class="fa fa-plus me-1"></i>Crear</button>
+					<button type="button" class="btn btn-success" v-on:click="archivosprivados.createFolder_()"><i class="fa fa-plus me-1"></i>Crear</button>
 				</div>
 			</div>
 		</div>
@@ -247,24 +247,24 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body">
-					<p class="mb-2">Selecciona la carpeta destino para <strong>{{ filemanager.name }}</strong>:</p>
+					<p class="mb-2">Selecciona la carpeta destino para <strong>{{ archivosprivados.name }}</strong>:</p>
 					<div id="relocate-tree" class="border rounded p-2" style="max-height:320px; overflow-y:auto;">
 						<ul class="list-unstyled mb-0" id="ul_relocate"></ul>
 					</div>
-					<div class="mt-2" v-show="filemanager.modal.relocateTarget">
-						<span class="badge bg-primary"><i class="fa fa-folder me-1"></i>Destino: {{ filemanager.modal.relocateTarget }}</span>
+					<div class="mt-2" v-show="archivosprivados.modal.relocateTarget">
+						<span class="badge bg-primary"><i class="fa fa-folder me-1"></i>Destino: {{ archivosprivados.modal.relocateTarget }}</span>
 					</div>
-					<div class="form-text text-danger mt-1" v-show="filemanager.modal.error">{{ filemanager.modal.error }}</div>
+					<div class="form-text text-danger mt-1" v-show="archivosprivados.modal.error">{{ archivosprivados.modal.error }}</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary" v-on:click="filemanager.relocate()"><i class="fa fa-folder-open me-1"></i>Reubicar aquí</button>
+					<button type="button" class="btn btn-primary" v-on:click="archivosprivados.relocate()"><i class="fa fa-folder-open me-1"></i>Reubicar aquí</button>
 				</div>
 			</div>
 		</div>
 	</div>
   
-	<!--include:filemanager/_configuracion_especial-->
+	<!--include:archivosprivados/_configuracion_especial-->
   
 
 <!--/define:main-->

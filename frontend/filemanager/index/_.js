@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────
 //  Constructor
 // ─────────────────────────────────────────────
-const filemanager = function () {
+const archivosprivados = function () {
   
 	this.service_read             = createService('GET',    ':path:id');
 	this.service_folder_collection = createService('GET',   ':path:id/collection');
@@ -42,8 +42,11 @@ const filemanager = function () {
 // ─────────────────────────────────────────────
 //  Arranque
 // ─────────────────────────────────────────────
-filemanager.prototype.start = async function (parent) {
+archivosprivados.prototype.start = async function (parent) {
 	this.parent = parent;
+  
+  this.canAdmin = this.parent.perfil.isAdmin();
+    
 	this.createFolderNode(document.getElementById('ul_directory'), 'd0', {
 		name:   '/',
 		file:   '/api/filemanager/file/',
@@ -53,7 +56,7 @@ filemanager.prototype.start = async function (parent) {
   this.dropzone();
 };
 
-filemanager.prototype.canDelete = function () {
+archivosprivados.prototype.canDelete = function () {
   if(!this.parent) return false;
   if(!this.parent.perfil) return false;
   
@@ -68,7 +71,7 @@ filemanager.prototype.canDelete = function () {
 // ─────────────────────────────────────────────
 //  Selección y cierre
 // ─────────────────────────────────────────────
-filemanager.prototype.close = function () {
+archivosprivados.prototype.close = function () {
 	document.querySelectorAll('#ul_directory .selected').forEach(el => el.classList.remove('selected'));
 	this.archive        = null;
 	this.isFile         = false;
@@ -82,12 +85,12 @@ filemanager.prototype.close = function () {
 	this.fileContent    = '';
 };
 
-filemanager.prototype.clean = function () {
+archivosprivados.prototype.clean = function () {
 	document.querySelectorAll('#ul_directory .selected').forEach(el => el.classList.remove('selected'));
 	this.archive = null;
 };
 
-filemanager.prototype.select = async function (li) {
+archivosprivados.prototype.select = async function (li) {
 	try {
 		const label = li.querySelector('label');
 		label.classList.add('selected');
@@ -187,11 +190,11 @@ filemanager.prototype.select = async function (li) {
 // ─────────────────────────────────────────────
 //  Eliminar
 // ─────────────────────────────────────────────
-filemanager.prototype.confirmDelete = function () {
+archivosprivados.prototype.confirmDelete = function () {
 	this.parent.modal.open('mdDelete');
 };
 
-filemanager.prototype.delete = async function () {
+archivosprivados.prototype.delete = async function () {
 	this.parent.modal.close('mdDelete');
 	try {
 		const label = this.archive.querySelector('label');
@@ -224,7 +227,7 @@ filemanager.prototype.delete = async function () {
 // ─────────────────────────────────────────────
 //  Guardar (actualizar contenido)
 // ─────────────────────────────────────────────
-filemanager.prototype.update = async function () {
+archivosprivados.prototype.update = async function () {
 	this.parent.modal.close('mdUpdate');
 	try {
 		const label = this.archive.querySelector('label');
@@ -251,7 +254,7 @@ filemanager.prototype.update = async function () {
 // ─────────────────────────────────────────────
 //  Renombrar
 // ─────────────────────────────────────────────
-filemanager.prototype.openRename = function () {
+archivosprivados.prototype.openRename = function () {
 	this.modal.newName = this.name;
 	this.parent.modal.open('mdRename');
 	setTimeout(() => {
@@ -260,7 +263,7 @@ filemanager.prototype.openRename = function () {
 	}, 300);
 };
 
-filemanager.prototype.rename = async function () {
+archivosprivados.prototype.rename = async function () {
 	const newName = (this.modal.newName || '').trim();
 	if (!newName) {
 		this.modal.error = 'El nombre no puede estar vacío.';
@@ -316,7 +319,7 @@ filemanager.prototype.rename = async function () {
 // ─────────────────────────────────────────────
 //  Nuevo archivo de texto
 // ─────────────────────────────────────────────
-filemanager.prototype.openNewFile = function () {
+archivosprivados.prototype.openNewFile = function () {
 	this.modal.newName = '';
 	this.parent.modal.open('mdNewFile');
 	setTimeout(() => {
@@ -325,7 +328,7 @@ filemanager.prototype.openNewFile = function () {
 	}, 300);
 };
 
-filemanager.prototype.createFile = async function () {
+archivosprivados.prototype.createFile = async function () {
 	const newName = (this.modal.newName || '').trim();
 	if (!newName) {
 		this.modal.error = 'El nombre no puede estar vacío.';
@@ -367,7 +370,7 @@ filemanager.prototype.createFile = async function () {
 // ─────────────────────────────────────────────
 //  Nueva carpeta
 // ─────────────────────────────────────────────
-filemanager.prototype.openNewFolder = function () {
+archivosprivados.prototype.openNewFolder = function () {
 	this.modal.newName = '';
 	this.parent.modal.open('mdNewFolder');
 	setTimeout(() => {
@@ -376,7 +379,7 @@ filemanager.prototype.openNewFolder = function () {
 	}, 300);
 };
 
-filemanager.prototype.createFolder_ = async function () {
+archivosprivados.prototype.createFolder_ = async function () {
 	const newName = (this.modal.newName || '').trim();
 	if (!newName) {
 		this.modal.error = 'El nombre no puede estar vacío.';
@@ -414,7 +417,7 @@ filemanager.prototype.createFolder_ = async function () {
 // ─────────────────────────────────────────────
 //  Reubicar archivo (mover a otra carpeta)
 // ─────────────────────────────────────────────
-filemanager.prototype.openRelocate = function () {
+archivosprivados.prototype.openRelocate = function () {
 	this.modal.relocateTarget = '';
 	this.modal.relocatePath   = '';
 	this.modal.error          = '';
@@ -427,7 +430,7 @@ filemanager.prototype.openRelocate = function () {
 	this.parent.modal.open('mdRelocate');
 };
 
-filemanager.prototype._buildRelocateTree = async function (ulEl, path, folderApi, depth) {
+archivosprivados.prototype._buildRelocateTree = async function (ulEl, path, folderApi, depth) {
 	try {
 		const id   = btoa(encodeURIComponent(path));
 		const coll = await this.service_folder_collection({ id, path: folderApi });
@@ -480,7 +483,7 @@ filemanager.prototype._buildRelocateTree = async function (ulEl, path, folderApi
 	}
 };
 
-filemanager.prototype.relocate = async function () {
+archivosprivados.prototype.relocate = async function () {
 	if (!this.modal.relocateTarget) {
 		this.modal.error = 'Selecciona una carpeta destino.';
 		return;
@@ -515,7 +518,7 @@ filemanager.prototype.relocate = async function () {
 // ─────────────────────────────────────────────
 //  Copiar URL limpia
 // ─────────────────────────────────────────────
-filemanager.prototype.copyCleanURL = async function () {
+archivosprivados.prototype.copyCleanURL = async function () {
 	try {
     await copyLarge(window.location.origin + this.cleanURL);
 		this.parent.modal.notify('URL copiada al portapapeles.', 'success');
@@ -527,7 +530,7 @@ filemanager.prototype.copyCleanURL = async function () {
 // ─────────────────────────────────────────────
 //  MD → HTML
 // ─────────────────────────────────────────────
-filemanager.prototype.mdToHtml = async function () {
+archivosprivados.prototype.mdToHtml = async function () {
 	try {
 		this.parent.loader.active = true;
 		const respuesta = await this.service_convertitmdhtml({}, { markdown: this.fileContent });
@@ -547,7 +550,7 @@ filemanager.prototype.mdToHtml = async function () {
 // ─────────────────────────────────────────────
 //  CSV → JSON
 // ─────────────────────────────────────────────
-filemanager.prototype.csvToJson = async function () {
+archivosprivados.prototype.csvToJson = async function () {
 	try {
 		this.parent.loader.active = true;
 		const respuesta = await this.service_convertitcsvjson({}, { csv: this.fileContent });
@@ -568,7 +571,7 @@ filemanager.prototype.csvToJson = async function () {
 // ─────────────────────────────────────────────
 //  Árbol de directorios (sidebar)
 // ─────────────────────────────────────────────
-filemanager.prototype.createFolderNode = function (ulParent, id, directory) {
+archivosprivados.prototype.createFolderNode = function (ulParent, id, directory) {
 	const li    = document.createElement('li');
 	const input = document.createElement('input');
 	input.type  = 'checkbox';
@@ -649,7 +652,7 @@ filemanager.prototype.createFolderNode = function (ulParent, id, directory) {
 };
 
 
-filemanager.prototype.dropzone = function() {
+archivosprivados.prototype.dropzone = function() {
   var dropzone = document.getElementById('dropzone');
   var fileInput = document.querySelector('#fileupload input[type="file"]');
 
@@ -678,7 +681,7 @@ filemanager.prototype.dropzone = function() {
 }
 
 //Uploader
-filemanager.prototype.uploadFile = async function () {
+archivosprivados.prototype.uploadFile = async function () {
   try {
     var form = document.getElementById('fileupload');
     var fileInput = form.querySelector('input[type="file"]');
@@ -724,4 +727,4 @@ filemanager.prototype.uploadFile = async function () {
 // ─────────────────────────────────────────────
 //  Registro en el framework
 // ─────────────────────────────────────────────
-app.modules.filemanager = filemanager;
+app.modules.archivosprivados = archivosprivados;
