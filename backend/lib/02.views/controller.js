@@ -10,7 +10,7 @@ module.exports = {
   index: async function (req, res) {
     try {
       res.render('filemanager/index/_', {
-        user: req.usera,
+        roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {
@@ -26,7 +26,7 @@ module.exports = {
   configuration: async function (req, res) {
     try {
       res.render('filemanager/configuration/_', {
-        user: req.user,
+        roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
       });
     } catch (error) {

@@ -4,9 +4,8 @@
 	
   <script>
     const env = '{{data:process.env.NODE_ENV}}';
-    const user_roles = {{data:JSON.stringify(doc.user.roles)}};
+    const user_roles = {{data:JSON.stringify(doc.roles)}};
     const host = "{{data:process.env.HOST}}";
-    const roles = {{data:JSON.stringify(doc.user.roles)}};
   </script>
 	<script src="filemanager/perfil.js"></script>
 	<script src="filemanager/menu.js"></script>
