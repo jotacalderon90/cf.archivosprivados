@@ -2,9 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
+
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-const constants = require('./constants');
+const redis = require('cl.jotacalderon.cf.framework/lib/redis');
+
 const filemanager = require('../filemanager');
+
+const constants = require('./constants');
 
 module.exports = {
   total: async function (input) {
@@ -26,11 +30,22 @@ module.exports = {
 
   collection: async function (input) {
     try {
+      if (redis.client) {
+        const cached = await redis.get('file' + input.id + input.host);
+        if (cached) return cached;
+      }
+
       const dir = filemanager.get(input.id, input.host);
 
-      return fs.readdirSync(dir, 'utf8').filter(function (row) {
+      const respuesta = fs.readdirSync(dir, 'utf8').filter(function (row) {
         return fs.statSync(path.join(dir, row)).isFile();
       });
+
+      if (redis.client) {
+        redis.set('file' + input.id + input.host, respuesta, 60);
+      }
+
+      return respuesta;
     } catch (error) {
       logger.error(error);
       throw new Error(
