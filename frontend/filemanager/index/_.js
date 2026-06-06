@@ -18,7 +18,7 @@ const archivosprivados = function () {
 	this.service_convertitcsvjson  = createService('POST',  '/api/convertitcsvjson');
   
 	this.archive     = null;
-	this.textFiles   = ['txt','html','css','js','json','csv','md','gitignore','bowerrc'];
+	this.textFiles   = ['txt','html','css','js','json','csv','md','gitignore','bowerrc','log'];
 	this.mediaFiles  = ['jpg','gif','png','ico','mp3','mp4','pdf'];
 
 	// Estado de modales
@@ -584,7 +584,9 @@ archivosprivados.prototype.createFolderNode = function (ulParent, id, directory)
 
 			const labelParent = event.target.parentNode.querySelector('label');
 			const newid = btoa(encodeURIComponent(labelParent.getAttribute('data-api-path')));
-
+      
+      this.parent.loader.active = true;
+      
 			// Sub-carpetas
 			let coll = await this.service_folder_collection({
 				id:   newid,
@@ -626,6 +628,9 @@ archivosprivados.prototype.createFolderNode = function (ulParent, id, directory)
 				};
 				event.target.parentNode.lastChild.appendChild(fileLi);
 			}
+      
+      this.parent.loader.active = false;
+      
 		} else {
 			event.target.parentNode.lastChild.innerHTML = '';
 		}
