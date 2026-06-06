@@ -4,15 +4,20 @@ const fs = require('fs');
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
-
-const constants = require('./constants');
+const redis = require('cl.jotacalderon.cf.framework/lib/redis');
 
 const filemanager = require('../filemanager');
+
+const constants = require('./constants');
 
 module.exports = {
   create: async function (input) {
     try {
       fs.writeFileSync(filemanager.get(input.id, input.host) + input.name, input.content || '');
+
+      if (redis.client) {
+        redis.del('file' + input.id + input.host);
+      }
 
       return true;
     } catch (error) {
@@ -43,9 +48,13 @@ module.exports = {
   delete: async function (input) {
     try {
       const deleted = fs.unlinkSync(filemanager.get(input.id, input.host));
-      console.log(deleted);
+      logger.info(deleted);
 
-      return 1;
+      if (redis.client) {
+        redis.del('file' + input.id + input.host);
+      }
+
+      return true;
     } catch (error) {
       logger.error(error);
       throw new Error(
@@ -63,6 +72,10 @@ module.exports = {
         filemanager.base(input.host) + '/' + input.name
       );
 
+      if (redis.client) {
+        redis.del('file' + input.id + input.host);
+      }
+
       return true;
     } catch (error) {
       logger.error(error);
@@ -79,6 +92,10 @@ module.exports = {
       const filename = filemanager.get(input.id, input.host) + input.file.name;
 
       await helper.upload_process(input.file, filename);
+
+      if (redis.client) {
+        redis.del('file' + input.id + input.host);
+      }
 
       return true;
     } catch (error) {
