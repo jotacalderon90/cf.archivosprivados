@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const redis = require('cl.jotacalderon.cf.framework/lib/redis');
@@ -14,10 +13,8 @@ module.exports = {
   total: async function (input) {
     try {
       const dir = filemanager.get(input.id, input.host);
-
-      return fs.readdirSync(dir, 'utf8').filter(function (row) {
-        return fs.statSync(path.join(dir, row)).isFile();
-      }).length;
+      const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+      return entries.filter((dirent) => dirent.isFile()).length;
     } catch (error) {
       logger.error(error);
       throw new Error(
@@ -37,9 +34,8 @@ module.exports = {
 
       const dir = filemanager.get(input.id, input.host);
 
-      const respuesta = fs.readdirSync(dir, 'utf8').filter(function (row) {
-        return fs.statSync(path.join(dir, row)).isFile();
-      });
+      const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+      const respuesta = entries.filter((dirent) => dirent.isFile()).map((dirent) => dirent.name);
 
       if (redis.client) {
         redis.set('file' + input.id + input.host, respuesta, 60);
