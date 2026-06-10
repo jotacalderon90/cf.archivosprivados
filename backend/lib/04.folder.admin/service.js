@@ -53,7 +53,10 @@ module.exports = {
 
   delete: async function (input) {
     try {
-      fs.rmdirSync(filemanager.get(input.id, input.host));
+      fs.rmSync(filemanager.get(input.id, input.host), {
+        recursive: true,
+        force: true,
+      });
 
       if (redis.client) {
         redis.del('folder' + input.id + input.host);
