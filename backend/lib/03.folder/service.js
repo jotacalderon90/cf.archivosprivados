@@ -3,7 +3,6 @@
 const fs = require('fs');
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-const redis = require('cl.jotacalderon.cf.framework/lib/redis');
 
 const filemanager = require('../filemanager');
 
@@ -29,20 +28,11 @@ module.exports = {
 
   collection: async function (input) {
     try {
-      if (redis.client) {
-        const cached = await redis.get('folder' + input.id + input.host);
-        if (cached) return cached;
-      }
-
       const dir = filemanager.get(input.id, input.host);
 
       const respuesta = (await fs.promises.readdir(dir, { withFileTypes: true }))
         .filter((dirent) => dirent.isDirectory())
         .map((dirent) => dirent.name);
-
-      if (redis.client) {
-        redis.set('folder' + input.id + input.host, respuesta, 60);
-      }
 
       return respuesta;
     } catch (error) {

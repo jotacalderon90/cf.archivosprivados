@@ -3,7 +3,6 @@
 const fs = require('fs');
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
-const redis = require('cl.jotacalderon.cf.framework/lib/redis');
 
 const filemanager = require('../filemanager');
 
@@ -13,10 +12,6 @@ module.exports = {
   create: async function (input) {
     try {
       fs.mkdirSync(filemanager.get(input.id, input.host) + input.name);
-
-      if (redis.client) {
-        redis.del('folder' + input.id + input.host);
-      }
 
       return true;
     } catch (error) {
@@ -36,10 +31,6 @@ module.exports = {
         filemanager.base(input.host) + input.name
       );
 
-      if (redis.client) {
-        redis.del('folder' + input.id + input.host);
-      }
-
       return true;
     } catch (error) {
       logger.error(error);
@@ -57,10 +48,6 @@ module.exports = {
         recursive: true,
         force: true,
       });
-
-      if (redis.client) {
-        redis.del('folder' + input.id + input.host);
-      }
 
       return true;
     } catch (error) {
