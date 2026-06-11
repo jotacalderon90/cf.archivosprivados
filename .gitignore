@@ -8,4 +8,4 @@ node_modules/*
 coverage/
 
 # Archivos propios de la app multidomain
-frontend/assets/domains/
+backend/assets/domains/

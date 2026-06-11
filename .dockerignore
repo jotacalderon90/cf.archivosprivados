@@ -1,4 +1,4 @@
-frontend/assets/domains/
+backend/assets/domains/
 backend__tests__
 node_modules
 .git
