@@ -1,8 +1,10 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
-constants.error.rest.convertitmdhtml = 'Error al convertir md a html';
-constants.error.rest.convertitcsvjson = 'Error al obtener csv a json';
+const _constants = { ...constants };
 
-module.exports = constants;
+_constants.error.rest.convertitmdhtml = 'Error al convertir md a html';
+_constants.error.rest.convertitcsvjson = 'Error al obtener csv a json';
+
+module.exports = _constants;

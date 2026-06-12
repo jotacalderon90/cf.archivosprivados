@@ -1,11 +1,13 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
-constants.error.rest.create = 'Error al crear archivo';
-constants.error.rest.update = 'Error al actualizar archivo';
-constants.error.rest.delete = 'Error al eliminar archivo';
-constants.error.rest.rename = 'Error al renombrar archivo';
-constants.error.rest.upload = 'Error al subir archivo';
+const _constants = { ...constants };
 
-module.exports = constants;
+_constants.error.rest.create = 'Error al crear archivo';
+_constants.error.rest.update = 'Error al actualizar archivo';
+_constants.error.rest.delete = 'Error al eliminar archivo';
+_constants.error.rest.rename = 'Error al renombrar archivo';
+_constants.error.rest.upload = 'Error al subir archivo';
+
+module.exports = _constants;

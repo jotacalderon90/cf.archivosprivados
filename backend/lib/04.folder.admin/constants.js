@@ -1,9 +1,11 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
-constants.error.rest.create = 'Error al crear carpeta';
-constants.error.rest.update = 'Error al actualizar carpeta';
-constants.error.rest.delete = 'Error al eliminar carpeta';
+const _constants = { ...constants };
 
-module.exports = constants;
+_constants.error.rest.create = 'Error al crear carpeta';
+_constants.error.rest.update = 'Error al actualizar carpeta';
+_constants.error.rest.delete = 'Error al eliminar carpeta';
+
+module.exports = _constants;

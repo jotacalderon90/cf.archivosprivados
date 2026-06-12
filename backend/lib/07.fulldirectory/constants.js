@@ -1,7 +1,9 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
-constants.error.rest.fulldirectory = 'Error al obtener directorio completo';
+const _constants = { ...constants };
 
-module.exports = constants;
+_constants.error.rest.fulldirectory = 'Error al obtener directorio completo';
+
+module.exports = _constants;

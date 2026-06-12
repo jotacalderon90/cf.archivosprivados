@@ -2,6 +2,8 @@
 
 const constants = require('../constants');
 
-constants.error.rest.collection = 'Error al obtener lista de roles';
+const _constants = { ...constants };
 
-module.exports = constants;
+_constants.error.rest.collection = 'Error al obtener lista de roles';
+
+module.exports = _constants;

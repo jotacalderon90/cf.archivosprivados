@@ -1,8 +1,10 @@
 'use strict';
 
-const constants  = require('../constants');
+const constants = require('../constants');
 
-constants.error.rest.total = 'Error al obtener total de carpetas';
-constants.error.rest.collection = 'Error al obtener colleccion de carpetas';
+const _constants = { ...constants };
 
-module.exports = constants;
+_constants.error.rest.total = 'Error al obtener total de carpetas';
+_constants.error.rest.collection = 'Error al obtener colleccion de carpetas';
+
+module.exports = _constants;
