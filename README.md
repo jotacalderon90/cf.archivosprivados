@@ -79,10 +79,6 @@ Esto garantiza que el acceso a los archivos esté alineado con la identidad y pe
 
 ## Ejecución local
 
-> Este servicio sigue la misma arquitectura de red utilizada en el ecosistema.
-
----
-
 ### Con Node.js
 
 ```bash
