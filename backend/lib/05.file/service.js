@@ -44,7 +44,8 @@ module.exports = {
 
   read: async function (input) {
     try {
-      return fs.readFileSync(filemanager.get(input.id, input.host), 'utf8');
+      const fileContent = await fs.promises.readFile(filemanager.get(input.id, input.host), 'utf8');
+      return fileContent;
     } catch (error) {
       logger.error(error);
       throw new Error(

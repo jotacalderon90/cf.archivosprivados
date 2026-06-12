@@ -9,18 +9,19 @@ const constants = require('./constants');
 
 const directory = process.cwd() + '/backend/assets/';
 
-const getDirectory = function (src, dirbase) {
-  const tmpDir = fs.readdirSync(src);
+const getDirectory = async function (src, dirbase) {
+  const tmpDir = await fs.promises.readdir(src);
   const directory = [];
   for (let i = 0; i < tmpDir.length; i++) {
     const direct = path.join(src, tmpDir[i]);
+    const stat = await fs.promises.stat(direct);
     const dir = {
       text: tmpDir[i],
       id: dirbase + tmpDir[i],
-      type: fs.statSync(direct).isDirectory() ? 'folder' : 'file',
+      type: stat.isDirectory() ? 'folder' : 'file',
     };
-    if (fs.statSync(direct).isDirectory()) {
-      dir.children = getDirectory(direct, dirbase + tmpDir[i] + '/');
+    if (stat.isDirectory()) {
+      dir.children = await getDirectory(direct, dirbase + tmpDir[i] + '/');
     }
     directory.push(dir);
   }
@@ -30,7 +31,7 @@ const getDirectory = function (src, dirbase) {
 module.exports = {
   fulldirectory: async function () {
     try {
-      return getDirectory(directory, '/');
+      return await getDirectory(directory, '/');
     } catch (error) {
       logger.error(error);
       throw new Error(

@@ -12,7 +12,10 @@ const constants = require('./constants');
 module.exports = {
   create: async function (input) {
     try {
-      fs.writeFileSync(filemanager.get(input.id, input.host) + input.name, input.content || '');
+      await fs.promises.writeFile(
+        filemanager.get(input.id, input.host) + input.name,
+        input.content || ''
+      );
 
       return true;
     } catch (error) {
@@ -27,7 +30,7 @@ module.exports = {
 
   update: async function (input) {
     try {
-      fs.writeFileSync(filemanager.get(input.id, input.host), input.content);
+      await fs.promises.writeFile(filemanager.get(input.id, input.host), input.content);
 
       return true;
     } catch (error) {
@@ -42,7 +45,7 @@ module.exports = {
 
   delete: async function (input) {
     try {
-      const deleted = fs.unlinkSync(filemanager.get(input.id, input.host));
+      const deleted = await fs.promises.unlink(filemanager.get(input.id, input.host));
       logger.info(deleted);
 
       return true;
@@ -58,7 +61,7 @@ module.exports = {
 
   rename: async function (input) {
     try {
-      fs.renameSync(
+      await fs.promises.rename(
         filemanager.get(input.id, input.host),
         filemanager.base(input.host) + '/' + input.name
       );

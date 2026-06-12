@@ -11,8 +11,7 @@ const constants = require('./constants');
 module.exports = {
   create: async function (input) {
     try {
-      fs.mkdirSync(filemanager.get(input.id, input.host) + input.name);
-
+      await fs.promises.mkdir(filemanager.get(input.id, input.host) + input.name);
       return true;
     } catch (error) {
       logger.error(error);
@@ -26,7 +25,7 @@ module.exports = {
 
   update: async function (input) {
     try {
-      fs.renameSync(
+      await fs.promises.rename(
         filemanager.get(input.id, input.host),
         filemanager.base(input.host) + input.name
       );
@@ -44,7 +43,7 @@ module.exports = {
 
   delete: async function (input) {
     try {
-      fs.rmSync(filemanager.get(input.id, input.host), {
+      await fs.promises.rm(filemanager.get(input.id, input.host), {
         recursive: true,
         force: true,
       });
