@@ -1,0 +1,85 @@
+<!--use:main-->
+
+<!--define:title-->HTML Editor :)<!--/define:title-->
+
+<!--define:head-->
+	<link rel="stylesheet" href="filemanager/html_editor/_.css" />
+<!--/define:head-->
+
+<!--define:script-->
+	<script>
+    const env = '{{data:process.env.NODE_ENV}}';
+    const user_roles = {{data:JSON.stringify(doc.roles)}};
+    const host = "{{data:process.env.HOST}}";
+    const host_database = "{{data:process.env.HOST_DATABASE}}";
+    const timezone = '{{data:process.env.TIMEZONE}}';
+    const domain = '{{data:doc.domain}}';
+    const filepath = '{{data:doc.filepath}}';
+  </script>
+	<script type="text/javascript" src="filemanager/perfil.js"></script>
+	<script type="text/javascript" src="filemanager/menu.js"></script>
+	<script type="text/javascript" src="filemanager/html_editor/_.js"></script>
+<!--/define:script-->
+
+<!--define:main-->
+
+	<script	src="{{data:process.env.HOST_ARCHIVOSPUBLICOS}}/assets/lib/node_modules/jquery/dist/jquery.min.js"></script>
+	
+	<input type="checkbox" id="abrir-cerrar" name="abrir-cerrar" value="" />
+	
+	<label for="abrir-cerrar">&#9776;</label>
+	
+	<nav id="nav-main">
+		<button class="btn btn-default btn-xs btn-block" v-on:click="html.refreshTreeDOM()">refrescar treeDOM</button>
+		<ul class="list-group" id="treeDom"></ul>
+		<button class="btn btn-default btn-xs btn-block" v-on:click="html.update()">Guardar cambios</button>
+	</nav>
+	
+	<div id="visualcontent"></div>
+	
+	<div class="modal fade" id="dvModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-body">
+					<table class="table">
+						<tbody>
+							<tr>
+								<th>Elemento</th>
+								<td>{{html.elementDOM.nodeName}}</td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>Atributo</th>
+								<th>Valor</th>
+								<th></th>
+							</tr>
+							<tr v-for="(attr, index) in html.elementDOM.attributes">
+								<td><input type="text" class="form-control input-sm" v-model="attr.name"/></td>
+								<td><input type="text" class="form-control input-sm" v-model="attr.value"/></td>
+								<td class="text-center">
+									<button class="btn btn-danger btn-xs" v-on:click="html.removeAttr(index)">
+									<i class="fa fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td><input type="text" class="form-control input-sm" placeholder="Nuevo atributo.name" v-model="html.newAttribute.name"/></td>
+								<td><input type="text" class="form-control input-sm" placeholder="Nuevo atributo.value" v-model="html.newAttribute.value"/></td>
+								<td class="text-center">
+									<button class="btn btn-success btn-xs" v-on:click="html.pushAttr()">
+										<i class="fa fa-check"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div>
+						<p>TextNode</p>
+						<textarea class="form-control input-sm" rows="5" v-model="html.elementDOM.innerHTML"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!--/define:main-->

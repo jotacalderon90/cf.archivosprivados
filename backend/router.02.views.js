@@ -46,4 +46,26 @@ module.exports = {
   //@method(['get'])
   //@roles(['root','admin'])
   configuration: controlador.configuration,
+
+  /**
+   * @swagger
+   * /html/{filepath}:
+   *   get:
+   *     tags:
+   *       - Vistas
+   *     summary: obtener vista de edición de archivos HTML
+   *     description: obtener vista de edición de archivos HTML
+   *     x-roles: ['root', 'admin','cms']
+   *     responses:
+   *       200:
+   *         description: Respuesta en HTML
+   *         content:
+   *           text/html:
+   *             schema:
+   *               type: string
+   */
+  //@route('/html/:filepath')
+  //@method(['get'])
+  //@roles(['root', 'admin','cms'])
+  renderHtml: controlador.renderHtml,
 };

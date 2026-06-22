@@ -89,6 +89,11 @@
 					<button class="btn btn-outline-secondary" v-show="archivosprivados.canAdmin && archivosprivados.isMdFile" v-on:click="archivosprivados.mdToHtml()" title="MD a HTML">
 						<i class="fa fa-code"></i> MD → HTML
 					</button>
+          
+					<button class="btn btn-outline-secondary" v-show="archivosprivados.canAdmin && archivosprivados.isHtmlFile" v-on:click="archivosprivados.editHTML()" title="Editar HTML">
+						<i class="fa-brands fa-html5"></i>
+						Editar HTML
+					</button>
           <!--
 					<button 
             class="btn btn-outline-secondary" 

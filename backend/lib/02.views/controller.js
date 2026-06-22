@@ -2,9 +2,11 @@
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
-const constants = require('./constants');
 
 const domain = require('../domain');
+
+const constants = require('./constants');
+const validator = require('./validator');
 
 module.exports = {
   index: async function (req, res) {
@@ -35,6 +37,30 @@ module.exports = {
         req,
         res,
         constants.error.rest.configuration + ' ' + constants.error.controlador
+      );
+    }
+  },
+
+  renderHtml: async function (req, res) {
+    try {
+      const parseResult = validator.renderHtml.safeParse(req.params);
+
+      if (!parseResult.success) {
+        response.APIError(req, res, constants.error.validacion);
+        return;
+      }
+
+      res.render('filemanager/html_editor/_', {
+        roles: req.user ? req.user.roles : [],
+        __hostAccount: domain.getHostAccount(req),
+        filepath: parseResult.data.filepath,
+      });
+    } catch (error) {
+      logger.error(error);
+      response.renderError(
+        req,
+        res,
+        constants.error.rest.renderHtml + ' ' + constants.error.controlador
       );
     }
   },

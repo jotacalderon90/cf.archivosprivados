@@ -80,6 +80,7 @@ archivosprivados.prototype.close = function () {
 	this.isMediaFile    = false;
 	this.isMdFile       = false;
 	this.isCsvFile      = false;
+	this.isHtmlFile     = false;
 	this.name           = '';
 	this.fullname       = '';
 	this.fileContent    = '';
@@ -122,6 +123,7 @@ archivosprivados.prototype.select = async function (li) {
 		this.isMediaFile = false;
 		this.isMdFile    = false;
 		this.isCsvFile   = false;
+    this.isHtmlFile  = false;
 		this.fileContent = '';
 
 		if (this.isFile) {
@@ -130,6 +132,7 @@ archivosprivados.prototype.select = async function (li) {
 			this.isMediaFile  = this.mediaFiles.includes(this.type);
 			this.isMdFile     = this.type === 'md';
 			this.isCsvFile    = this.type === 'csv';
+      this.isHtmlFile   = this.type === 'html';
 			this.fullnameDOWNLOAD = label.getAttribute('data-api-file') + btoa(this.fullname) + '/download';
 			this.fullnameGET      = label.getAttribute('data-api-file') + btoa(this.fullname) + '/getfile';
 
@@ -567,6 +570,14 @@ archivosprivados.prototype.csvToJson = async function () {
 	}
 };
 
+// ─────────────────────────────────────────────
+//  HTML Editor
+// ─────────────────────────────────────────────
+archivosprivados.prototype.editHTML = function() {
+  const urleditor = '/html/' + btoa(this.fullname);
+  this.close();
+  location.href = urleditor;
+}
 
 // ─────────────────────────────────────────────
 //  Árbol de directorios (sidebar)

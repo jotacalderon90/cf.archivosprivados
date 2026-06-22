@@ -1,0 +1,58 @@
+/***************************/
+/*MENU VERTICAL DESPLEGABLE*/
+/***************************/
+
+input#abrir-cerrar {
+    display:none;
+}
+input#abrir-cerrar:checked ~ #nav-main {
+    width:auto;
+	padding: 25px;
+}
+label[for="abrir-cerrar"] {
+    cursor:pointer;
+    padding: 1rem;
+    background-color:#333;
+    color:#fff;
+	position: fixed;
+	top: 50%;
+    transform: translateY(-50%);
+	z-index: 999999;
+}
+#nav-main{
+    width:0;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999998;
+    background-color: #00324b;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding: 1rem 0;
+    box-sizing:border-box; 
+}
+
+/**********************/
+/*******DOM EDITOR*****/
+/**********************/
+
+#treeDom{
+	font-size: 9px;
+	text-transform: lowercase;
+}
+#treeDom .list-group-item{
+	padding: 2px 7px;
+}
+#treeDom .nodeSelected {
+	color: orange;
+}
+#treeDom .noDisplay {
+	display:none;
+}
+#treeDom .over{
+	background:#F2F2F2;
+}
+ul ul{
+	padding-left: 10px;
+}
