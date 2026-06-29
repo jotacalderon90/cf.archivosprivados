@@ -1,0 +1,11 @@
+'use strict';
+
+const constants = require('../constants');
+
+const _constants = { ...constants };
+
+_constants.error.rest.get = 'Error al leer archivo';
+_constants.error.rest.bad_ip = 'Ip cliente inválida :|';
+_constants.error.rest.bad_useragent = 'User agent inválido :O';
+
+module.exports = _constants;
