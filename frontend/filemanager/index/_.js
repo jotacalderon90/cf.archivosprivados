@@ -218,8 +218,11 @@ archivosprivados.prototype.delete = async function () {
 		if (result && result.error) throw new Error(result.error);
 
 		this.close();
-		this.parent.modal.notify('Eliminado correctamente.', 'success');
-		setTimeout(() => location.reload(), 1200);
+    
+		await this.parent.modal.notify('Eliminado correctamente.');
+    
+    location.reload();
+    
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
@@ -246,7 +249,7 @@ archivosprivados.prototype.update = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this.parent.modal.notify('Archivo guardado correctamente.', 'success');
+    this.parent.modal.notify('Archivo guardado correctamente.');
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
@@ -310,8 +313,10 @@ archivosprivados.prototype.rename = async function () {
 		this.parent.loader.active = false;
 		if (result && result.error) throw new Error(result.error);
 
-		this.parent.modal.notify('Renombrado correctamente.', 'success');
-		setTimeout(() => location.reload(), 1200);
+		await this.parent.modal.notify('Renombrado correctamente.');
+    
+    location.reload();
+    
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
@@ -361,8 +366,10 @@ archivosprivados.prototype.createFile = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this.parent.modal.notify('Archivo "' + newName + '" creado.', 'success');
-		setTimeout(() => location.reload(), 1200);
+		await this.parent.modal.notify('Archivo "' + newName + '" creado.');
+    
+		location.reload();
+    
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
@@ -408,8 +415,10 @@ archivosprivados.prototype.createFolder_ = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this.parent.modal.notify('Carpeta "' + newName + '" creada.', 'success');
-		setTimeout(() => location.reload(), 1200);
+		await this.parent.modal.notify('Carpeta "' + newName + '" creada.');
+    
+		location.reload();
+    
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
@@ -509,8 +518,10 @@ archivosprivados.prototype.relocate = async function () {
 
 		if (result && result.error) throw new Error(result.error);
 
-		this.parent.modal.notify('Archivo reubicado en "' + this.modal.relocateTarget + '".', 'success');
-		setTimeout(() => location.reload(), 1200);
+		await this.parent.modal.notify('Archivo reubicado en "' + this.modal.relocateTarget + '".');
+		
+    location.reload();
+    
 	} catch (e) {
 		this.parent.loader.active = false;
 		console.error(e);
@@ -729,8 +740,10 @@ archivosprivados.prototype.uploadFile = async function () {
     
     this.parent.loader.active = false;    
     this.close();
-		this.parent.modal.notify('Archivo subido correctamente.', 'success');
-		setTimeout(() => location.reload(), 1200);
+		
+    await this.parent.modal.notify('Archivo subido correctamente.');
+    
+		location.reload();
 
   }catch(error) {
     this.parent.loader.active = false;
