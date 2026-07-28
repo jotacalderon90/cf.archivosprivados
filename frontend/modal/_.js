@@ -15,10 +15,16 @@ modal.prototype.close = function (id) {
 	bootstrap.Modal.getOrCreateInstance(el).hide();
 };
 
-modal.prototype.notify = function (msg, type) {
-	this.notifyMsg  = msg;
-	this.notifyType = type || 'success';
-	this.open('mdNotify');
+modal.prototype.notify = async function (msg, type) {
+  return new Promise((resolve,reject)=>{    
+    this.notifyMsg  = msg;
+    this.notifyType = type || 'success';
+    this.open('mdNotify');
+    document.getElementById('btnMdAceptar').addEventListener( 'click' , (event) => {
+      this.close('mdNotify');
+      resolve(true);
+    });
+  });
 };
 
 app.modules.modal = modal;
