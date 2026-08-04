@@ -16,6 +16,7 @@ const archivosprivados = function () {
 	this.service_rename_folder     = createService('PUT',   ':path:id');
 	this.service_convertitmdhtml   = createService('POST',  '/api/convertitmdhtml');
 	this.service_convertitcsvjson  = createService('POST',  '/api/convertitcsvjson');
+	this.service_extract           = createService('POST',  '/api/filemanager/file/:id/extract');
   
 	this.archive     = null;
 	this.textFiles   = ['txt','html','css','js','json','csv','md','gitignore','bowerrc','log'];
@@ -81,6 +82,7 @@ archivosprivados.prototype.close = function () {
 	this.isMdFile       = false;
 	this.isCsvFile      = false;
 	this.isHtmlFile     = false;
+	this.isZipFile      = false;
 	this.name           = '';
 	this.fullname       = '';
 	this.fileContent    = '';
@@ -125,6 +127,7 @@ archivosprivados.prototype.select = async function (li) {
 		this.isMdFile    = false;
 		this.isCsvFile   = false;
 		this.isHtmlFile  = false;
+    this.isZipFile   = false;
 		this.fileContent = '';
 		this.fullnameFolderDOWNLOAD = '';
 
@@ -135,6 +138,7 @@ archivosprivados.prototype.select = async function (li) {
 			this.isMdFile     = this.type === 'md';
 			this.isCsvFile    = this.type === 'csv';
       this.isHtmlFile   = this.type === 'html';
+      this.isZipFile    = this.type === 'zip';
 			this.fullnameDOWNLOAD = label.getAttribute('data-api-file') + btoa(this.fullname) + '/download';
 			this.fullnameGET      = label.getAttribute('data-api-file') + btoa(this.fullname) + '/getfile';
 
@@ -543,6 +547,23 @@ archivosprivados.prototype.copyCleanURL = async function () {
 		this.parent.modal.notify('No se pudo copiar la URL.', 'error');
 	}
 };
+
+// EXTRACT ZIP
+archivosprivados.prototype.extract = async function() {
+  try {
+		this.parent.loader.active = true;
+		const respuesta = await this.service_extract({id: btoa(this.fullname)});
+		this.parent.loader.active = false;
+
+		if (respuesta && respuesta.error) throw new Error(respuesta.error);
+
+		this.parent.modal.notify('Zip extraído', 'success');
+	} catch (e) {
+		this.parent.loader.active = false;
+		console.error(e);
+		this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
+	}
+}
 
 // ─────────────────────────────────────────────
 //  MD → HTML

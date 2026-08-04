@@ -1,6 +1,9 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
+
+const unzipper = require('unzipper');
 
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const helper = require('cl.jotacalderon.cf.framework/lib/helper');
@@ -20,11 +23,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.create + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.create + ' ' + constants.error.servicio);
     }
   },
 
@@ -35,11 +34,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.update + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.update + ' ' + constants.error.servicio);
     }
   },
 
@@ -51,11 +46,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.delete + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.delete + ' ' + constants.error.servicio);
     }
   },
 
@@ -69,11 +60,7 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.download + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.download + ' ' + constants.error.servicio);
     }
   },
 
@@ -86,11 +73,28 @@ module.exports = {
       return true;
     } catch (error) {
       logger.error(error);
-      throw new Error(
-        error instanceof Error
-          ? error.message
-          : constants.error.rest.upload + ' ' + constants.error.servicio
-      );
+      throw new Error(constants.error.rest.upload + ' ' + constants.error.servicio);
+    }
+  },
+
+  extract: async function (input) {
+    try {
+      const zipDirectory = filemanager.get(input.id, input.host);
+      if (!zipDirectory.endsWith('.zip')) {
+        return constants.error.rest.extract_invalidZip + ' ' + constants.error.servicio;
+      }
+
+      const destinationFolder = path.dirname(zipDirectory);
+
+      await fs
+        .createReadStream(zipDirectory)
+        .pipe(unzipper.Extract({ path: destinationFolder }))
+        .promise();
+
+      return true;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.extract + ' ' + constants.error.servicio);
     }
   },
 };

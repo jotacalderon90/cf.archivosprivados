@@ -166,4 +166,38 @@ module.exports = {
   //@method(['post'])
   //@roles(['root','admin'])
   upload: controlador.upload,
+
+  /**
+   * @swagger
+   * /api/filemanager/file/{id}/extract:
+   *   post:
+   *     tags:
+   *       - File Admin
+   *     summary: descomprime archivo .zip
+   *     description: descomprime archivo .zip
+   *     x-roles: ['root','admin']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   */
+  //@route('/api/filemanager/file/:id/extract')
+  //@method(['post'])
+  //@roles(['root','admin'])
+  extract: controlador.extract,
 };

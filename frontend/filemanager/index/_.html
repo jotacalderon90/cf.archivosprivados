@@ -60,6 +60,10 @@
 						<i class="fa fa-download"></i> Descargar
 					</a>
 
+					<button class="btn btn-outline-warning" title="Descomprimir Zip" v-show="archivosprivados.isZipFile" v-on:click="archivosprivados.extract()">
+						<i class="fa fa-box-open"></i> Extraer
+					</button>
+
 					<a class="btn btn-outline-primary" target="_blank" title="Visualizar" v-show="archivosprivados.isFile" :href="archivosprivados.fullnameGET">
 						<i class="fa fa-eye"></i> Visualizar
 					</a>

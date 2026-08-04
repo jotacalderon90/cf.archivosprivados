@@ -112,4 +112,32 @@ module.exports = {
       response.APIError(req, res, constants.error.rest.upload + ' ' + constants.error.controlador);
     }
   },
+
+  extract: async function (req, res) {
+    try {
+      const parseResult = validator.extract.safeParse(req.params);
+
+      if (!parseResult.success) {
+        logger.error(parseResult);
+        response.APIError(req, res, constants.error.validacion);
+        return;
+      }
+
+      const respuesta = await service.extract({
+        ...parseResult.data,
+        host: req.headers.host,
+      });
+
+      if (typeof respuesta === 'string') {
+        logger.error(parseResult);
+        response.APIError(req, res, constants.error.validacion);
+        return;
+      }
+
+      res.send({ data: respuesta });
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.extract + ' ' + constants.error.controlador);
+    }
+  },
 };

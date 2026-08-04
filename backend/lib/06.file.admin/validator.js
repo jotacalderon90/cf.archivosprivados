@@ -25,15 +25,14 @@ const fileContentRequired = z
   .max(10 * 1024 * 1024, 'El contenido excede el tamaño máximo permitido (10MB)');
 
 module.exports = {
-
   create: z.object({
-    id:      validator.b64,
-    name:    fileName,
+    id: validator.b64,
+    name: fileName,
     content: fileContent,
   }),
 
   update: z.object({
-    id:      validator.b64,
+    id: validator.b64,
     content: fileContentRequired,
   }),
 
@@ -42,7 +41,7 @@ module.exports = {
   }),
 
   rename: z.object({
-    id:   validator.b64,
+    id: validator.b64,
     name: z
       .string({ required_error: 'El nombre del archivo es requerido' })
       .min(1, 'El nombre no puede estar vacío')
@@ -51,11 +50,14 @@ module.exports = {
 
   upload: z.object({
     id: validator.b64,
-    file: z.object({
-        size: z
-          .number()
-          .max(50 * 1024 * 1024, 'El archivo supera el tamaño máximo permitido.')
-      }).passthrough()
+    file: z
+      .object({
+        size: z.number().max(50 * 1024 * 1024, 'El archivo supera el tamaño máximo permitido.'),
+      })
+      .passthrough(),
   }),
 
+  extract: z.object({
+    id: validator.b64,
+  }),
 };
