@@ -58,4 +58,33 @@ module.exports = {
   //@method(['get'])
   //@roles(['root','admin','archivosprivados'])
   collection: controlador.collection,
+
+  /**
+   * @swagger
+   * /api/filemanager/folder/:id/download:
+   *   get:
+   *     tags:
+   *       - Folder
+   *     summary: descargar carpeta en formato zip
+   *     description: descargar carpeta en formato zip
+   *     x-roles: ['root','admin','archivosprivados']
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/zip:
+   *             schema:
+   *               type: string
+   *               format: binary
+   */
+  //@route('/api/filemanager/folder/:id/download')
+  //@method(['get'])
+  //@roles(['root','admin','archivosprivados'])
+  download: controlador.download,
 };

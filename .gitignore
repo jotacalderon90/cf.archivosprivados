@@ -9,3 +9,6 @@ coverage/
 
 # Archivos propios de la app multidomain
 backend/assets/domains/
+
+# Logs
+logs

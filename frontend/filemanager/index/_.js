@@ -84,6 +84,7 @@ archivosprivados.prototype.close = function () {
 	this.name           = '';
 	this.fullname       = '';
 	this.fileContent    = '';
+	this.fullnameFolderDOWNLOAD = '';
 };
 
 archivosprivados.prototype.clean = function () {
@@ -123,8 +124,9 @@ archivosprivados.prototype.select = async function (li) {
 		this.isMediaFile = false;
 		this.isMdFile    = false;
 		this.isCsvFile   = false;
-    this.isHtmlFile  = false;
+		this.isHtmlFile  = false;
 		this.fileContent = '';
+		this.fullnameFolderDOWNLOAD = '';
 
 		if (this.isFile) {
 			this.type         = this.name.split('.').pop().toLowerCase();
@@ -177,10 +179,11 @@ archivosprivados.prototype.select = async function (li) {
 			// Es carpeta: configurar el uploader
 			const n = label.getAttribute('data-api-file') + btoa(encodeURIComponent(label.getAttribute('data-api-path'))) + '/uploader';
 			document.getElementById('fileupload').setAttribute('action', n);
-      this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
+			this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
+			this.fullnameFolderDOWNLOAD = label.getAttribute('data-api-folder') + btoa(encodeURIComponent(this.fullname)) + '/download';
       
-      //20260510:cargar configuracion especial
-      //this.parent.configuracion_especial.select(this.fullname);
+			//20260510:cargar configuracion especial
+			//this.parent.configuracion_especial.select(this.fullname);
       
 		}
     

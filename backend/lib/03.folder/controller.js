@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
@@ -48,6 +49,41 @@ module.exports = {
         req,
         res,
         constants.error.rest.collection + ' ' + constants.error.controlador
+      );
+    }
+  },
+
+  download: async function (req, res) {
+    try {
+      const parseResult = validator.download.safeParse(req.params);
+
+      if (!parseResult.success) {
+        response.renderError(req, res, constants.error.validacion);
+        return;
+      }
+
+      const { tempZipPath, folderName } = await service.download({
+        ...parseResult.data,
+        host: req.headers.host,
+      });
+
+      res.download(tempZipPath, `${folderName}.zip`, (err) => {
+        fs.unlink(tempZipPath, (unlinkErr) => {
+          if (unlinkErr) {
+            logger.error('Error al eliminar archivo temporal zip:', unlinkErr);
+          }
+        });
+
+        if (err && !res.headersSent) {
+          logger.error('Error durante la descarga del archivo zip:', err);
+        }
+      });
+    } catch (error) {
+      logger.error(error);
+      response.renderError(
+        req,
+        res,
+        constants.error.rest.download + ' ' + constants.error.controlador
       );
     }
   },

@@ -56,6 +56,10 @@
 						<i class="fa fa-download"></i> Descargar
 					</a>
 
+					<a class="btn btn-outline-primary" target="_blank" title="Descargar Carpeta" v-show="archivosprivados.isFolder" :href="archivosprivados.fullnameFolderDOWNLOAD">
+						<i class="fa fa-download"></i> Descargar
+					</a>
+
 					<a class="btn btn-outline-primary" target="_blank" title="Visualizar" v-show="archivosprivados.isFile" :href="archivosprivados.fullnameGET">
 						<i class="fa fa-eye"></i> Visualizar
 					</a>
