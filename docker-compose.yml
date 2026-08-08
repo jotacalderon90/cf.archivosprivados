@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     image: archivosprivados:0.0.1
     container_name: archivosprivados
+    mem_limit: 128M
+    mem_reservation: 64M
     env_file:
       - .env.production
     environment:
