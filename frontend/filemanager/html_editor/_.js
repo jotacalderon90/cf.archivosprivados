@@ -52,10 +52,11 @@ html.prototype.read = async function() {
 html.prototype.update = async function() {
   try {
 
-    if (!confirm('Confirme actualización, esto no tiene vuelta atras')) {
+    const confirmar = await this.parent.modal.confirm('Confirme actualización, esto no tiene vuelta atras', 'Cancelar', 'Aceptar');
+    if(!confirmar) {
       return;
     }
-
+    
     const response = await this.service.update({}, {
       content: this.formatHTML(document.getElementById('visualcontent').innerHTML)
     });
