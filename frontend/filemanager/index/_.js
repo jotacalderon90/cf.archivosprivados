@@ -3,37 +3,37 @@
 // ─────────────────────────────────────────────
 //  Constructor
 // ─────────────────────────────────────────────
-const archivosprivados = function () {
-  
-	this.service_read             = createService('GET',    ':path:id');
-	this.service_folder_collection = createService('GET',   ':path:id/collection');
-	this.service_file_collection   = createService('GET',   ':path:id/collection');
-	this.service_delete            = createService('DELETE',':path:id');
-	this.service_update            = createService('PUT',   ':path:id');
-	this.service_file_create       = createService('POST',  ':path:id');
-	this.service_folder_create     = createService('POST',  '/api/filemanager/folder');
-	this.service_rename_file       = createService('PUT',   '/api/filemanager/file/:id/rename');
-	this.service_rename_folder     = createService('PUT',   ':path:id');
-	this.service_convertitmdhtml   = createService('POST',  '/api/convertitmdhtml');
-	this.service_convertitcsvjson  = createService('POST',  '/api/convertitcsvjson');
-	this.service_extract           = createService('POST',  '/api/filemanager/file/:id/extract');
-  
-	this.archive     = null;
-	this.textFiles   = ['txt','html','css','js','json','csv','md','gitignore','bowerrc','log'];
-	this.mediaFiles  = ['jpg','gif','png','webp','ico','mp3','mp4','pdf'];
+const archivosprivados = function() {
 
-	// Estado de modales
-	this.modal = {
-		newName:        '',
-		error:          '',
-		relocateTarget: '',
-		relocatePath:   '',
-		notifyMsg:      '',
-		notifyType:     'success'
-	};
-  
+  this.service_read = createService('GET', ':path:id');
+  this.service_folder_collection = createService('GET', ':path:id/collection');
+  this.service_file_collection = createService('GET', ':path:id/collection');
+  this.service_delete = createService('DELETE', ':path:id');
+  this.service_update = createService('PUT', ':path:id');
+  this.service_file_create = createService('POST', ':path:id');
+  this.service_folder_create = createService('POST', '/api/filemanager/folder');
+  this.service_rename_file = createService('PUT', '/api/filemanager/file/:id/rename');
+  this.service_rename_folder = createService('PUT', ':path:id');
+  this.service_convertitmdhtml = createService('POST', '/api/convertitmdhtml');
+  this.service_convertitcsvjson = createService('POST', '/api/convertitcsvjson');
+  this.service_extract = createService('POST', '/api/filemanager/file/:id/extract');
+
+  this.archive = null;
+  this.textFiles = ['txt', 'html', 'css', 'js', 'json', 'csv', 'md', 'gitignore', 'bowerrc', 'log'];
+  this.mediaFiles = ['jpg', 'gif', 'png', 'webp', 'ico', 'mp3', 'mp4', 'pdf'];
+
+  // Estado de modales
+  this.modal = {
+    newName: '',
+    error: '',
+    relocateTarget: '',
+    relocatePath: '',
+    notifyMsg: '',
+    notifyType: 'success'
+  };
+
   this.uploadUrl = '/';
-  
+
   this.configuracion_especial = {
     path: '',
     roles: []
@@ -43,566 +43,611 @@ const archivosprivados = function () {
 // ─────────────────────────────────────────────
 //  Arranque
 // ─────────────────────────────────────────────
-archivosprivados.prototype.start = async function (parent) {
-	this.parent = parent;
-  
+archivosprivados.prototype.start = async function(parent) {
+  this.parent = parent;
+
   this.canAdmin = this.parent.perfil.isAdmin();
-    
-	this.createFolderNode(document.getElementById('ul_directory'), 'd0', {
-		name:   '/',
-		file:   '/api/filemanager/file/',
-		folder: '/api/filemanager/folder/',
-		path:   '/'
-	});
+
+  this.createFolderNode(document.getElementById('ul_directory'), 'd0', {
+    name: '/',
+    file: '/api/filemanager/file/',
+    folder: '/api/filemanager/folder/',
+    path: '/'
+  });
   this.dropzone();
 };
 
-archivosprivados.prototype.canDelete = function () {
-  if(!this.parent) return false;
-  if(!this.parent.perfil) return false;
-  
-  if(this.parent.perfil.isAdmin()) {
+archivosprivados.prototype.canDelete = function() {
+  if (!this.parent) return false;
+  if (!this.parent.perfil) return false;
+
+  if (this.parent.perfil.isAdmin()) {
     return true;
-  } /*if(this.parent && this.parent.configuracion_especial.has(roles)) {
-    return true;
-  }*/
+  }
+  /*if(this.parent && this.parent.configuracion_especial.has(roles)) {
+     return true;
+   }*/
   return false;
 };
 
 // ─────────────────────────────────────────────
 //  Selección y cierre
 // ─────────────────────────────────────────────
-archivosprivados.prototype.close = function () {
-	document.querySelectorAll('#ul_directory .selected').forEach(el => el.classList.remove('selected'));
-	this.archive        = null;
-	this.isFile         = false;
-	this.isFolder       = false;
-	this.isTextFile     = false;
-	this.isMediaFile    = false;
-	this.isMdFile       = false;
-	this.isCsvFile      = false;
-	this.isHtmlFile     = false;
-	this.isZipFile      = false;
-	this.name           = '';
-	this.fullname       = '';
-	this.fileContent    = '';
-	this.fullnameFolderDOWNLOAD = '';
+archivosprivados.prototype.close = function() {
+  document.querySelectorAll('#ul_directory .selected').forEach(el => el.classList.remove('selected'));
+  this.archive = null;
+  this.isFile = false;
+  this.isFolder = false;
+  this.isTextFile = false;
+  this.isMediaFile = false;
+  this.isMdFile = false;
+  this.isCsvFile = false;
+  this.isHtmlFile = false;
+  this.isZipFile = false;
+  this.name = '';
+  this.fullname = '';
+  this.fileContent = '';
+  this.fullnameFolderDOWNLOAD = '';
 };
 
-archivosprivados.prototype.clean = function () {
-	document.querySelectorAll('#ul_directory .selected').forEach(el => el.classList.remove('selected'));
-	this.archive = null;
+archivosprivados.prototype.clean = function() {
+  document.querySelectorAll('#ul_directory .selected').forEach(el => el.classList.remove('selected'));
+  this.archive = null;
 };
 
-archivosprivados.prototype.select = async function (li) {
-	try {
-		const label = li.querySelector('label');
-		label.classList.add('selected');
-		this.archive = li;
+archivosprivados.prototype.select = async function(li) {
+  try {
+    const label = li.querySelector('label');
+    label.classList.add('selected');
+    this.archive = li;
 
-		const type      = label.getAttribute('data-type');
-		this.isFile     = type === 'file';
-		this.isFolder   = type === 'folder';
-		this.name       = label.textContent.trim();
-		this.fullname   = decodeURIComponent(label.getAttribute('data-api-path'));
-		this.cleanURL   = this.fullname;
+    const type = label.getAttribute('data-type');
+    this.isFile = type === 'file';
+    this.isFolder = type === 'folder';
+    this.name = label.textContent.trim();
+    this.fullname = decodeURIComponent(label.getAttribute('data-api-path'));
+    this.cleanURL = this.fullname;
 
-		// Directorio padre: para archivos es todo antes del último segmento,
-		// para carpetas el path ya incluye la barra final, así que subimos un nivel.
-		if (this.isFile) {
-			const parts = this.fullname.split('/');
-			parts.pop(); // quita el nombre del archivo
-			this.parentPath = parts.join('/') + '/';
-		} else {
-			// fullname para carpeta termina en '/', ej: '/carpeta demo/'
-			// el padre es todo hasta la penúltima barra
-			const trimmed = this.fullname.replace(/\/$/, '');
-			const parts   = trimmed.split('/');
-			parts.pop();
-			this.parentPath = parts.join('/') + '/';
-		}
-		// Reset de flags
-		this.isTextFile  = false;
-		this.isMediaFile = false;
-		this.isMdFile    = false;
-		this.isCsvFile   = false;
-		this.isHtmlFile  = false;
-    this.isZipFile   = false;
-		this.fileContent = '';
-		this.fullnameFolderDOWNLOAD = '';
+    // Directorio padre: para archivos es todo antes del último segmento,
+    // para carpetas el path ya incluye la barra final, así que subimos un nivel.
+    if (this.isFile) {
+      const parts = this.fullname.split('/');
+      parts.pop(); // quita el nombre del archivo
+      this.parentPath = parts.join('/') + '/';
+    } else {
+      // fullname para carpeta termina en '/', ej: '/carpeta demo/'
+      // el padre es todo hasta la penúltima barra
+      const trimmed = this.fullname.replace(/\/$/, '');
+      const parts = trimmed.split('/');
+      parts.pop();
+      this.parentPath = parts.join('/') + '/';
+    }
+    // Reset de flags
+    this.isTextFile = false;
+    this.isMediaFile = false;
+    this.isMdFile = false;
+    this.isCsvFile = false;
+    this.isHtmlFile = false;
+    this.isZipFile = false;
+    this.fileContent = '';
+    this.fullnameFolderDOWNLOAD = '';
 
-		if (this.isFile) {
-			this.type         = this.name.split('.').pop().toLowerCase();
-			this.isTextFile   = this.textFiles.includes(this.type);
-			this.isMediaFile  = this.mediaFiles.includes(this.type);
-			this.isMdFile     = this.type === 'md';
-			this.isCsvFile    = this.type === 'csv';
-      this.isHtmlFile   = this.type === 'html';
-      this.isZipFile    = this.type === 'zip';
-			this.fullnameDOWNLOAD = label.getAttribute('data-api-file') + btoa(this.fullname) + '/download';
-			this.fullnameGET      = label.getAttribute('data-api-file') + btoa(this.fullname) + '/getfile';
+    if (this.isFile) {
+      this.type = this.name.split('.').pop().toLowerCase();
+      this.isTextFile = this.textFiles.includes(this.type);
+      this.isMediaFile = this.mediaFiles.includes(this.type);
+      this.isMdFile = this.type === 'md';
+      this.isCsvFile = this.type === 'csv';
+      this.isHtmlFile = this.type === 'html';
+      this.isZipFile = this.type === 'zip';
+      this.fullnameDOWNLOAD = label.getAttribute('data-api-file') + btoa(this.fullname) + '/download';
+      this.fullnameGET = label.getAttribute('data-api-file') + btoa(this.fullname) + '/getfile';
 
-			if (this.isTextFile) {
-				this.parent.loader.active = true;
-				const result = await this.service_read({
-					id:   btoa(this.fullname),
-					path: label.getAttribute('data-api-file')
-				});
-				this.fileContent = result.data;
-				this.parent.loader.active = false;
-			} else if (this.isMediaFile) {
-				const src = this.fullnameGET;
-				let child = null;
+      if (this.isTextFile) {
+        this.parent.loader.active = true;
+        const result = await this.service_read({
+          id: btoa(this.fullname),
+          path: label.getAttribute('data-api-file')
+        });
+        this.fileContent = result.data;
+        this.parent.loader.active = false;
+      } else if (this.isMediaFile) {
+        const src = this.fullnameGET;
+        let child = null;
 
-				if (['jpg','png','gif','ico','webp'].includes(this.type)) {
-					child = document.createElement('img');
-					child.src = src;
-					child.className = 'img-fluid mt-2';
-				} else if (this.type === 'mp3') {
-					child = document.createElement('audio');
-					child.controls = true;
-					child.src = src;
-				} else if (this.type === 'mp4') {
-					child = document.createElement('video');
-					child.controls = true;
-					child.src = src;
-					child.className = 'w-100';
-				} else if (this.type === 'pdf') {
-					child = document.createElement('object');
-					child.data = src;
-					child.type = 'application/pdf';
-					child.style.width  = '100%';
-					child.style.height = '600px';
-				}
+        if (['jpg', 'png', 'gif', 'ico', 'webp'].includes(this.type)) {
+          child = document.createElement('img');
+          child.src = src;
+          child.className = 'img-fluid mt-2';
+        } else if (this.type === 'mp3') {
+          child = document.createElement('audio');
+          child.controls = true;
+          child.src = src;
+        } else if (this.type === 'mp4') {
+          child = document.createElement('video');
+          child.controls = true;
+          child.src = src;
+          child.className = 'w-100';
+        } else if (this.type === 'pdf') {
+          child = document.createElement('object');
+          child.data = src;
+          child.type = 'application/pdf';
+          child.style.width = '100%';
+          child.style.height = '600px';
+        }
 
-				const dv = document.querySelector('.dv-visualcontent');
-				dv.innerHTML = '';
-				if (child) dv.appendChild(child);
-			}
-		} else {
-			// Es carpeta: configurar el uploader
-			const n = label.getAttribute('data-api-file') + btoa(encodeURIComponent(label.getAttribute('data-api-path'))) + '/uploader';
-			document.getElementById('fileupload').setAttribute('action', n);
-			this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
-			this.fullnameFolderDOWNLOAD = label.getAttribute('data-api-folder') + btoa(encodeURIComponent(this.fullname)) + '/download';
-      
-			//20260510:cargar configuracion especial
-			//this.parent.configuracion_especial.select(this.fullname);
-      
-		}
-    
-	} catch (e) {
-		console.error(e);
-		this.parent.modal.notify('Error al seleccionar: ' + e.message, 'error');
-	}
+        const dv = document.querySelector('.dv-visualcontent');
+        dv.innerHTML = '';
+        if (child) dv.appendChild(child);
+      }
+    } else {
+      // Es carpeta: configurar el uploader
+      const n = label.getAttribute('data-api-file') + btoa(encodeURIComponent(label.getAttribute('data-api-path'))) + '/uploader';
+      document.getElementById('fileupload').setAttribute('action', n);
+      this.uploadUrl = btoa(encodeURIComponent(label.getAttribute('data-api-path')));
+      this.fullnameFolderDOWNLOAD = label.getAttribute('data-api-folder') + btoa(encodeURIComponent(this.fullname)) + '/download';
+
+      //20260510:cargar configuracion especial
+      //this.parent.configuracion_especial.select(this.fullname);
+
+    }
+
+  } catch (e) {
+    console.error(e);
+    this.parent.modal.notify('Error al seleccionar: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Eliminar
 // ─────────────────────────────────────────────
-archivosprivados.prototype.confirmDelete = function () {
-	this.parent.modal.open('mdDelete');
+archivosprivados.prototype.confirmDelete = function() {
+  this.parent.modal.open('mdDelete');
 };
 
-archivosprivados.prototype.delete = async function () {
-	this.parent.modal.close('mdDelete');
-	try {
-		const label = this.archive.querySelector('label');
-		let p, i;
+archivosprivados.prototype.delete = async function() {
+  this.parent.modal.close('mdDelete');
+  try {
+    const label = this.archive.querySelector('label');
+    let p, i;
 
-		if (this.isFile) {
-			p = label.getAttribute('data-api-file');
-			i = btoa(this.fullname);
-		} else if (this.isFolder) {
-			p = label.getAttribute('data-api-folder');
-			i = btoa(this.fullname);//.replace(/^\//, ''));
-		}
+    if (this.isFile) {
+      p = label.getAttribute('data-api-file');
+      i = btoa(this.fullname);
+    } else if (this.isFolder) {
+      p = label.getAttribute('data-api-folder');
+      i = btoa(this.fullname); //.replace(/^\//, ''));
+    }
 
-		this.parent.loader.active = true;
-		const result = await this.service_delete({ id: i, path: p });
-		this.parent.loader.active = false;
+    this.parent.loader.active = true;
+    const result = await this.service_delete({
+      id: i,
+      path: p
+    });
+    this.parent.loader.active = false;
 
-		if (result && result.error) throw new Error(result.error);
+    if (result && result.error) throw new Error(result.error);
 
-		this.close();
-    
-		await this.parent.modal.notify('Eliminado correctamente.');
-    
+    this.close();
+
+    await this.parent.modal.notify('Eliminado correctamente.');
+
     location.reload();
-    
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al eliminar: ' + e.message, 'error');
-	}
+
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al eliminar: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Guardar (actualizar contenido)
 // ─────────────────────────────────────────────
-archivosprivados.prototype.update = async function () {
-	this.parent.modal.close('mdUpdate');
-	try {
-		const label = this.archive.querySelector('label');
-		const p     = label.getAttribute('data-api-file');
-		const i     = btoa(this.fullname);
+archivosprivados.prototype.update = async function() {
+  this.parent.modal.close('mdUpdate');
+  try {
+    const label = this.archive.querySelector('label');
+    const p = label.getAttribute('data-api-file');
+    const i = btoa(this.fullname);
 
-		this.parent.loader.active = true;
-		const result = await this.service_update(
-			{ id: i, path: p },
-			JSON.stringify({ content: this.fileContent })
-		);
-		this.parent.loader.active = false;
+    this.parent.loader.active = true;
+    const result = await this.service_update({
+        id: i,
+        path: p
+      },
+      JSON.stringify({
+        content: this.fileContent
+      })
+    );
+    this.parent.loader.active = false;
 
-		if (result && result.error) throw new Error(result.error);
+    if (result && result.error) throw new Error(result.error);
 
     this.parent.modal.notify('Archivo guardado correctamente.');
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al guardar: ' + e.message, 'error');
-	}
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al guardar: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Renombrar
 // ─────────────────────────────────────────────
-archivosprivados.prototype.openRename = function () {
-	this.modal.newName = this.name;
-	this.parent.modal.open('mdRename');
-	setTimeout(() => {
-		const input = document.querySelector('#mdRename input');
-		if (input) { input.focus(); input.select(); }
-	}, 300);
+archivosprivados.prototype.openRename = function() {
+  this.modal.newName = this.name;
+  this.parent.modal.open('mdRename');
+  setTimeout(() => {
+    const input = document.querySelector('#mdRename input');
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }, 300);
 };
 
-archivosprivados.prototype.rename = async function () {
-	const newName = (this.modal.newName || '').trim();
-	if (!newName) {
-		this.modal.error = 'El nombre no puede estar vacío.';
-		return;
-	}
-	if (/[/\\:*?"<>|]/.test(newName)) {
-		this.modal.error = 'El nombre contiene caracteres no permitidos.';
-		return;
-	}
-	if (this.isFile && !/\.[a-zA-Z0-9]+$/.test(newName)) {
-		this.modal.error = 'El archivo debe tener una extensión válida.';
-		return;
-	}
+archivosprivados.prototype.rename = async function() {
+  const newName = (this.modal.newName || '').trim();
+  if (!newName) {
+    this.modal.error = 'El nombre no puede estar vacío.';
+    return;
+  }
+  if (/[/\\:*?"<>|]/.test(newName)) {
+    this.modal.error = 'El nombre contiene caracteres no permitidos.';
+    return;
+  }
+  if (this.isFile && !/\.[a-zA-Z0-9]+$/.test(newName)) {
+    this.modal.error = 'El archivo debe tener una extensión válida.';
+    return;
+  }
 
-	this.parent.modal.close('mdRename');
-	try {
-		const label = this.archive.querySelector('label');
-		const i     = btoa(this.fullname);
-		let result;
+  this.parent.modal.close('mdRename');
+  try {
+    const label = this.archive.querySelector('label');
+    const i = btoa(this.fullname);
+    let result;
 
-		// El backend hace: fs.renameSync(base + decode(id), base + name)
-		// Por lo tanto "name" debe ser la ruta completa desde la raíz de assets:
-		// directorio padre actual + nuevo nombre ingresado por el usuario.
-		const fullNewName = this.parentPath + newName;
-		this.parent.loader.active = true;
+    // El backend hace: fs.renameSync(base + decode(id), base + name)
+    // Por lo tanto "name" debe ser la ruta completa desde la raíz de assets:
+    // directorio padre actual + nuevo nombre ingresado por el usuario.
+    const fullNewName = this.parentPath + newName;
+    this.parent.loader.active = true;
 
-		if (this.isFile) {
-			const p = label.getAttribute('data-api-file');
-			result = await this.service_rename_file(
-				{ id: i, path: p },
-				JSON.stringify({ name: fullNewName })
-			);
-		} else {
-			const p = label.getAttribute('data-api-folder');
-			result = await this.service_rename_folder(
-				{ id: i, path: p },
-				JSON.stringify({ id: i, name: fullNewName })
-			);
-		}
+    if (this.isFile) {
+      const p = label.getAttribute('data-api-file');
+      result = await this.service_rename_file({
+          id: i,
+          path: p
+        },
+        JSON.stringify({
+          name: fullNewName
+        })
+      );
+    } else {
+      const p = label.getAttribute('data-api-folder');
+      result = await this.service_rename_folder({
+          id: i,
+          path: p
+        },
+        JSON.stringify({
+          id: i,
+          name: fullNewName
+        })
+      );
+    }
 
-		this.parent.loader.active = false;
-		if (result && result.error) throw new Error(result.error);
+    this.parent.loader.active = false;
+    if (result && result.error) throw new Error(result.error);
 
-		await this.parent.modal.notify('Renombrado correctamente.');
-    
+    await this.parent.modal.notify('Renombrado correctamente.');
+
     location.reload();
-    
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al renombrar: ' + e.message, 'error');
-	}
+
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al renombrar: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Nuevo archivo de texto
 // ─────────────────────────────────────────────
-archivosprivados.prototype.openNewFile = function () {
-	this.modal.newName = '';
-	this.parent.modal.open('mdNewFile');
-	setTimeout(() => {
-		const input = document.querySelector('#mdNewFile input');
-		if (input) input.focus();
-	}, 300);
+archivosprivados.prototype.openNewFile = function() {
+  this.modal.newName = '';
+  this.parent.modal.open('mdNewFile');
+  setTimeout(() => {
+    const input = document.querySelector('#mdNewFile input');
+    if (input) input.focus();
+  }, 300);
 };
 
-archivosprivados.prototype.createFile = async function () {
-	const newName = (this.modal.newName || '').trim();
-	if (!newName) {
-		this.modal.error = 'El nombre no puede estar vacío.';
-		return;
-	}
-	if (/[/\\:*?"<>|]/.test(newName)) {
-		this.modal.error = 'El nombre contiene caracteres no permitidos.';
-		return;
-	}
-	if (!/\.[a-zA-Z0-9]+$/.test(newName)) {
-		this.modal.error = 'El archivo debe tener una extensión válida (ej: notas.txt).';
-		return;
-	}
+archivosprivados.prototype.createFile = async function() {
+  const newName = (this.modal.newName || '').trim();
+  if (!newName) {
+    this.modal.error = 'El nombre no puede estar vacío.';
+    return;
+  }
+  if (/[/\\:*?"<>|]/.test(newName)) {
+    this.modal.error = 'El nombre contiene caracteres no permitidos.';
+    return;
+  }
+  if (!/\.[a-zA-Z0-9]+$/.test(newName)) {
+    this.modal.error = 'El archivo debe tener una extensión válida (ej: notas.txt).';
+    return;
+  }
 
-	this.parent.modal.close('mdNewFile');
-	try {
-		const label = this.archive.querySelector('label');
-		const i     = btoa(encodeURIComponent(this.fullname));
-		const p     = label.getAttribute('data-api-file');
+  this.parent.modal.close('mdNewFile');
+  try {
+    const label = this.archive.querySelector('label');
+    const i = btoa(encodeURIComponent(this.fullname));
+    const p = label.getAttribute('data-api-file');
 
-		this.parent.loader.active = true;
-		const result = await this.service_file_create(
-			{ id: i, path: p },
-			JSON.stringify({ id: i, name: newName, content: '' })
-		);
-		this.parent.loader.active = false;
+    this.parent.loader.active = true;
+    const result = await this.service_file_create({
+        id: i,
+        path: p
+      },
+      JSON.stringify({
+        id: i,
+        name: newName,
+        content: ''
+      })
+    );
+    this.parent.loader.active = false;
 
-		if (result && result.error) throw new Error(result.error);
+    if (result && result.error) throw new Error(result.error);
 
-		await this.parent.modal.notify('Archivo "' + newName + '" creado.');
-    
-		location.reload();
-    
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al crear archivo: ' + e.message, 'error');
-	}
+    await this.parent.modal.notify('Archivo "' + newName + '" creado.');
+
+    location.reload();
+
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al crear archivo: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Nueva carpeta
 // ─────────────────────────────────────────────
-archivosprivados.prototype.openNewFolder = function () {
-	this.modal.newName = '';
-	this.parent.modal.open('mdNewFolder');
-	setTimeout(() => {
-		const input = document.querySelector('#mdNewFolder input');
-		if (input) input.focus();
-	}, 300);
+archivosprivados.prototype.openNewFolder = function() {
+  this.modal.newName = '';
+  this.parent.modal.open('mdNewFolder');
+  setTimeout(() => {
+    const input = document.querySelector('#mdNewFolder input');
+    if (input) input.focus();
+  }, 300);
 };
 
-archivosprivados.prototype.createFolder_ = async function () {
-	const newName = (this.modal.newName || '').trim();
-	if (!newName) {
-		this.modal.error = 'El nombre no puede estar vacío.';
-		return;
-	}
-	if (/[/\\:*?"<>|]/.test(newName)) {
-		this.modal.error = 'El nombre contiene caracteres no permitidos.';
-		return;
-	}
+archivosprivados.prototype.createFolder_ = async function() {
+  const newName = (this.modal.newName || '').trim();
+  if (!newName) {
+    this.modal.error = 'El nombre no puede estar vacío.';
+    return;
+  }
+  if (/[/\\:*?"<>|]/.test(newName)) {
+    this.modal.error = 'El nombre contiene caracteres no permitidos.';
+    return;
+  }
 
-	this.parent.modal.close('mdNewFolder');
-	try {
-		const label = this.archive.querySelector('label');
-		const i     = btoa(encodeURIComponent(this.fullname));
-		const p     = label.getAttribute('data-api-folder');
+  this.parent.modal.close('mdNewFolder');
+  try {
+    const label = this.archive.querySelector('label');
+    const i = btoa(encodeURIComponent(this.fullname));
+    const p = label.getAttribute('data-api-folder');
 
-		this.parent.loader.active = true;
-		const result = await this.service_folder_create(
-			{ id: i, path: p },
-			JSON.stringify({ id: i, name: newName })
-		);
-		this.parent.loader.active = false;
+    this.parent.loader.active = true;
+    const result = await this.service_folder_create({
+        id: i,
+        path: p
+      },
+      JSON.stringify({
+        id: i,
+        name: newName
+      })
+    );
+    this.parent.loader.active = false;
 
-		if (result && result.error) throw new Error(result.error);
+    if (result && result.error) throw new Error(result.error);
 
-		await this.parent.modal.notify('Carpeta "' + newName + '" creada.');
-    
-		location.reload();
-    
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al crear carpeta: ' + e.message, 'error');
-	}
+    await this.parent.modal.notify('Carpeta "' + newName + '" creada.');
+
+    location.reload();
+
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al crear carpeta: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Reubicar archivo (mover a otra carpeta)
 // ─────────────────────────────────────────────
-archivosprivados.prototype.openRelocate = function () {
-	this.modal.relocateTarget = '';
-	this.modal.relocatePath   = '';
-	this.modal.error          = '';
+archivosprivados.prototype.openRelocate = function() {
+  this.modal.relocateTarget = '';
+  this.modal.relocatePath = '';
+  this.modal.error = '';
 
-	// Construir árbol de carpetas para selección
-	const ul = document.getElementById('ul_relocate');
-	ul.innerHTML = '';
-	this._buildRelocateTree(ul, '/', '/api/filemanager/folder/', 0);
+  // Construir árbol de carpetas para selección
+  const ul = document.getElementById('ul_relocate');
+  ul.innerHTML = '';
+  this._buildRelocateTree(ul, '/', '/api/filemanager/folder/', 0);
 
-	this.parent.modal.open('mdRelocate');
+  this.parent.modal.open('mdRelocate');
 };
 
-archivosprivados.prototype._buildRelocateTree = async function (ulEl, path, folderApi, depth) {
-	try {
-		const id   = btoa(encodeURIComponent(path));
-		const coll = await this.service_folder_collection({ id, path: folderApi });
-		if (!coll || !coll.data) return;
+archivosprivados.prototype._buildRelocateTree = async function(ulEl, path, folderApi, depth) {
+  try {
+    const id = btoa(encodeURIComponent(path));
+    const coll = await this.service_folder_collection({
+      id,
+      path: folderApi
+    });
+    if (!coll || !coll.data) return;
 
-		for (let i = 0; i < coll.data.length; i++) {
-			const folderName = coll.data[i];
-			const folderPath = path + folderName + '/';
+    for (let i = 0; i < coll.data.length; i++) {
+      const folderName = coll.data[i];
+      const folderPath = path + folderName + '/';
 
-			const li    = document.createElement('li');
-			li.style.paddingLeft = (depth * 16) + 'px';
-			li.style.cursor      = 'pointer';
-			li.style.padding     = '4px 8px 4px ' + ((depth * 16) + 8) + 'px';
-			li.className         = 'relocate-item rounded';
+      const li = document.createElement('li');
+      li.style.paddingLeft = (depth * 16) + 'px';
+      li.style.cursor = 'pointer';
+      li.style.padding = '4px 8px 4px ' + ((depth * 16) + 8) + 'px';
+      li.className = 'relocate-item rounded';
 
-			li.innerHTML = '<i class="fa fa-folder text-warning me-2"></i>' + folderName;
+      li.innerHTML = '<i class="fa fa-folder text-warning me-2"></i>' + folderName;
 
-			li.addEventListener('click', (e) => {
-				e.stopPropagation();
-				document.querySelectorAll('#ul_relocate .relocate-item').forEach(el => el.classList.remove('bg-primary', 'text-white'));
-				li.classList.add('bg-primary', 'text-white');
-				this.modal.relocateTarget = folderPath;
-				this.modal.relocatePath   = folderApi;
-			});
+      li.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('#ul_relocate .relocate-item').forEach(el => el.classList.remove('bg-primary', 'text-white'));
+        li.classList.add('bg-primary', 'text-white');
+        this.modal.relocateTarget = folderPath;
+        this.modal.relocatePath = folderApi;
+      });
 
-			const subUl = document.createElement('ul');
-			subUl.className = 'list-unstyled mb-0';
-			li.appendChild(subUl);
-			ulEl.appendChild(li);
+      const subUl = document.createElement('ul');
+      subUl.className = 'list-unstyled mb-0';
+      li.appendChild(subUl);
+      ulEl.appendChild(li);
 
-			// Expandir sub-carpetas al hacer click en el icono de flecha
-			const arrow = document.createElement('span');
-			arrow.innerHTML = ' <i class="fa fa-chevron-right fa-xs ms-1" style="opacity:.5"></i>';
-			arrow.style.float = 'right';
-			li.insertBefore(arrow, li.lastChild);
+      // Expandir sub-carpetas al hacer click en el icono de flecha
+      const arrow = document.createElement('span');
+      arrow.innerHTML = ' <i class="fa fa-chevron-right fa-xs ms-1" style="opacity:.5"></i>';
+      arrow.style.float = 'right';
+      li.insertBefore(arrow, li.lastChild);
 
-			arrow.addEventListener('click', async (e) => {
-				e.stopPropagation();
-				if (subUl.children.length > 0) {
-					subUl.innerHTML = '';
-					arrow.innerHTML = ' <i class="fa fa-chevron-right fa-xs ms-1" style="opacity:.5"></i>';
-				} else {
-					await this._buildRelocateTree(subUl, folderPath, folderApi, depth + 1);
-					arrow.innerHTML = ' <i class="fa fa-chevron-down fa-xs ms-1" style="opacity:.5"></i>';
-				}
-			});
-		}
-	} catch (e) {
-		console.error('Error construyendo árbol de reubicación:', e);
-	}
+      arrow.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (subUl.children.length > 0) {
+          subUl.innerHTML = '';
+          arrow.innerHTML = ' <i class="fa fa-chevron-right fa-xs ms-1" style="opacity:.5"></i>';
+        } else {
+          await this._buildRelocateTree(subUl, folderPath, folderApi, depth + 1);
+          arrow.innerHTML = ' <i class="fa fa-chevron-down fa-xs ms-1" style="opacity:.5"></i>';
+        }
+      });
+    }
+  } catch (e) {
+    console.error('Error construyendo árbol de reubicación:', e);
+  }
 };
 
-archivosprivados.prototype.relocate = async function () {
-	if (!this.modal.relocateTarget) {
-		this.modal.error = 'Selecciona una carpeta destino.';
-		return;
-	}
+archivosprivados.prototype.relocate = async function() {
+  if (!this.modal.relocateTarget) {
+    this.modal.error = 'Selecciona una carpeta destino.';
+    return;
+  }
 
-	this.parent.modal.close('mdRelocate');
-	try {
-		// La reubicación usa rename del archivo: lo renombra con path destino + nombre actual
-		const label    = this.archive.querySelector('label');
-		const i        = btoa(this.fullname);
-		const p        = label.getAttribute('data-api-file');
-		const destName = this.modal.relocateTarget + this.name;
+  this.parent.modal.close('mdRelocate');
+  try {
+    // La reubicación usa rename del archivo: lo renombra con path destino + nombre actual
+    const label = this.archive.querySelector('label');
+    const i = btoa(this.fullname);
+    const p = label.getAttribute('data-api-file');
+    const destName = this.modal.relocateTarget + this.name;
 
-		this.parent.loader.active = true;
-		const result = await this.service_rename_file(
-			{ id: i, path: p },
-			JSON.stringify({  id: i, name: destName })
-		);
-		this.parent.loader.active = false;
+    this.parent.loader.active = true;
+    const result = await this.service_rename_file({
+        id: i,
+        path: p
+      },
+      JSON.stringify({
+        id: i,
+        name: destName
+      })
+    );
+    this.parent.loader.active = false;
 
-		if (result && result.error) throw new Error(result.error);
+    if (result && result.error) throw new Error(result.error);
 
-		await this.parent.modal.notify('Archivo reubicado en "' + this.modal.relocateTarget + '".');
-		
+    await this.parent.modal.notify('Archivo reubicado en "' + this.modal.relocateTarget + '".');
+
     location.reload();
-    
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al reubicar: ' + e.message, 'error');
-	}
+
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al reubicar: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  Copiar URL limpia
 // ─────────────────────────────────────────────
-archivosprivados.prototype.copyCleanURL = async function () {
-	try {
+archivosprivados.prototype.copyCleanURL = async function() {
+  try {
     await copyLarge(window.location.origin + this.cleanURL);
-		this.parent.modal.notify('URL copiada al portapapeles.', 'success');
-	} catch (e) {
-		this.parent.modal.notify('No se pudo copiar la URL.', 'error');
-	}
+    this.parent.modal.notify('URL copiada al portapapeles.', 'success');
+  } catch (e) {
+    this.parent.modal.notify('No se pudo copiar la URL.', 'error');
+  }
 };
 
 // EXTRACT ZIP
 archivosprivados.prototype.extract = async function() {
   try {
-		this.parent.loader.active = true;
-		const respuesta = await this.service_extract({id: btoa(this.fullname)});
-		this.parent.loader.active = false;
+    this.parent.loader.active = true;
+    const respuesta = await this.service_extract({
+      id: btoa(this.fullname)
+    });
+    this.parent.loader.active = false;
 
-		if (respuesta && respuesta.error) throw new Error(respuesta.error);
+    if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
-		this.parent.modal.notify('Zip extraído', 'success');
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
-	}
+    this.parent.modal.notify('Zip extraído', 'success');
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
+  }
 }
 
 // ─────────────────────────────────────────────
 //  MD → HTML
 // ─────────────────────────────────────────────
-archivosprivados.prototype.mdToHtml = async function () {
-	try {
-		this.parent.loader.active = true;
-		const respuesta = await this.service_convertitmdhtml({}, { markdown: this.fileContent });
-		this.parent.loader.active = false;
+archivosprivados.prototype.mdToHtml = async function() {
+  try {
+    this.parent.loader.active = true;
+    const respuesta = await this.service_convertitmdhtml({}, {
+      markdown: this.fileContent
+    });
+    this.parent.loader.active = false;
 
-		if (respuesta && respuesta.error) throw new Error(respuesta.error);
+    if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
-		await copyLarge(respuesta.data);
-		this.parent.modal.notify('HTML generado y copiado al portapapeles.', 'success');
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al convertir MD: ' + e.message, 'error');
-	}
+    await copyLarge(respuesta.data);
+    this.parent.modal.notify('HTML generado y copiado al portapapeles.', 'success');
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al convertir MD: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
 //  CSV → JSON
 // ─────────────────────────────────────────────
-archivosprivados.prototype.csvToJson = async function () {
-	try {
-		this.parent.loader.active = true;
-		const respuesta = await this.service_convertitcsvjson({}, { csv: this.fileContent });
-		this.parent.loader.active = false;
+archivosprivados.prototype.csvToJson = async function() {
+  try {
+    this.parent.loader.active = true;
+    const respuesta = await this.service_convertitcsvjson({}, {
+      csv: this.fileContent
+    });
+    this.parent.loader.active = false;
 
-		if (respuesta && respuesta.error) throw new Error(respuesta.error);
+    if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
-		await copyLarge(JSON.stringify(respuesta.data, null, 2));
-		this.parent.modal.notify('JSON copiado al portapapeles.', 'success');
-	} catch (e) {
-		this.parent.loader.active = false;
-		console.error(e);
-		this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
-	}
+    await copyLarge(JSON.stringify(respuesta.data, null, 2));
+    this.parent.modal.notify('JSON copiado al portapapeles.', 'success');
+  } catch (e) {
+    this.parent.loader.active = false;
+    console.error(e);
+    this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
+  }
 };
 
 // ─────────────────────────────────────────────
@@ -617,89 +662,88 @@ archivosprivados.prototype.editHTML = function() {
 // ─────────────────────────────────────────────
 //  Árbol de directorios (sidebar)
 // ─────────────────────────────────────────────
-archivosprivados.prototype.createFolderNode = function (ulParent, id, directory) {
-	const li    = document.createElement('li');
-	const input = document.createElement('input');
-	input.type  = 'checkbox';
-	input.id    = id;
+archivosprivados.prototype.createFolderNode = function(ulParent, id, directory) {
+  const li = document.createElement('li');
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.id = id;
 
-	input.onchange = async (event) => {
-		this.clean();
-		if (event.target.checked) {
-			this.select(event.target.parentNode);
+  input.onchange = async (event) => {
+    this.clean();
+    if (event.target.checked) {
+      this.select(event.target.parentNode);
 
-			const labelParent = event.target.parentNode.querySelector('label');
-			const newid = btoa(encodeURIComponent(labelParent.getAttribute('data-api-path')));
-      
+      const labelParent = event.target.parentNode.querySelector('label');
+      const newid = btoa(encodeURIComponent(labelParent.getAttribute('data-api-path')));
+
       this.parent.loader.active = true;
-      
-			// Sub-carpetas
-			let coll = await this.service_folder_collection({
-				id:   newid,
-				path: labelParent.getAttribute('data-api-folder')
-			});
 
-			for (let i = 0; i < coll.data.length; i++) {
-				this.createFolderNode(
-					event.target.parentNode.lastChild,
-					event.target.getAttribute('id') + 'd' + i,
-					{
-						file:   directory.file,
-						folder: directory.folder,
-						path:   labelParent.getAttribute('data-api-path') + coll.data[i] + '/',
-						name:   coll.data[i]
-					}
-				);
-			}
+      // Sub-carpetas
+      let coll = await this.service_folder_collection({
+        id: newid,
+        path: labelParent.getAttribute('data-api-folder')
+      });
 
-			// Archivos dentro de la carpeta
-			coll = await this.service_file_collection({
-				id:   newid,
-				path: labelParent.getAttribute('data-api-file')
-			});
+      for (let i = 0; i < coll.data.length; i++) {
+        this.createFolderNode(
+          event.target.parentNode.lastChild,
+          event.target.getAttribute('id') + 'd' + i, {
+            file: directory.file,
+            folder: directory.folder,
+            path: labelParent.getAttribute('data-api-path') + coll.data[i] + '/',
+            name: coll.data[i]
+          }
+        );
+      }
 
-			for (let i = 0; i < coll.data.length; i++) {
-				const label = document.createElement('label');
-				label.setAttribute('data-api-file',   labelParent.getAttribute('data-api-file'));
-				label.setAttribute('data-api-folder', labelParent.getAttribute('data-api-folder'));
-				label.setAttribute('data-api-path',   labelParent.getAttribute('data-api-path') + coll.data[i]);
-				label.setAttribute('data-type',       'file');
-				label.textContent = coll.data[i];
+      // Archivos dentro de la carpeta
+      coll = await this.service_file_collection({
+        id: newid,
+        path: labelParent.getAttribute('data-api-file')
+      });
 
-				const fileLi = document.createElement('li');
-				fileLi.appendChild(label);
-				fileLi.onclick = (e) => {
-					this.clean();
-					this.select(e.target.parentNode);
-				};
-				event.target.parentNode.lastChild.appendChild(fileLi);
-			}
-      
+      for (let i = 0; i < coll.data.length; i++) {
+        const label = document.createElement('label');
+        label.setAttribute('data-api-file', labelParent.getAttribute('data-api-file'));
+        label.setAttribute('data-api-folder', labelParent.getAttribute('data-api-folder'));
+        label.setAttribute('data-api-path', labelParent.getAttribute('data-api-path') + coll.data[i]);
+        label.setAttribute('data-type', 'file');
+        label.textContent = coll.data[i];
+
+        const fileLi = document.createElement('li');
+        fileLi.appendChild(label);
+        fileLi.onclick = (e) => {
+          this.clean();
+          this.select(e.target.parentNode);
+        };
+        event.target.parentNode.lastChild.appendChild(fileLi);
+      }
+
       this.parent.loader.active = false;
-      
-		} else {
-			event.target.parentNode.lastChild.innerHTML = '';
-		}
-	};
 
-	li.appendChild(input);
+    } else {
+      event.target.parentNode.lastChild.innerHTML = '';
+    }
+  };
 
-	const label = document.createElement('label');
-	label.setAttribute('for',             id);
-	label.setAttribute('class',           'folder');
-	label.setAttribute('data-api-file',   directory.file);
-	label.setAttribute('data-api-folder', directory.folder);
-	label.setAttribute('data-api-path',   directory.path);
-	label.setAttribute('data-type',       'folder');
-	label.textContent = directory.name;
+  li.appendChild(input);
 
-	li.appendChild(label);
+  const label = document.createElement('label');
+  label.setAttribute('for', id);
+  label.setAttribute('class', 'folder');
+  label.setAttribute('data-api-file', directory.file);
+  label.setAttribute('data-api-folder', directory.folder);
+  label.setAttribute('data-api-path', directory.path);
+  label.setAttribute('data-type', 'folder');
+  label.textContent = directory.name;
 
-	const ul = document.createElement('ul');
-	ul.setAttribute('class', 'inside');
-	li.appendChild(ul);
+  li.appendChild(label);
 
-	ulParent.appendChild(li);
+  const ul = document.createElement('ul');
+  ul.setAttribute('class', 'inside');
+  li.appendChild(ul);
+
+  ulParent.appendChild(li);
 };
 
 
@@ -708,31 +752,31 @@ archivosprivados.prototype.dropzone = function() {
   var fileInput = document.querySelector('#fileupload input[type="file"]');
 
   dropzone.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      dropzone.classList.add('dragover');
+    e.preventDefault();
+    dropzone.classList.add('dragover');
   });
 
   dropzone.addEventListener('dragleave', function() {
-      dropzone.classList.remove('dragover');
+    dropzone.classList.remove('dragover');
   });
 
   dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
 
-      // Inyecta los archivos dropeados en el input nativo
-      var dt = new DataTransfer();
-      for (var i = 0; i < e.dataTransfer.files.length; i++) {
-          dt.items.add(e.dataTransfer.files[i]);
-      }
-      fileInput.files = dt.files;
-      
-      this.uploadFile();
+    // Inyecta los archivos dropeados en el input nativo
+    var dt = new DataTransfer();
+    for (var i = 0; i < e.dataTransfer.files.length; i++) {
+      dt.items.add(e.dataTransfer.files[i]);
+    }
+    fileInput.files = dt.files;
+
+    this.uploadFile();
   });
 }
 
 //Uploader
-archivosprivados.prototype.uploadFile = async function () {
+archivosprivados.prototype.uploadFile = async function() {
   try {
     var form = document.getElementById('fileupload');
     var fileInput = form.querySelector('input[type="file"]');
@@ -743,11 +787,11 @@ archivosprivados.prototype.uploadFile = async function () {
     for (var i = 0; i < files.length; i++) {
       formData.append('file', files[i]);
     }
-    
+
     console.log(formData);
-    
+
     this.parent.loader.active = true;
-    
+
     for (var i = 0; i < files.length; i++) {
       var formData = new FormData();
       formData.append('file', files[i]);
@@ -759,17 +803,17 @@ archivosprivados.prototype.uploadFile = async function () {
       const result = await respuesta.json();
       if (result.error) throw new Error(result.error);
     }
-    
-    form.reset();
-    
-    this.parent.loader.active = false;    
-    this.close();
-		
-    await this.parent.modal.notify('Archivo subido correctamente.');
-    
-		location.reload();
 
-  }catch(error) {
+    form.reset();
+
+    this.parent.loader.active = false;
+    this.close();
+
+    await this.parent.modal.notify('Archivo subido correctamente.');
+
+    location.reload();
+
+  } catch (error) {
     this.parent.loader.active = false;
     this.parent.modal.notify(error, 'error');
     console.log(error);

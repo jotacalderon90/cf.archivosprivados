@@ -1,8 +1,8 @@
 'use strict';
 
-const configuracion_especial = function () {
+const configuracion_especial = function() {
   const apibase = '/api/admin/configuracion-especial';
-  
+
   this.service = {
     total: createService('get', apibase + '/total'),
     collection: createService('get', apibase + '/collection'),
@@ -11,9 +11,9 @@ const configuracion_especial = function () {
     update: createService('put', apibase + '/:id'),
     delete: createService('delete', apibase + '/:id'),
   };
-  
+
   this.collection = [];
-  
+
   this.doc = {
     path: '',
     roles: []
@@ -27,22 +27,22 @@ configuracion_especial.prototype.start = async function(parent) {
 
 configuracion_especial.prototype.getCollection = async function(loader) {
   try {
-    
+
     if (loader) this.parent.loader.active = true;
-    
+
     const collection = await this.service.collection();
-    
+
     if (loader) this.parent.loader.active = false;
 
-    if(collection.error) {
+    if (collection.error) {
       throw new Error(collection);
-    }    
-    
+    }
+
     this.collection = collection.data;
-    
-  } catch(error) {
-    alert('Error al cargar configuración especial');
+
+  } catch (error) {
     console.error(error);
+    this.parent.modal.notify(error, 'error');
   }
 }
 
@@ -84,14 +84,16 @@ configuracion_especial.prototype.formatRolesToServer = function(roles) {
   }, {});
 }
 
-configuracion_especial.prototype.open = async function () {
-  
-  const row = this.collection.filter((row)=>{
+configuracion_especial.prototype.open = async function() {
+
+  const row = this.collection.filter((row) => {
     return row.path === this.pathSelected;
   });
-  
-  if(row.length > 0) {
-    this.doc = {...row[0]};
+
+  if (row.length > 0) {
+    this.doc = {
+      ...row[0]
+    };
     this.doc.roles = this.formatRolesToClient(this.parent._roles.getToSelect(), this.doc.roles);
   } else {
     this.doc = {
@@ -99,22 +101,26 @@ configuracion_especial.prototype.open = async function () {
       roles: this.parent._roles.getToSelect()
     }
   }
-  
+
   this.parent.modal.open('mdFolderConfig');
 };
 
-configuracion_especial.prototype.save = async function () {
+configuracion_especial.prototype.save = async function() {
   try {
-    
+
     this.parent.modal.close('mdFolderConfig');
-    
-    const doc = {...this.doc};
+
+    const doc = {
+      ...this.doc
+    };
     doc.roles = this.formatRolesToServer(doc.roles);
-    
+
     this.parent.loader.active = true;
-    
-    const method = (doc._id)?'update':'create';
-    const params = (doc._id)?{id: doc.id}:{};
+
+    const method = (doc._id) ? 'update' : 'create';
+    const params = (doc._id) ? {
+      id: doc.id
+    } : {};
 
     const saved = await this.service[method](params, {
       path: doc.path,
@@ -123,15 +129,15 @@ configuracion_especial.prototype.save = async function () {
 
     this.parent.loader.active = false;
 
-    if(saved.error != undefined) {
+    if (saved.error != undefined) {
       throw new Error(saved.error);
     }
-    
+
     this.parent.modal.notify('Configuración especial guardada exitosamente');
-    
+
     this.getCollection(true);
-    
-  }catch(error) {
+
+  } catch (error) {
     this.parent.loader.active = false;
     this.parent.modal.notify(error.message, 'error');
     console.log(error);
@@ -140,22 +146,22 @@ configuracion_especial.prototype.save = async function () {
 
 configuracion_especial.prototype.has = function(roles) {
   if (!this.collection) return false;
-  
-  const row = this.collection.filter((row)=>{
+
+  const row = this.collection.filter((row) => {
     return row.path === this.pathSelected;
   });
-  
-  if(row.length > 0) {
+
+  if (row.length > 0) {
     console.log(row, roles);
     return roles.some(tipo => {
       const valor = row[0].roles[tipo];
       if (valor === undefined) return false;
       const digits = String(valor).padStart(3, '0');
-      console.log(tipo,digits);
+      console.log(tipo, digits);
       return digits[2] === '1';
     });
   }
-  
+
   return false;
 }
 
