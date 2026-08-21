@@ -44,8 +44,8 @@ html.prototype.read = async function() {
     this.primeraRenderizacion();
 
   } catch (error) {
-    console.log(error);
-    this.parent.modal.notify(error, 'error');
+    await this.parent.modal.notify(error, 'error');
+    console.error(error);
   }
 }
 
@@ -64,15 +64,13 @@ html.prototype.update = async function() {
     if (response.error) {
       throw new Error(response.error);
     }
-
-    console.log(response);
-
+    
     //this.read();
     location.reload();
 
   } catch (error) {
-    console.log(error);
-    this.parent.modal.notify(error, 'error');
+    await this.parent.modal.notify(error, 'error');
+    console.error(error);
   }
 }
 
@@ -213,7 +211,7 @@ html.prototype.treeDOMDragover = function(event) {
   event.preventDefault();
 }
 
-html.prototype.treeDOMDragenter = function(event) {
+html.prototype.treeDOMDragenter = async function(event) {
   console.log(new Date(), 'treeDOMDragenter');
   try {
     event.preventDefault();
@@ -221,8 +219,8 @@ html.prototype.treeDOMDragenter = function(event) {
     $(event.target).addClass("over");
     this.overNode = event.target;
   } catch (error) {
-    console.log(error);
-    this.parent.modal.notify(error, 'error');
+    await this.parent.modal.notify(error, 'error');
+    console.error(error);
     return false;
   }
 }
@@ -274,7 +272,7 @@ html.prototype.treeDOMClick = function(event) {
   //document.getElementById('visualcontent').innerHTML = this.treeToDom(document.getElementById('treeDom').childNodes);
 }
 
-html.prototype.treeDOMKeyDown = function(event) {
+html.prototype.treeDOMKeyDown = async function(event) {
   switch (event.keyCode) {
     case 46:
       try {
@@ -287,8 +285,8 @@ html.prototype.treeDOMKeyDown = function(event) {
         nodeSelected[0].parentNode.removeChild(nodeSelected[0]);
         document.getElementById('visualcontent').innerHTML = this.treeToDom(document.getElementById('treeDom').childNodes);
       } catch (error) {
-        console.log(error);
-        this.parent.modal.notify(error, 'error');
+        await this.parent.modal.notify(error, 'error');
+        console.error(error);
         document.querySelectorAll("#treeDom li").forEach(li => li.classList.remove("nodeSelected"));
       }
       break;

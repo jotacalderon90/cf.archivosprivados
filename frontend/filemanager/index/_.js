@@ -192,9 +192,9 @@ archivosprivados.prototype.select = async function(li) {
 
     }
 
-  } catch (e) {
-    console.error(e);
-    this.parent.modal.notify('Error al seleccionar: ' + e.message, 'error');
+  } catch (error) {
+    await this.parent.modal.notify('Error al seleccionar: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -229,15 +229,13 @@ archivosprivados.prototype.delete = async function() {
     if (result && result.error) throw new Error(result.error);
 
     this.close();
-
-    await this.parent.modal.notify('Eliminado correctamente.');
-
+    
     location.reload();
 
-  } catch (e) {
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al eliminar: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al eliminar: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -263,12 +261,11 @@ archivosprivados.prototype.update = async function() {
     this.parent.loader.active = false;
 
     if (result && result.error) throw new Error(result.error);
-
-    this.parent.modal.notify('Archivo guardado correctamente.');
-  } catch (e) {
+    
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al guardar: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al guardar: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -340,14 +337,12 @@ archivosprivados.prototype.rename = async function() {
     this.parent.loader.active = false;
     if (result && result.error) throw new Error(result.error);
 
-    await this.parent.modal.notify('Renombrado correctamente.');
-
     location.reload();
 
-  } catch (e) {
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al renombrar: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al renombrar: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -399,14 +394,12 @@ archivosprivados.prototype.createFile = async function() {
 
     if (result && result.error) throw new Error(result.error);
 
-    await this.parent.modal.notify('Archivo "' + newName + '" creado.');
-
     location.reload();
 
-  } catch (e) {
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al crear archivo: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al crear archivo: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -453,14 +446,12 @@ archivosprivados.prototype.createFolder_ = async function() {
 
     if (result && result.error) throw new Error(result.error);
 
-    await this.parent.modal.notify('Carpeta "' + newName + '" creada.');
-
     location.reload();
 
-  } catch (e) {
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al crear carpeta: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al crear carpeta: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -531,8 +522,9 @@ archivosprivados.prototype._buildRelocateTree = async function(ulEl, path, folde
         }
       });
     }
-  } catch (e) {
-    console.error('Error construyendo árbol de reubicación:', e);
+  } catch (error) {
+    await this.parent.modal.notify('Error construyendo árbol de reubicación: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -564,14 +556,12 @@ archivosprivados.prototype.relocate = async function() {
 
     if (result && result.error) throw new Error(result.error);
 
-    await this.parent.modal.notify('Archivo reubicado en "' + this.modal.relocateTarget + '".');
-
     location.reload();
 
   } catch (e) {
     this.parent.loader.active = false;
+    await this.parent.modal.notify('Error al reubicar: ' + e.message, 'error');
     console.error(e);
-    this.parent.modal.notify('Error al reubicar: ' + e.message, 'error');
   }
 };
 
@@ -581,9 +571,10 @@ archivosprivados.prototype.relocate = async function() {
 archivosprivados.prototype.copyCleanURL = async function() {
   try {
     await copyLarge(window.location.origin + this.cleanURL);
-    this.parent.modal.notify('URL copiada al portapapeles.', 'success');
-  } catch (e) {
-    this.parent.modal.notify('No se pudo copiar la URL.', 'error');
+    await this.parent.modal.notify('URL copiada al portapapeles.', 'success');
+  } catch (error) {
+    await this.parent.modal.notify('No se pudo copiar la URL.', 'error');
+    console.error(error);
   }
 };
 
@@ -598,11 +589,11 @@ archivosprivados.prototype.extract = async function() {
 
     if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
-    this.parent.modal.notify('Zip extraído', 'success');
-  } catch (e) {
+    await this.parent.modal.notify('Zip extraído', 'success');
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al convertir CSV: ' + error.message, 'error');
+    console.error(error);
   }
 }
 
@@ -620,11 +611,11 @@ archivosprivados.prototype.mdToHtml = async function() {
     if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
     await copyLarge(respuesta.data);
-    this.parent.modal.notify('HTML generado y copiado al portapapeles.', 'success');
-  } catch (e) {
+    await this.parent.modal.notify('HTML generado y copiado al portapapeles.', 'success');
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al convertir MD: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al convertir MD: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -642,11 +633,11 @@ archivosprivados.prototype.csvToJson = async function() {
     if (respuesta && respuesta.error) throw new Error(respuesta.error);
 
     await copyLarge(JSON.stringify(respuesta.data, null, 2));
-    this.parent.modal.notify('JSON copiado al portapapeles.', 'success');
-  } catch (e) {
+    await this.parent.modal.notify('JSON copiado al portapapeles.', 'success');
+  } catch (error) {
     this.parent.loader.active = false;
-    console.error(e);
-    this.parent.modal.notify('Error al convertir CSV: ' + e.message, 'error');
+    await this.parent.modal.notify('Error al convertir CSV: ' + error.message, 'error');
+    console.error(error);
   }
 };
 
@@ -787,9 +778,7 @@ archivosprivados.prototype.uploadFile = async function() {
     for (var i = 0; i < files.length; i++) {
       formData.append('file', files[i]);
     }
-
-    console.log(formData);
-
+    
     this.parent.loader.active = true;
 
     for (var i = 0; i < files.length; i++) {
@@ -809,14 +798,12 @@ archivosprivados.prototype.uploadFile = async function() {
     this.parent.loader.active = false;
     this.close();
 
-    await this.parent.modal.notify('Archivo subido correctamente.');
-
     location.reload();
 
   } catch (error) {
     this.parent.loader.active = false;
-    this.parent.modal.notify(error, 'error');
-    console.log(error);
+    await this.parent.modal.notify(error, 'error');
+    console.error(error);
   }
 }
 
