@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "archiver": "8.0.0",
-    "cl.jotacalderon.cf.framework": "1.11.0",
+    "cl.jotacalderon.cf.framework": "1.12.1",
     "express-fileupload": "1.5.2",
     "markdown-it": "^14.3.0",
     "unzipper": "0.12.5",
