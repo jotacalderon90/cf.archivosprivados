@@ -5,6 +5,7 @@ const fs = require('fs');
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 
 const filemanager = require('../filemanager');
+const AppError = require('../error');
 
 const constants = require('./constants');
 
@@ -19,6 +20,11 @@ module.exports = {
       return respuesta;
     } catch (error) {
       logger.error(error);
+      const code = error?.code;
+      const message = error?.message ?? String(error);
+      if (code === 'ENOENT' || message.includes('ENOENT')) {
+        throw new AppError('ENOENT', 404);
+      }
       throw new Error(constants.error.rest.collection + ' ' + constants.error.servicio);
     }
   },

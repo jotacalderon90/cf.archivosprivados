@@ -4,6 +4,7 @@ const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
 const localip = require('../localip');
+const AppError = require('../error');
 
 const constants = require('./constants');
 const validator = require('./validator');
@@ -35,7 +36,7 @@ module.exports = {
       const parseResult = validator.collection.safeParse(req.params);
 
       if (!parseResult.success) {
-        response.renderError(req, res, constants.error.validacion);
+        response.APIError(req, res, constants.error.validacion);
         return;
       }
 
@@ -47,7 +48,11 @@ module.exports = {
       res.send({ data: respuesta });
     } catch (error) {
       logger.error(error);
-      response.renderError(
+      if (error instanceof AppError) {
+        res.status(error.statusCode).json({ error: error.message });
+        return;
+      }
+      response.APIError(
         req,
         res,
         constants.error.rest.collection + ' ' + constants.error.controlador
@@ -62,7 +67,7 @@ module.exports = {
       const parseResult = validator.download.safeParse(req.params);
 
       if (!parseResult.success) {
-        response.renderError(req, res, constants.error.validacion);
+        response.APIError(req, res, constants.error.validacion);
         return;
       }
 
@@ -74,7 +79,7 @@ module.exports = {
       res.download(respuesta);
     } catch (error) {
       logger.error(error);
-      response.renderError(
+      response.APIError(
         req,
         res,
         constants.error.rest.download + ' ' + constants.error.controlador
@@ -89,7 +94,7 @@ module.exports = {
       const parseResult = validator.get.safeParse(req.params);
 
       if (!parseResult.success) {
-        response.renderError(req, res, constants.error.validacion);
+        response.APIError(req, res, constants.error.validacion);
         return;
       }
 
@@ -98,7 +103,7 @@ module.exports = {
       res.sendFile(respuesta);
     } catch (error) {
       logger.error(error);
-      response.renderError(req, res, constants.error.rest.get + ' ' + constants.error.controlador);
+      response.APIError(req, res, constants.error.rest.get + ' ' + constants.error.controlador);
     }
   },
 };
