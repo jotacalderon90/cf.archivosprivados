@@ -3,8 +3,9 @@
 const logger = require('cl.jotacalderon.cf.framework/lib/log')(__filename);
 const response = require('cl.jotacalderon.cf.framework/lib/response');
 
-const localip = require('../localip');
 const AppError = require('../error');
+const localip = require('../localip');
+const domain = require('../domain');
 
 const constants = require('./constants');
 const validator = require('./validator');
@@ -18,9 +19,12 @@ const validaEjecucion = function (headers) {
       if (validIps.indexOf(headers['x-real-ip']) === -1) {
         throw new Error(constants.error.rest.bad_ip + ' ' + headers['x-real-ip']);
       }
-      if (!headers['user-agent'] || headers['user-agent'] !== headers.host) {
+      if (
+        !headers.origin ||
+        domain.getParentDomain(headers.origin) !== domain.getParentDomain(headers.host)
+      ) {
         throw new Error(
-          constants.error.rest.bad_useragent + ' ' + headers['user-agent'] + ' ' + headers.host
+          constants.error.rest.bad_origin + ' ' + headers.origin + ' ' + headers.host
         );
       }
     }
