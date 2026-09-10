@@ -14,7 +14,7 @@ module.exports = {
   get: z.object({
     id: validator.b64,
   }),
-  push: z.object({
+  put: z.object({
     id: validator.b64,
     content: z.string()
   }),

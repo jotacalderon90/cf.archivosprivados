@@ -111,11 +111,11 @@ module.exports = {
     }
   },
   
-  push: async function (req, res) {
+  put: async function (req, res) {
     try {
       validaEjecucion(req.headers);
 
-      const parseResult = validator.push.safeParse({
+      const parseResult = validator.put.safeParse({
         ...req.params,
         ...req.body
       });
@@ -125,7 +125,7 @@ module.exports = {
         return;
       }
 
-      const respuesta = await service.push({ 
+      const respuesta = await service.put({ 
         ...parseResult.data,
         host: req.headers.host
       });
@@ -133,7 +133,7 @@ module.exports = {
       res.json({data: respuesta});
     } catch (error) {
       logger.error(error);
-      response.APIError(req, res, constants.error.rest.push + ' ' + constants.error.controlador);
+      response.APIError(req, res, constants.error.rest.put + ' ' + constants.error.controlador);
     }
   },
 };

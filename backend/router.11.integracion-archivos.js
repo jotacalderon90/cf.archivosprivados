@@ -66,8 +66,8 @@ module.exports = {
   
   /**
    * @swagger
-   * /api/integration/push/{id}:
-   *   push:
+   * /api/integration/put/{id}:
+   *   put:
    *     tags:
    *       - Configuración especial
    *     summary: Servicio para agregar contenido al final de un archivo desde otro sistema, ejm sites
@@ -80,7 +80,7 @@ module.exports = {
    *             schema:
    *               type: object
    */
-  //@route('/api/integration/push/:id')
-  //@method(['push'])
-  push: controlador.push,
+  //@route('/api/integration/put/:id')
+  //@method(['put'])
+  put: controlador.put,
 };
