@@ -110,4 +110,30 @@ module.exports = {
       response.APIError(req, res, constants.error.rest.get + ' ' + constants.error.controlador);
     }
   },
+  
+  push: async function (req, res) {
+    try {
+      validaEjecucion(req.headers);
+
+      const parseResult = validator.push.safeParse({
+        ...req.params,
+        ...req.body
+      });
+
+      if (!parseResult.success) {
+        response.APIError(req, res, constants.error.validacion);
+        return;
+      }
+
+      const respuesta = await service.push({ 
+        ...parseResult.data,
+        host: req.headers.host
+      });
+
+      res.json({data: respuesta});
+    } catch (error) {
+      logger.error(error);
+      response.APIError(req, res, constants.error.rest.push + ' ' + constants.error.controlador);
+    }
+  },
 };

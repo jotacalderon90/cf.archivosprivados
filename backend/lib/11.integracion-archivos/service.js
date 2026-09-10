@@ -44,4 +44,14 @@ module.exports = {
       throw new Error(constants.error.rest.get + ' ' + constants.error.servicio);
     }
   },
+  push: async function (input) {
+    try {
+      const filename = filemanager.get(input.id, input.host);
+      fs.appendFileSync(filename, input.content);
+      return true;
+    } catch (error) {
+      logger.error(error);
+      throw new Error(constants.error.rest.push + ' ' + constants.error.servicio);
+    }
+  }
 };

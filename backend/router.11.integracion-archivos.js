@@ -63,4 +63,24 @@ module.exports = {
   //@route('/api/integration/get/:id')
   //@method(['get'])
   get: controlador.get,
+  
+  /**
+   * @swagger
+   * /api/integration/push/{id}:
+   *   get:
+   *     tags:
+   *       - Configuración especial
+   *     summary: Servicio para agregar contenido al final de un archivo desde otro sistema, ejm sites
+   *     description: Servicio para agregar contenido al final de un archivo desde otro sistema, ejm sites
+   *     responses:
+   *       200:
+   *         description: OK
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   */
+  //@route('/api/integration/push/:id')
+  //@method(['push'])
+  push: controlador.push,
 };
