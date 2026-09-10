@@ -67,7 +67,7 @@ module.exports = {
   /**
    * @swagger
    * /api/integration/push/{id}:
-   *   get:
+   *   push:
    *     tags:
    *       - Configuración especial
    *     summary: Servicio para agregar contenido al final de un archivo desde otro sistema, ejm sites
