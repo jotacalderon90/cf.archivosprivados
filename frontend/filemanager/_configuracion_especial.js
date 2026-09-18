@@ -140,7 +140,7 @@ configuracion_especial.prototype.save = async function() {
   } catch (error) {
     this.parent.loader.active = false;
     this.parent.modal.notify(error.message, 'error');
-    console.log(error);
+    console.error(error);
   }
 }
 
