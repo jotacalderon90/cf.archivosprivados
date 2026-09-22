@@ -811,6 +811,7 @@ archivosprivados.prototype.uploadFile = async function() {
 
 //Open Parent
 archivosprivados.prototype.openParent = function() {
+  console.log(this.parentLi);
   this.select(this.parentLi);
 }
 
