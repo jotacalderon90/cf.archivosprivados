@@ -100,6 +100,7 @@ archivosprivados.prototype.select = async function(li) {
     const label = li.querySelector('label');
     label.classList.add('selected');
     this.archive = li;
+    this.parentLi = li.closest('li:not(:scope)');
 
     const type = label.getAttribute('data-type');
     this.isFile = type === 'file';
@@ -230,7 +231,7 @@ archivosprivados.prototype.delete = async function() {
 
     this.close();
     
-    location.reload();
+    this.openParent();//location.reload();
 
   } catch (error) {
     this.parent.loader.active = false;
@@ -337,7 +338,7 @@ archivosprivados.prototype.rename = async function() {
     this.parent.loader.active = false;
     if (result && result.error) throw new Error(result.error);
 
-    location.reload();
+    this.openParent();//location.reload();
 
   } catch (error) {
     this.parent.loader.active = false;
@@ -394,7 +395,7 @@ archivosprivados.prototype.createFile = async function() {
 
     if (result && result.error) throw new Error(result.error);
 
-    location.reload();
+    this.openParent();//location.reload();
 
   } catch (error) {
     this.parent.loader.active = false;
@@ -446,7 +447,7 @@ archivosprivados.prototype.createFolder_ = async function() {
 
     if (result && result.error) throw new Error(result.error);
 
-    location.reload();
+    this.openParent();//location.reload();
 
   } catch (error) {
     this.parent.loader.active = false;
@@ -556,7 +557,7 @@ archivosprivados.prototype.relocate = async function() {
 
     if (result && result.error) throw new Error(result.error);
 
-    location.reload();
+    this.openParent();//location.reload();
 
   } catch (e) {
     this.parent.loader.active = false;
@@ -798,7 +799,7 @@ archivosprivados.prototype.uploadFile = async function() {
     this.parent.loader.active = false;
     this.close();
 
-    location.reload();
+    this.openParent();//location.reload();
 
   } catch (error) {
     this.parent.loader.active = false;
@@ -807,6 +808,11 @@ archivosprivados.prototype.uploadFile = async function() {
   }
 }
 
+
+//Open Parent
+archivosprivados.prototype.openParent = function() {
+  this.select(this.parentLi);
+}
 
 // ─────────────────────────────────────────────
 //  Registro en el framework
