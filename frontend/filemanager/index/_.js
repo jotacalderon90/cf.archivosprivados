@@ -811,8 +811,11 @@ archivosprivados.prototype.uploadFile = async function() {
 
 //Open Parent
 archivosprivados.prototype.openParent = function() {
-  console.log(this.parentLi);
-  this.select(this.parentLi);
+  const checkbox = this.parentLi.querySelector('input[type="checkbox"]');
+  if (checkbox) {
+    checkbox.click();
+    checkbox.click();
+  }
 }
 
 // ─────────────────────────────────────────────
