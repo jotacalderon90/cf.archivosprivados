@@ -1,0 +1,68 @@
+ /***********/
+/*DIRECTORY*/
+/***********/
+ #ul_directory * {
+     list-style:none;
+}
+ #ul_directory li{
+     line-height:180%;
+}
+ #ul_directory input{
+     position: absolute;
+     left: -1000em;
+}
+ #ul_directory .folder:before{
+     content:"\025b8";
+     margin-right:4px;
+}
+ #ul_directory input:checked ~ .folder:before{
+     content:"\025be";
+}
+ #ul_directory .inside{
+     display: none;
+     margin-left: -10px;
+}
+ #ul_directory input:checked ~ ul{
+     display:block;
+}
+ #ul_directory .selected{
+     color: grey;
+}
+/**********/
+/*DROPZONE*/
+/**********/
+/* #dropzone{
+     border: dotted 3px lightgray;
+     text-align:center;
+     background: inherit;
+     min-height: 300px;
+     line-height:250px;
+     font-size: 32px;
+}
+ .hover{
+     border: dotted 3px green!important;
+}*/
+
+
+
+
+
+.dropzone {
+    border: 2px dashed #adb5bd;
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    color: #adb5bd;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.dropzone.dragover {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    background-color: #f0f5ff;
+}
+.dropzone i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+}

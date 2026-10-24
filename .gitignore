@@ -1,0 +1,14 @@
+# Dependencias
+node_modules/*
+
+# Variables de entorno
+.env.production
+
+# Cobertura de tests
+coverage/
+
+# Archivos propios de la app multidomain
+backend/assets/domains/
+
+# Logs
+logs
