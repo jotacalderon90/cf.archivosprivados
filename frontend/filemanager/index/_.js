@@ -20,7 +20,7 @@ const archivosprivados = function() {
 
   this.archive = null;
   this.textFiles = ['txt', 'html', 'css', 'js', 'json', 'csv', 'md', 'gitignore', 'bowerrc', 'log', 'yml'];
-  this.mediaFiles = ['jpg', 'gif', 'png', 'webp', 'ico', 'mp3', 'mp4', 'pdf'];
+  this.mediaFiles = ['jpg', 'jpeg', 'gif', 'png', 'webp', 'ico', 'mp3', 'mp4', 'pdf'];
 
   // Estado de modales
   this.modal = {
@@ -156,7 +156,7 @@ archivosprivados.prototype.select = async function(li) {
         const src = this.fullnameGET;
         let child = null;
 
-        if (['jpg', 'png', 'gif', 'ico', 'webp'].includes(this.type)) {
+        if (['jpg', 'jpeg', 'png', 'gif', 'ico', 'webp'].includes(this.type)) {
           child = document.createElement('img');
           child.src = src;
           child.className = 'img-fluid mt-2';
