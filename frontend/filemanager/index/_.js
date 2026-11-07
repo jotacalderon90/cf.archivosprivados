@@ -19,7 +19,7 @@ const archivosprivados = function() {
   this.service_extract = createService('POST', '/api/filemanager/file/:id/extract');
 
   this.archive = null;
-  this.textFiles = ['txt', 'html', 'css', 'js', 'json', 'csv', 'md', 'gitignore', 'bowerrc', 'log', 'yml'];
+  this.textFiles = ['txt', 'html', 'xml', 'css', 'js', 'json', 'csv', 'md', 'gitignore', 'bowerrc', 'log', 'yml'];
   this.mediaFiles = ['jpg', 'jpeg', 'gif', 'png', 'webp', 'ico', 'mp3', 'mp4', 'pdf'];
 
   // Estado de modales
