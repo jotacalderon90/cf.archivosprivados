@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "archiver": "8.0.0",
-    "cl.jotacalderon.cf.framework": "1.16.0",
+    "cl.jotacalderon.cf.framework": "1.17.0",
     "express-fileupload": "1.6.0",
     "markdown-it": "15.0.3",
     "unzipper": "0.12.5",
