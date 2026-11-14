@@ -55,7 +55,7 @@ module.exports = {
    *       - Vistas
    *     summary: obtener vista de edición de archivos HTML
    *     description: obtener vista de edición de archivos HTML
-   *     x-roles: ['root', 'admin','cms']
+   *     x-roles: ['root', 'admin']
    *     responses:
    *       200:
    *         description: Respuesta en HTML
@@ -66,6 +66,6 @@ module.exports = {
    */
   //@route('/html/:filepath')
   //@method(['get'])
-  //@roles(['root', 'admin','cms'])
+  //@roles(['root', 'admin'])
   renderHtml: controlador.renderHtml,
 };
