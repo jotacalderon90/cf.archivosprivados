@@ -14,6 +14,7 @@ module.exports = {
       res.render('filemanager/index/_', {
         roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req)
       });
     } catch (error) {
       logger.error(error);
@@ -30,6 +31,7 @@ module.exports = {
       res.render('filemanager/configuration/_', {
         roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req)
       });
     } catch (error) {
       logger.error(error);
@@ -53,6 +55,7 @@ module.exports = {
       res.render('filemanager/html_editor/_', {
         roles: req.user ? req.user.roles : [],
         __hostAccount: domain.getHostAccount(req),
+        __hostArchivosPublicos: domain.getHostArchivosPublicos(req),
         filepath: parseResult.data.filepath,
       });
     } catch (error) {
